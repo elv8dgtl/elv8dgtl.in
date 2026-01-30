@@ -1,0 +1,332 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>ELV8 DGTL | Digital Marketing Agency</title>
+    <!-- Fonts: Cormorant for Luxury, Montserrat for Modernity -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,500;1,400&family=Montserrat:wght@200;300;400&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    
+    <style>
+        /* --- PREMIUM THEME VARIABLES --- */
+        :root {
+            --bg-color: #050505;     /* Deepest Matte Black */
+            --text-main: #f0f0f0;    /* Off-White */
+            --text-muted: #888888;   /* Silver Grey */
+            --brand-green: #39ff14;  /* Subtle electric accent */
+            --border-light: rgba(255, 255, 255, 0.12);
+            --glass-bg: rgba(255, 255, 255, 0.02);
+        }
+
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+
+        body {
+            background-color: var(--bg-color);
+            color: var(--text-main);
+            font-family: 'Montserrat', sans-serif;
+            height: 100vh; /* Fallback */
+            height: 100dvh; /* Dynamic viewport height for mobile browsers */
+            overflow: hidden;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: default;
+        }
+
+        /* --- BACKGROUND ATMOSPHERE --- */
+        
+        /* 1. Film Grain - Texture */
+        .noise-overlay {
+            position: fixed;
+            top: 0; left: 0; width: 100%; height: 100%;
+            background: url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noiseFilter'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.7' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noiseFilter)' opacity='0.03'/%3E%3C/svg%3E");
+            pointer-events: none;
+            z-index: 1;
+        }
+
+        /* 2. Breathing Ambient Glow */
+        .ambient-glow {
+            position: absolute;
+            width: 80vw;
+            height: 80vw;
+            max-width: 600px;
+            max-height: 600px;
+            background: radial-gradient(circle, rgba(255,255,255,0.04) 0%, transparent 70%);
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            z-index: 0;
+            pointer-events: none;
+            border-radius: 50%;
+            animation: breathe 8s infinite ease-in-out;
+        }
+
+        /* --- CONTENT CONTAINER --- */
+        .container {
+            position: relative;
+            z-index: 2;
+            text-align: center;
+            width: 100%;
+            max-width: 1000px;
+            padding: 2rem;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+        }
+
+        /* --- TYPOGRAPHY & ANIMATIONS --- */
+        
+        /* Staggered Fade In Classes */
+        .fade-in {
+            opacity: 0;
+            transform: translateY(20px);
+            transition: opacity 1s cubic-bezier(0.2, 0.8, 0.2, 1), transform 1s cubic-bezier(0.2, 0.8, 0.2, 1);
+        }
+
+        .fade-in.visible {
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        h1 {
+            font-family: 'Cormorant Garamond', serif;
+            /* Fluid Typography: Scales between 3.5rem and 7.5rem depending on screen width */
+            font-size: clamp(3.5rem, 15vw, 7.5rem);
+            font-weight: 300;
+            letter-spacing: -0.04em;
+            line-height: 1;
+            margin-bottom: 0.5rem;
+            color: #fff;
+            white-space: nowrap;
+        }
+        
+        h1 span.accent {
+            color: var(--brand-green);
+            font-size: clamp(3.5rem, 15vw, 7.5rem);
+            font-style: italic;
+            display: inline-block;
+            transition: transform 0.5s ease;
+        }
+        
+        /* Subtle hover effect on the brand logo */
+        .container:hover h1 span.accent {
+            transform: rotate(5deg) scale(1.05);
+        }
+
+        .tagline {
+            font-family: 'Montserrat', sans-serif;
+            font-size: clamp(0.7rem, 2vw, 0.85rem);
+            text-transform: uppercase;
+            letter-spacing: 0.3em;
+            color: var(--text-muted);
+            margin-bottom: 3.5rem;
+            position: relative;
+            display: inline-block;
+            padding-bottom: 15px;
+        }
+
+        .tagline::after {
+            content: '';
+            position: absolute;
+            bottom: 0;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 40px;
+            height: 1px;
+            background: rgba(255,255,255,0.2);
+        }
+
+        /* --- SERVICES LIST --- */
+        .services-row {
+            display: flex;
+            justify-content: center;
+            flex-wrap: wrap;
+            gap: 1.5rem;
+            margin-bottom: 4rem;
+            max-width: 800px;
+        }
+
+        .service-item {
+            font-family: 'Cormorant Garamond', serif;
+            font-style: italic;
+            font-size: clamp(1.2rem, 3vw, 1.5rem);
+            color: #ccc;
+            position: relative;
+            padding: 0 1rem;
+        }
+
+        /* Separator lines */
+        .service-item:not(:last-child)::after {
+            content: '';
+            position: absolute;
+            right: -0.75rem;
+            top: 55%;
+            transform: translateY(-50%) rotate(20deg);
+            width: 1px;
+            height: 12px;
+            background: #444;
+        }
+
+        /* --- BUTTONS --- */
+        .btn-container {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 1.2rem;
+            width: 100%;
+        }
+
+        .minimal-btn {
+            text-decoration: none;
+            color: var(--text-main);
+            border: 1px solid var(--border-light);
+            padding: 1.1rem 0;
+            width: 100%;
+            max-width: 320px; /* Nicer width on desktop */
+            border-radius: 2px; /* Sharper, more editorial look */
+            font-size: 0.75rem;
+            text-transform: uppercase;
+            letter-spacing: 0.2em;
+            transition: all 0.4s cubic-bezier(0.2, 0.8, 0.2, 1);
+            background: rgba(255, 255, 255, 0.01);
+            backdrop-filter: blur(5px);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            gap: 12px;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .minimal-btn::before {
+            content: '';
+            position: absolute;
+            top: 0; left: 0; width: 0%; height: 100%;
+            background: #fff;
+            transition: width 0.4s cubic-bezier(0.2, 0.8, 0.2, 1);
+            z-index: 0;
+        }
+
+        .minimal-btn span, .minimal-btn i {
+            position: relative;
+            z-index: 1;
+            transition: color 0.4s;
+        }
+
+        .minimal-btn:hover {
+            border-color: #fff;
+        }
+
+        .minimal-btn:hover::before {
+            width: 100%;
+        }
+
+        .minimal-btn:hover span, .minimal-btn:hover i {
+            color: #000;
+        }
+
+        /* --- FOOTER --- */
+        .footer-note {
+            position: fixed;
+            bottom: 25px;
+            width: 100%;
+            text-align: center;
+            font-size: 0.6rem;
+            color: #333;
+            letter-spacing: 0.15em;
+            text-transform: uppercase;
+            z-index: 2;
+        }
+
+        /* --- ANIMATION KEYFRAMES --- */
+        @keyframes breathe {
+            0%, 100% { transform: translate(-50%, -50%) scale(1); opacity: 0.6; }
+            50% { transform: translate(-50%, -50%) scale(1.1); opacity: 0.3; }
+        }
+
+        /* --- MOBILE MEDIA QUERIES --- */
+        @media (max-width: 768px) {
+            .services-row { 
+                flex-direction: column; 
+                gap: 0.5rem; 
+                margin-bottom: 3rem;
+            }
+            .service-item {
+                font-size: 1.25rem;
+                padding: 0;
+            }
+            .service-item:not(:last-child)::after { display: none; }
+            
+            .minimal-btn {
+                padding: 1rem 0;
+                max-width: 85%; /* Slightly wider on mobile */
+            }
+        }
+    </style>
+</head>
+<body>
+
+    <!-- Texture Layers -->
+    <div class="noise-overlay"></div>
+    <div class="ambient-glow"></div>
+
+    <!-- Main Content -->
+    <div class="container" id="main-content">
+        <!-- Brand Title -->
+        <h1 class="fade-in" style="transition-delay: 0.1s;">elv<span class="accent">8</span> dgtl</h1>
+        
+        <!-- Updated Tagline -->
+        <div class="tagline fade-in" style="transition-delay: 0.3s;">Digital Media & Marketing Agency</div>
+
+        <!-- Updated Services List -->
+        <div class="services-row fade-in" style="transition-delay: 0.5s;">
+            <span class="service-item">Digital Marketing</span>
+            <span class="service-item">Social Media</span>
+            <span class="service-item">Content Strategy</span>
+        </div>
+
+        <!-- Call to Actions -->
+        <div class="btn-container fade-in" style="transition-delay: 0.7s;">
+            <!-- Instagram Link -->
+            <a href="https://instagram.com/elv8dgtl.in" target="_blank" class="minimal-btn">
+                <i class="fab fa-instagram"></i> <span>Instagram</span>
+            </a>
+            <a href="mailto:contact@elv8dgtl.com" class="minimal-btn">
+                <i class="far fa-envelope"></i> <span>Get in Touch</span>
+            </a>
+        </div>
+    </div>
+
+    <div class="footer-note fade-in" style="transition-delay: 1.2s;">
+        Coming Soon &mdash; 2026
+    </div>
+
+    <script>
+        // Trigger Animations on Load
+        window.addEventListener('load', () => {
+            const elements = document.querySelectorAll('.fade-in');
+            elements.forEach(el => el.classList.add('visible'));
+        });
+
+        // Mouse Parallax - Disabled on Mobile
+        const isMobile = /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent);
+
+        if (!isMobile) {
+            document.addEventListener('mousemove', (e) => {
+                const container = document.querySelector('.container');
+                const glow = document.querySelector('.ambient-glow');
+                
+                const x = (window.innerWidth / 2 - e.pageX) / 45;
+                const y = (window.innerHeight / 2 - e.pageY) / 45;
+                
+                container.style.transform = `translate(${x}px, ${y}px)`;
+                glow.style.transform = `translate(calc(-50% + ${-x * 1.5}px), calc(-50% + ${-y * 1.5}px))`;
+            });
+        }
+    </script>
+</body>
+</html>
