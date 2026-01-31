@@ -1,332 +1,521 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en" class="scroll-smooth">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>ELV8 DGTL | Digital Marketing Agency</title>
-    <!-- Fonts: Cormorant for Luxury, Montserrat for Modernity -->
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>elv8 dgtl | Boutique Digital Agency</title>
+    
+    <!-- Fonts -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,500;1,400&family=Montserrat:wght@200;300;400&display=swap" rel="stylesheet">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&family=Space+Grotesk:wght@400;500;600;700&display=swap" rel="stylesheet">
     
+    <!-- Icons -->
+    <script src="https://unpkg.com/lucide@latest"></script>
+    
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    fontFamily: {
+                        sans: ['"Plus Jakarta Sans"', 'sans-serif'],
+                        display: ['"Space Grotesk"', 'sans-serif'],
+                    },
+                    colors: {
+                        brand: {
+                            lime: '#CCF381',
+                            dark: '#120E16',
+                            purple: '#4831D4',
+                            gray: '#1F1B24',
+                            light: '#F9FAFB'
+                        }
+                    },
+                    animation: {
+                        'float': 'float 6s ease-in-out infinite',
+                        'spin-slow': 'spin 12s linear infinite',
+                    },
+                    keyframes: {
+                        float: {
+                            '0%, 100%': { transform: 'translateY(0)' },
+                            '50%': { transform: 'translateY(-20px)' },
+                        }
+                    }
+                }
+            }
+        }
+    </script>
+
     <style>
-        /* --- PREMIUM THEME VARIABLES --- */
-        :root {
-            --bg-color: #050505;     /* Deepest Matte Black */
-            --text-main: #f0f0f0;    /* Off-White */
-            --text-muted: #888888;   /* Silver Grey */
-            --brand-green: #39ff14;  /* Subtle electric accent */
-            --border-light: rgba(255, 255, 255, 0.12);
-            --glass-bg: rgba(255, 255, 255, 0.02);
-        }
-
-        * { margin: 0; padding: 0; box-sizing: border-box; }
-
+        /* Custom Utilities */
         body {
-            background-color: var(--bg-color);
-            color: var(--text-main);
-            font-family: 'Montserrat', sans-serif;
-            height: 100vh; /* Fallback */
-            height: 100dvh; /* Dynamic viewport height for mobile browsers */
-            overflow: hidden;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            cursor: default;
+            background-color: #ffffff;
+            color: #120E16;
+            overflow-x: hidden;
         }
-
-        /* --- BACKGROUND ATMOSPHERE --- */
         
-        /* 1. Film Grain - Texture */
-        .noise-overlay {
-            position: fixed;
-            top: 0; left: 0; width: 100%; height: 100%;
-            background: url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noiseFilter'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.7' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noiseFilter)' opacity='0.03'/%3E%3C/svg%3E");
-            pointer-events: none;
-            z-index: 1;
+        .glass-nav {
+            background: rgba(255, 255, 255, 0.85);
+            backdrop-filter: blur(12px);
+            -webkit-backdrop-filter: blur(12px);
+            border-bottom: 1px solid rgba(0,0,0,0.05);
         }
 
-        /* 2. Breathing Ambient Glow */
-        .ambient-glow {
-            position: absolute;
-            width: 80vw;
-            height: 80vw;
-            max-width: 600px;
-            max-height: 600px;
-            background: radial-gradient(circle, rgba(255,255,255,0.04) 0%, transparent 70%);
-            top: 50%;
-            left: 50%;
-            transform: translate(-50%, -50%);
-            z-index: 0;
-            pointer-events: none;
-            border-radius: 50%;
-            animation: breathe 8s infinite ease-in-out;
-        }
-
-        /* --- CONTENT CONTAINER --- */
-        .container {
-            position: relative;
-            z-index: 2;
-            text-align: center;
-            width: 100%;
-            max-width: 1000px;
-            padding: 2rem;
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            justify-content: center;
-        }
-
-        /* --- TYPOGRAPHY & ANIMATIONS --- */
-        
-        /* Staggered Fade In Classes */
-        .fade-in {
+        .reveal {
             opacity: 0;
-            transform: translateY(20px);
-            transition: opacity 1s cubic-bezier(0.2, 0.8, 0.2, 1), transform 1s cubic-bezier(0.2, 0.8, 0.2, 1);
+            transform: translateY(30px);
+            transition: all 0.8s cubic-bezier(0.5, 0, 0, 1);
         }
 
-        .fade-in.visible {
+        .reveal.active {
             opacity: 1;
             transform: translateY(0);
         }
 
-        h1 {
-            font-family: 'Cormorant Garamond', serif;
-            /* Fluid Typography: Scales between 3.5rem and 7.5rem depending on screen width */
-            font-size: clamp(3.5rem, 15vw, 7.5rem);
-            font-weight: 300;
-            letter-spacing: -0.04em;
-            line-height: 1;
-            margin-bottom: 0.5rem;
-            color: #fff;
-            white-space: nowrap;
-        }
-        
-        h1 span.accent {
-            color: var(--brand-green);
-            font-size: clamp(3.5rem, 15vw, 7.5rem);
-            font-style: italic;
-            display: inline-block;
-            transition: transform 0.5s ease;
-        }
-        
-        /* Subtle hover effect on the brand logo */
-        .container:hover h1 span.accent {
-            transform: rotate(5deg) scale(1.05);
+        .text-stroke {
+            -webkit-text-stroke: 1px rgba(255,255,255,0.2);
+            color: transparent;
         }
 
-        .tagline {
-            font-family: 'Montserrat', sans-serif;
-            font-size: clamp(0.7rem, 2vw, 0.85rem);
-            text-transform: uppercase;
-            letter-spacing: 0.3em;
-            color: var(--text-muted);
-            margin-bottom: 3.5rem;
-            position: relative;
-            display: inline-block;
-            padding-bottom: 15px;
-        }
-
-        .tagline::after {
-            content: '';
+        .blob {
             position: absolute;
-            bottom: 0;
-            left: 50%;
-            transform: translateX(-50%);
-            width: 40px;
-            height: 1px;
-            background: rgba(255,255,255,0.2);
+            filter: blur(80px);
+            z-index: -1;
+            opacity: 0.6;
         }
 
-        /* --- SERVICES LIST --- */
-        .services-row {
-            display: flex;
-            justify-content: center;
-            flex-wrap: wrap;
-            gap: 1.5rem;
-            margin-bottom: 4rem;
-            max-width: 800px;
+        /* Hover Cards */
+        .service-card {
+            transition: all 0.4s ease;
         }
-
-        .service-item {
-            font-family: 'Cormorant Garamond', serif;
-            font-style: italic;
-            font-size: clamp(1.2rem, 3vw, 1.5rem);
-            color: #ccc;
-            position: relative;
-            padding: 0 1rem;
+        .service-card:hover {
+            transform: translateY(-8px);
+            box-shadow: 0 20px 40px -5px rgba(0, 0, 0, 0.1);
+            border-color: #CCF381;
         }
-
-        /* Separator lines */
-        .service-item:not(:last-child)::after {
-            content: '';
-            position: absolute;
-            right: -0.75rem;
-            top: 55%;
-            transform: translateY(-50%) rotate(20deg);
-            width: 1px;
-            height: 12px;
-            background: #444;
-        }
-
-        /* --- BUTTONS --- */
-        .btn-container {
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            gap: 1.2rem;
-            width: 100%;
-        }
-
-        .minimal-btn {
-            text-decoration: none;
-            color: var(--text-main);
-            border: 1px solid var(--border-light);
-            padding: 1.1rem 0;
-            width: 100%;
-            max-width: 320px; /* Nicer width on desktop */
-            border-radius: 2px; /* Sharper, more editorial look */
-            font-size: 0.75rem;
-            text-transform: uppercase;
-            letter-spacing: 0.2em;
-            transition: all 0.4s cubic-bezier(0.2, 0.8, 0.2, 1);
-            background: rgba(255, 255, 255, 0.01);
-            backdrop-filter: blur(5px);
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            gap: 12px;
-            position: relative;
-            overflow: hidden;
-        }
-
-        .minimal-btn::before {
-            content: '';
-            position: absolute;
-            top: 0; left: 0; width: 0%; height: 100%;
-            background: #fff;
-            transition: width 0.4s cubic-bezier(0.2, 0.8, 0.2, 1);
-            z-index: 0;
-        }
-
-        .minimal-btn span, .minimal-btn i {
-            position: relative;
-            z-index: 1;
-            transition: color 0.4s;
-        }
-
-        .minimal-btn:hover {
-            border-color: #fff;
-        }
-
-        .minimal-btn:hover::before {
-            width: 100%;
-        }
-
-        .minimal-btn:hover span, .minimal-btn:hover i {
-            color: #000;
-        }
-
-        /* --- FOOTER --- */
-        .footer-note {
-            position: fixed;
-            bottom: 25px;
-            width: 100%;
-            text-align: center;
-            font-size: 0.6rem;
-            color: #333;
-            letter-spacing: 0.15em;
-            text-transform: uppercase;
-            z-index: 2;
-        }
-
-        /* --- ANIMATION KEYFRAMES --- */
-        @keyframes breathe {
-            0%, 100% { transform: translate(-50%, -50%) scale(1); opacity: 0.6; }
-            50% { transform: translate(-50%, -50%) scale(1.1); opacity: 0.3; }
-        }
-
-        /* --- MOBILE MEDIA QUERIES --- */
-        @media (max-width: 768px) {
-            .services-row { 
-                flex-direction: column; 
-                gap: 0.5rem; 
-                margin-bottom: 3rem;
-            }
-            .service-item {
-                font-size: 1.25rem;
-                padding: 0;
-            }
-            .service-item:not(:last-child)::after { display: none; }
-            
-            .minimal-btn {
-                padding: 1rem 0;
-                max-width: 85%; /* Slightly wider on mobile */
-            }
+        .service-card:hover .icon-box {
+            background-color: #CCF381;
+            color: #120E16;
         }
     </style>
 </head>
 <body>
 
-    <!-- Texture Layers -->
-    <div class="noise-overlay"></div>
-    <div class="ambient-glow"></div>
+    <!-- Navigation -->
+    <nav id="navbar" class="fixed w-full z-50 transition-all duration-300 py-6">
+        <div class="container mx-auto px-6 md:px-12 flex justify-between items-center">
+            <a href="#" class="flex items-center gap-2 group">
+                <div class="w-10 h-10 bg-brand-lime rounded-xl flex items-center justify-center transform group-hover:rotate-12 transition-transform duration-300">
+                    <i data-lucide="zap" class="text-brand-dark w-6 h-6 fill-current"></i>
+                </div>
+                <span class="text-2xl font-display font-bold tracking-tight text-brand-dark">elv8<span class="font-normal opacity-70">dgtl</span></span>
+            </a>
 
-    <!-- Main Content -->
-    <div class="container" id="main-content">
-        <!-- Brand Title -->
-        <h1 class="fade-in" style="transition-delay: 0.1s;">elv<span class="accent">8</span> dgtl</h1>
+            <!-- Desktop Menu -->
+            <div class="hidden md:flex items-center gap-8">
+                <a href="#services" class="text-sm font-medium text-gray-600 hover:text-brand-purple transition-colors">Services</a>
+                <a href="#work" class="text-sm font-medium text-gray-600 hover:text-brand-purple transition-colors">Projects</a>
+                <a href="#process" class="text-sm font-medium text-gray-600 hover:text-brand-purple transition-colors">Why Us</a>
+                <a href="#contact" class="px-6 py-3 bg-brand-dark text-white rounded-full text-sm font-bold hover:bg-brand-purple hover:shadow-lg hover:-translate-y-1 transition-all duration-300 flex items-center gap-2">
+                    Start a Project <i data-lucide="arrow-right" class="w-4 h-4"></i>
+                </a>
+            </div>
+
+            <!-- Mobile Toggle -->
+            <button id="menu-btn" class="md:hidden text-brand-dark p-2">
+                <i data-lucide="menu" class="w-8 h-8"></i>
+            </button>
+        </div>
+    </nav>
+
+    <!-- Mobile Menu Overlay -->
+    <div id="mobile-menu" class="fixed inset-0 bg-white z-40 translate-x-full transition-transform duration-300 flex flex-col justify-center items-center gap-8">
+        <button id="close-menu" class="absolute top-8 right-8 p-2">
+            <i data-lucide="x" class="w-8 h-8 text-brand-dark"></i>
+        </button>
+        <a href="#services" class="mobile-link text-3xl font-display font-bold text-brand-dark hover:text-brand-purple">Services</a>
+        <a href="#work" class="mobile-link text-3xl font-display font-bold text-brand-dark hover:text-brand-purple">Projects</a>
+        <a href="#process" class="mobile-link text-3xl font-display font-bold text-brand-dark hover:text-brand-purple">Why Us</a>
+        <a href="#contact" class="mobile-link text-3xl font-display font-bold text-brand-dark hover:text-brand-purple">Contact</a>
+    </div>
+
+    <!-- Hero Section -->
+    <header class="relative pt-40 pb-20 md:pt-48 md:pb-32 overflow-hidden">
+        <!-- Blobs -->
+        <div class="blob bg-brand-lime w-[600px] h-[600px] rounded-full top-0 right-[-200px] opacity-30 animate-float"></div>
+        <div class="blob bg-brand-purple w-[500px] h-[500px] rounded-full bottom-0 left-[-100px] opacity-20" style="animation-delay: -3s;"></div>
+
+        <div class="container mx-auto px-6 md:px-12 relative z-10">
+            <div class="grid lg:grid-cols-12 gap-16 items-center">
+                
+                <!-- Hero Text -->
+                <div class="lg:col-span-7 reveal active">
+                    <div class="inline-flex items-center gap-2 px-4 py-2 bg-gray-50 border border-gray-200 rounded-full mb-8">
+                        <span class="w-2 h-2 rounded-full bg-brand-lime animate-pulse"></span>
+                        <span class="text-xs font-bold uppercase tracking-widest text-brand-dark">Accepting New Clients 2026</span>
+                    </div>
+                    
+                    <h1 class="text-5xl md:text-7xl lg:text-8xl font-display font-bold text-brand-dark leading-[1.05] mb-8 tracking-tight">
+                        Elevating brands, <br />
+                        <span class="relative inline-block text-brand-purple">
+                            one project
+                            <svg class="absolute w-full h-4 -bottom-1 left-0 text-brand-lime -z-10" viewBox="0 0 100 10" preserveAspectRatio="none">
+                                <path d="M0 5 Q 50 12 100 5" stroke="currentColor" stroke-width="12" fill="none" opacity="0.8" />
+                            </svg>
+                        </span>
+                         at a time.
+                    </h1>
+                    
+                    <p class="text-xl text-gray-600 mb-10 max-w-lg leading-relaxed">
+                        elv8 dgtl is a boutique digital studio specializing in web development and strategic marketing. We provide the personal attention your business deserves.
+                    </p>
+                    
+                    <div class="flex flex-col sm:flex-row gap-4">
+                        <a href="#contact" class="px-8 py-4 bg-brand-dark text-white rounded-full font-bold hover:bg-brand-purple shadow-xl hover:shadow-2xl hover:-translate-y-1 transition-all duration-300 flex justify-center items-center gap-2">
+                            Get a Quote <i data-lucide="arrow-up-right" class="w-5 h-5"></i>
+                        </a>
+                        <a href="#services" class="px-8 py-4 bg-white text-brand-dark border border-gray-200 rounded-full font-bold hover:border-brand-lime hover:bg-gray-50 transition-all duration-300 flex justify-center items-center gap-2 group">
+                            Explore Services
+                        </a>
+                    </div>
+                    
+                    <!-- Tech Stack / Social Proof Replacement -->
+                    <div class="mt-16 border-t border-gray-100 pt-8">
+                        <p class="text-sm font-semibold text-gray-400 mb-4 uppercase tracking-wider">Powered by Modern Tech</p>
+                        <div class="flex flex-wrap gap-8 opacity-60 grayscale hover:grayscale-0 transition-all duration-500">
+                            <!-- Tech Stack Indicators -->
+                            <div class="h-8 flex items-center gap-2 font-display font-bold text-lg"><i data-lucide="code" class="fill-current w-5 h-5"></i> React.js</div>
+                            <div class="h-8 flex items-center gap-2 font-display font-bold text-lg"><i data-lucide="zap" class="fill-current w-5 h-5"></i> SEO</div>
+                            <div class="h-8 flex items-center gap-2 font-display font-bold text-lg"><i data-lucide="pen-tool" class="fill-current w-5 h-5"></i> Design</div>
+                            <div class="h-8 flex items-center gap-2 font-display font-bold text-lg"><i data-lucide="smartphone" class="fill-current w-5 h-5"></i> Mobile</div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Hero Bento Grid Visual -->
+                <div class="lg:col-span-5 relative reveal" style="transition-delay: 200ms;">
+                    <div class="grid grid-cols-2 gap-4 relative z-10">
+                        <!-- Stat Card -->
+                        <div class="col-span-2 bg-brand-dark text-white p-8 rounded-[2rem] shadow-2xl relative overflow-hidden group hover:scale-[1.02] transition-transform duration-500">
+                            <div class="absolute top-0 right-0 w-32 h-32 bg-brand-purple rounded-full blur-[60px] opacity-50"></div>
+                            <div class="flex justify-between items-start mb-6">
+                                <div class="p-3 bg-white/10 rounded-2xl backdrop-blur-md">
+                                    <i data-lucide="trending-up" class="text-brand-lime w-6 h-6"></i>
+                                </div>
+                                <span class="px-3 py-1 rounded-full bg-brand-lime text-brand-dark text-xs font-bold">Growth Focused</span>
+                            </div>
+                            <h3 class="text-3xl font-display font-bold mb-2">Results Driven</h3>
+                            <p class="text-gray-400 text-sm">Websites designed to convert visitors into loyal customers.</p>
+                            
+                            <!-- Graph Visualization -->
+                            <div class="flex items-end gap-2 h-20 mt-8">
+                                <div class="w-full bg-white/5 rounded-t-lg h-[30%] group-hover:h-[40%] transition-all duration-700 delay-100"></div>
+                                <div class="w-full bg-white/10 rounded-t-lg h-[50%] group-hover:h-[65%] transition-all duration-700 delay-200"></div>
+                                <div class="w-full bg-white/20 rounded-t-lg h-[40%] group-hover:h-[60%] transition-all duration-700 delay-300"></div>
+                                <div class="w-full bg-brand-purple rounded-t-lg h-[70%] group-hover:h-[85%] transition-all duration-700 delay-400"></div>
+                                <div class="w-full bg-brand-lime rounded-t-lg h-[60%] group-hover:h-[100%] transition-all duration-700 delay-500 shadow-[0_0_20px_rgba(204,243,129,0.5)]"></div>
+                            </div>
+                        </div>
+
+                        <!-- Image Card -->
+                        <div class="bg-gray-100 rounded-[2rem] h-48 relative overflow-hidden group">
+                            <img src="https://images.unsplash.com/photo-1522071820081-009f0129c71c?ixlib=rb-1.2.1&auto=format&fit=crop&w=800&q=80" alt="Collaboration" class="w-full h-full object-cover transition-transform duration-700 group-hover:scale-110">
+                            <div class="absolute inset-0 bg-brand-dark/20 group-hover:bg-transparent transition-colors"></div>
+                        </div>
+
+                        <!-- Mini Stat -->
+                        <div class="bg-brand-lime p-6 rounded-[2rem] flex flex-col justify-center items-center text-center hover:scale-[1.02] transition-transform duration-300 shadow-xl">
+                            <span class="text-4xl font-display font-bold text-brand-dark mb-1">100%</span>
+                            <span class="text-xs font-bold uppercase tracking-wide text-brand-dark/80">Dedication</span>
+                        </div>
+                    </div>
+                    
+                    <!-- Decorative Border behind grid -->
+                    <div class="absolute -inset-4 border-2 border-dashed border-gray-200 rounded-[2.5rem] -z-10 rotate-2"></div>
+                </div>
+
+            </div>
+        </div>
+    </header>
+
+    <!-- Services Section -->
+    <section id="services" class="py-24 bg-gray-50 relative">
+        <div class="container mx-auto px-6 md:px-12">
+            <div class="text-center max-w-3xl mx-auto mb-20 reveal">
+                <h4 class="text-brand-purple font-bold uppercase tracking-widest text-sm mb-4">What We Do</h4>
+                <h2 class="text-4xl md:text-5xl font-display font-bold text-brand-dark mb-6">Custom digital solutions for your unique needs.</h2>
+                <p class="text-lg text-gray-600">We work closely with you to understand your goals, delivering pixel-perfect designs and strategies that actually work.</p>
+            </div>
+
+            <div class="grid md:grid-cols-2 lg:grid-cols-3 gap-8">
+                <!-- Service 1 -->
+                <div class="service-card bg-white p-10 rounded-3xl border border-gray-100 reveal">
+                    <div class="icon-box w-16 h-16 bg-gray-50 rounded-2xl flex items-center justify-center mb-8 transition-colors duration-300">
+                        <i data-lucide="search" class="w-8 h-8"></i>
+                    </div>
+                    <h3 class="text-2xl font-bold text-brand-dark mb-4">SEO & Growth</h3>
+                    <p class="text-gray-600 leading-relaxed mb-6">Get found online. We implement solid SEO strategies to help local customers find your business first.</p>
+                </div>
+
+                <!-- Service 2 -->
+                <div class="service-card bg-white p-10 rounded-3xl border border-gray-100 reveal" style="transition-delay: 100ms;">
+                    <div class="icon-box w-16 h-16 bg-gray-50 rounded-2xl flex items-center justify-center mb-8 transition-colors duration-300">
+                        <i data-lucide="palette" class="w-8 h-8"></i>
+                    </div>
+                    <h3 class="text-2xl font-bold text-brand-dark mb-4">Graphic Design</h3>
+                    <p class="text-gray-600 leading-relaxed mb-6">From logos to social media posts, we create consistent visuals that make your brand look professional.</p>
+                </div>
+
+                <!-- Service 3 -->
+                <div class="service-card bg-white p-10 rounded-3xl border border-gray-100 reveal" style="transition-delay: 200ms;">
+                    <div class="icon-box w-16 h-16 bg-gray-50 rounded-2xl flex items-center justify-center mb-8 transition-colors duration-300">
+                        <i data-lucide="code-2" class="w-8 h-8"></i>
+                    </div>
+                    <h3 class="text-2xl font-bold text-brand-dark mb-4">Web Development</h3>
+                    <p class="text-gray-600 leading-relaxed mb-6">Fast, mobile-friendly websites tailored to your specific requirements, not generic templates.</p>
+                </div>
+
+                <!-- Service 4 -->
+                <div class="service-card bg-white p-10 rounded-3xl border border-gray-100 reveal">
+                    <div class="icon-box w-16 h-16 bg-gray-50 rounded-2xl flex items-center justify-center mb-8 transition-colors duration-300">
+                        <i data-lucide="message-square" class="w-8 h-8"></i>
+                    </div>
+                    <h3 class="text-2xl font-bold text-brand-dark mb-4">Social Media</h3>
+                    <p class="text-gray-600 leading-relaxed mb-6">Engage your audience with content strategies that build trust and keep your brand top-of-mind.</p>
+                </div>
+
+                <!-- Service 5 -->
+                <div class="service-card bg-white p-10 rounded-3xl border border-gray-100 reveal" style="transition-delay: 100ms;">
+                    <div class="icon-box w-16 h-16 bg-gray-50 rounded-2xl flex items-center justify-center mb-8 transition-colors duration-300">
+                        <i data-lucide="layout" class="w-8 h-8"></i>
+                    </div>
+                    <h3 class="text-2xl font-bold text-brand-dark mb-4">Brand Identity</h3>
+                    <p class="text-gray-600 leading-relaxed mb-6">Starting fresh? We help define your voice, colors, and style to set you apart from competitors.</p>
+                </div>
+
+                <!-- Service 6 -->
+                <div class="service-card bg-white p-10 rounded-3xl border border-gray-100 reveal" style="transition-delay: 200ms;">
+                    <div class="icon-box w-16 h-16 bg-gray-50 rounded-2xl flex items-center justify-center mb-8 transition-colors duration-300">
+                        <i data-lucide="bar-chart-3" class="w-8 h-8"></i>
+                    </div>
+                    <h3 class="text-2xl font-bold text-brand-dark mb-4">Digital Ads</h3>
+                    <p class="text-gray-600 leading-relaxed mb-6">Targeted ad campaigns on Google and Social Media to bring immediate traffic to your site.</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Work Section (Dark Mode) -->
+    <section id="work" class="py-32 bg-brand-dark text-white relative overflow-hidden">
+        <!-- Abstract Background -->
+        <div class="absolute top-0 right-0 w-[800px] h-[800px] bg-brand-purple/20 rounded-full blur-[120px] translate-x-1/2 -translate-y-1/2 pointer-events-none"></div>
+        <div class="absolute bottom-0 left-0 w-[600px] h-[600px] bg-brand-lime/10 rounded-full blur-[100px] -translate-x-1/3 translate-y-1/3 pointer-events-none"></div>
+
+        <div class="container mx-auto px-6 md:px-12 relative z-10">
+            <div class="flex flex-col md:flex-row justify-between items-end mb-20 reveal">
+                <div>
+                    <span class="text-brand-lime font-bold uppercase tracking-widest text-sm mb-4 block">Our Portfolio</span>
+                    <h2 class="text-4xl md:text-6xl font-display font-bold leading-tight">
+                        Selected <br/> Recent Work.
+                    </h2>
+                </div>
+                <div class="flex gap-4 mt-8 md:mt-0">
+                    <button class="px-6 py-2 rounded-full border border-white/20 hover:bg-brand-lime hover:text-brand-dark hover:border-brand-lime transition-all duration-300">Web</button>
+                    <button class="px-6 py-2 rounded-full border border-white/20 hover:bg-brand-lime hover:text-brand-dark hover:border-brand-lime transition-all duration-300">Design</button>
+                </div>
+            </div>
+
+            <div class="space-y-32">
+                <!-- Case Study 1 -->
+                <div class="group relative grid md:grid-cols-2 gap-12 items-center reveal">
+                    <div class="order-2 md:order-1">
+                        <div class="text-8xl font-display font-bold text-stroke opacity-10 absolute -top-16 -left-10 z-0">01</div>
+                        <h3 class="text-3xl md:text-4xl font-bold mb-4 relative z-10 group-hover:text-brand-lime transition-colors">Startup Landing Page</h3>
+                        <p class="text-gray-400 text-lg mb-8 relative z-10">A modern, responsive landing page design for a new SaaS product. Built for speed and conversion with a clean aesthetic.</p>
+                        <ul class="flex gap-4 mb-8 text-sm font-medium text-gray-300">
+                            <li class="px-3 py-1 bg-white/10 rounded-md">Web Design</li>
+                            <li class="px-3 py-1 bg-white/10 rounded-md">Development</li>
+                        </ul>
+                    </div>
+                    <div class="order-1 md:order-2 overflow-hidden rounded-3xl relative aspect-[4/3] group-hover:shadow-[0_0_50px_rgba(72,49,212,0.3)] transition-all duration-500">
+                        <img src="https://images.unsplash.com/photo-1611162617474-5b21e879e113?ixlib=rb-1.2.1&auto=format&fit=crop&w=800&q=80" alt="Work" class="w-full h-full object-cover group-hover:scale-110 transition-transform duration-700">
+                        <div class="absolute inset-0 bg-black/20 group-hover:bg-transparent transition-colors"></div>
+                    </div>
+                </div>
+
+                <!-- Case Study 2 -->
+                <div class="group relative grid md:grid-cols-2 gap-12 items-center reveal">
+                    <div class="overflow-hidden rounded-3xl relative aspect-[4/3] group-hover:shadow-[0_0_50px_rgba(204,243,129,0.2)] transition-all duration-500">
+                        <img src="https://images.unsplash.com/photo-1460925895917-afdab827c52f?ixlib=rb-1.2.1&auto=format&fit=crop&w=800&q=80" alt="Work" class="w-full h-full object-cover group-hover:scale-110 transition-transform duration-700">
+                        <div class="absolute inset-0 bg-black/20 group-hover:bg-transparent transition-colors"></div>
+                    </div>
+                    <div>
+                        <div class="text-8xl font-display font-bold text-stroke opacity-10 absolute -top-16 -right-10 z-0">02</div>
+                        <h3 class="text-3xl md:text-4xl font-bold mb-4 relative z-10 group-hover:text-brand-lime transition-colors">E-commerce Refresh</h3>
+                        <p class="text-gray-400 text-lg mb-8 relative z-10">Complete visual refresh for an online boutique store, focusing on user experience, mobile responsiveness, and easy navigation.</p>
+                        <ul class="flex gap-4 mb-8 text-sm font-medium text-gray-300">
+                            <li class="px-3 py-1 bg-white/10 rounded-md">Shopify</li>
+                            <li class="px-3 py-1 bg-white/10 rounded-md">UI Design</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="mt-24 text-center">
+                <a href="#contact" class="inline-block px-10 py-4 border border-gray-600 rounded-full hover:bg-white hover:text-brand-dark hover:border-white transition-all duration-300 font-bold">Start Your Project</a>
+            </div>
+        </div>
+    </section>
+
+    <!-- Stats & Impact -->
+    <section id="process" class="py-24 bg-white">
+        <div class="container mx-auto px-6 md:px-12">
+            <div class="bg-gray-50 rounded-[3rem] p-8 md:p-20 flex flex-col lg:flex-row gap-12 lg:gap-16 items-center reveal">
+                <div class="flex-1">
+                    <h2 class="text-4xl font-display font-bold text-brand-dark mb-6">Why Choose elv8?</h2>
+                    <p class="text-gray-600 text-lg mb-8">As a boutique agency, we offer benefits big firms can't: agility, personal communication, and cost-effective solutions tailored to your budget.</p>
+                    <div class="flex gap-4">
+                        <div class="w-12 h-12 bg-brand-lime rounded-full flex items-center justify-center shrink-0">
+                            <i data-lucide="check" class="text-brand-dark w-6 h-6"></i>
+                        </div>
+                        <div>
+                            <h4 class="font-bold text-lg">Direct Collaboration</h4>
+                            <p class="text-sm text-gray-500">You work directly with the creators, not account managers.</p>
+                        </div>
+                    </div>
+                </div>
+                <!-- Fixed Grid Layout -->
+                <div class="flex-1 grid grid-cols-1 sm:grid-cols-2 gap-4 md:gap-6 w-full">
+                    
+                    <!-- Card 1 -->
+                    <div class="bg-white p-6 md:p-8 rounded-3xl shadow-sm hover:shadow-xl transition-all">
+                        <div class="text-3xl xl:text-4xl font-bold text-brand-purple mb-2 whitespace-nowrap">1-on-1</div>
+                        <div class="text-gray-500 font-medium">Personal Focus</div>
+                    </div>
+
+                    <!-- Card 2 -->
+                    <div class="bg-brand-dark p-6 md:p-8 rounded-3xl shadow-lg sm:translate-y-8 transform transition-transform">
+                        <div class="text-3xl xl:text-4xl font-bold text-brand-lime mb-2">100%</div>
+                        <div class="text-gray-400 font-medium">Transparency</div>
+                    </div>
+
+                    <!-- Card 3 -->
+                    <div class="bg-brand-lime p-6 md:p-8 rounded-3xl shadow-lg">
+                        <div class="text-3xl xl:text-4xl font-bold text-brand-dark mb-2">Fast</div>
+                        <div class="text-brand-dark/80 font-medium">Turnaround</div>
+                    </div>
+
+                    <!-- Card 4 -->
+                    <div class="bg-white p-6 md:p-8 rounded-3xl shadow-sm hover:shadow-xl transition-all sm:translate-y-8 transform">
+                        <div class="text-3xl xl:text-4xl font-bold text-brand-dark mb-2">Modern</div>
+                        <div class="text-gray-500 font-medium">Tech Stack</div>
+                    </div>
+
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- CTA / Footer -->
+    <footer id="contact" class="bg-brand-dark text-white pt-24 pb-12 rounded-t-[3rem] mt-12 relative overflow-hidden">
+        <!-- Footer Blobs -->
+        <div class="absolute top-0 left-0 w-full h-1 bg-gradient-to-r from-brand-purple via-brand-lime to-brand-purple"></div>
         
-        <!-- Updated Tagline -->
-        <div class="tagline fade-in" style="transition-delay: 0.3s;">Digital Media & Marketing Agency</div>
+        <div class="container mx-auto px-6 md:px-12 relative z-10">
+            <div class="grid md:grid-cols-2 gap-16 mb-20">
+                <div class="reveal">
+                    <h2 class="text-5xl md:text-7xl font-display font-bold mb-8">Ready to <span class="text-brand-lime">launch?</span></h2>
+                    <p class="text-xl text-gray-400 mb-10 max-w-md">Let's discuss your project. Whether it's a website refresh or a new marketing campaign, we're ready to help.</p>
+                    <div class="flex flex-col sm:flex-row gap-4">
+                        <a href="mailto:hello@elv8.com" class="px-8 py-4 bg-brand-lime text-brand-dark rounded-full font-bold hover:bg-white transition-all duration-300 text-center">Email Us</a>
+                    </div>
+                </div>
 
-        <!-- Updated Services List -->
-        <div class="services-row fade-in" style="transition-delay: 0.5s;">
-            <span class="service-item">Digital Marketing</span>
-            <span class="service-item">Social Media</span>
-            <span class="service-item">Content Strategy</span>
+                <div class="grid grid-cols-2 gap-8 reveal" style="transition-delay: 100ms;">
+                    <div>
+                        <h4 class="text-brand-lime font-bold mb-6">Menu</h4>
+                        <ul class="space-y-4 text-gray-400">
+                            <li><a href="#" class="hover:text-white transition-colors">Home</a></li>
+                            <li><a href="#services" class="hover:text-white transition-colors">Services</a></li>
+                            <li><a href="#work" class="hover:text-white transition-colors">Projects</a></li>
+                        </ul>
+                    </div>
+                    <div>
+                        <h4 class="text-brand-lime font-bold mb-6">Connect</h4>
+                        <ul class="space-y-4 text-gray-400">
+                            <li><a href="#" class="hover:text-white transition-colors">Instagram</a></li>
+                            <li><a href="#" class="hover:text-white transition-colors">LinkedIn</a></li>
+                        </ul>
+                    </div>
+                    <div class="col-span-2">
+                         <h4 class="text-brand-lime font-bold mb-6">Contact</h4>
+                         <p class="text-gray-400">hello@elv8.com<br>Available for Remote Work</p>
+                    </div>
+                </div>
+            </div>
+
+            <div class="border-t border-white/10 pt-8 flex flex-col md:flex-row justify-between items-center text-sm text-gray-500">
+                <p>&copy; 2026 elv8 dgtl. All rights reserved.</p>
+                <div class="flex gap-6 mt-4 md:mt-0">
+                    <a href="#" class="hover:text-white">Privacy</a>
+                </div>
+            </div>
         </div>
+    </footer>
 
-        <!-- Call to Actions -->
-        <div class="btn-container fade-in" style="transition-delay: 0.7s;">
-            <!-- Instagram Link -->
-            <a href="https://instagram.com/elv8dgtl.in" target="_blank" class="minimal-btn">
-                <i class="fab fa-instagram"></i> <span>Instagram</span>
-            </a>
-            <a href="mailto:contact@elv8dgtl.com" class="minimal-btn">
-                <i class="far fa-envelope"></i> <span>Get in Touch</span>
-            </a>
-        </div>
-    </div>
-
-    <div class="footer-note fade-in" style="transition-delay: 1.2s;">
-        Coming Soon &mdash; 2026
-    </div>
-
+    <!-- Scripts -->
     <script>
-        // Trigger Animations on Load
-        window.addEventListener('load', () => {
-            const elements = document.querySelectorAll('.fade-in');
-            elements.forEach(el => el.classList.add('visible'));
+        // Initialize Icons
+        lucide.createIcons();
+
+        // Navbar Scroll Effect
+        const navbar = document.getElementById('navbar');
+        window.addEventListener('scroll', () => {
+            if (window.scrollY > 50) {
+                navbar.classList.add('glass-nav', 'shadow-sm', 'py-4');
+                navbar.classList.remove('py-6');
+            } else {
+                navbar.classList.remove('glass-nav', 'shadow-sm', 'py-4');
+                navbar.classList.add('py-6');
+            }
         });
 
-        // Mouse Parallax - Disabled on Mobile
-        const isMobile = /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent);
+        // Mobile Menu Logic
+        const menuBtn = document.getElementById('menu-btn');
+        const closeMenu = document.getElementById('close-menu');
+        const mobileMenu = document.getElementById('mobile-menu');
+        const mobileLinks = document.querySelectorAll('.mobile-link');
 
-        if (!isMobile) {
-            document.addEventListener('mousemove', (e) => {
-                const container = document.querySelector('.container');
-                const glow = document.querySelector('.ambient-glow');
-                
-                const x = (window.innerWidth / 2 - e.pageX) / 45;
-                const y = (window.innerHeight / 2 - e.pageY) / 45;
-                
-                container.style.transform = `translate(${x}px, ${y}px)`;
-                glow.style.transform = `translate(calc(-50% + ${-x * 1.5}px), calc(-50% + ${-y * 1.5}px))`;
-            });
+        function toggleMenu() {
+            mobileMenu.classList.toggle('translate-x-full');
+            document.body.classList.toggle('overflow-hidden');
         }
+
+        menuBtn.addEventListener('click', toggleMenu);
+        closeMenu.addEventListener('click', toggleMenu);
+        
+        mobileLinks.forEach(link => {
+            link.addEventListener('click', toggleMenu);
+        });
+
+        // Scroll Reveal Animation using Intersection Observer
+        const observerOptions = {
+            threshold: 0.1,
+            rootMargin: "0px 0px -50px 0px"
+        };
+
+        const observer = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    entry.target.classList.add('active');
+                }
+            });
+        }, observerOptions);
+
+        document.querySelectorAll('.reveal').forEach(el => {
+            observer.observe(el);
+        });
     </script>
 </body>
 </html>
