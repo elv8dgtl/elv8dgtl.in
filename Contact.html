@@ -1,0 +1,377 @@
+<!DOCTYPE html>
+<html lang="en" class="scroll-smooth">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Contact Us | elv8 dgtl</title>
+    
+    <!-- Favicon Code -->
+    <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png">
+    <link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png">
+    <link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png">
+    <!-- Immediate SVG Favicon -->
+    <link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 24 24%22 fill=%22%23CCF381%22 stroke=%22%23120E16%22 stroke-width=%222%22 stroke-linecap=%22round%22 stroke-linejoin=%22round%22><polygon points=%2213 2 3 14 12 14 11 22 21 10 12 10 13 2%22/></svg>">
+    
+    <!-- Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&family=Space+Grotesk:wght@400;500;600;700&display=swap" rel="stylesheet">
+    
+    <!-- Icons -->
+    <script src="https://unpkg.com/lucide@latest"></script>
+    
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    fontFamily: {
+                        sans: ['"Plus Jakarta Sans"', 'sans-serif'],
+                        display: ['"Space Grotesk"', 'sans-serif'],
+                    },
+                    colors: {
+                        brand: {
+                            lime: '#CCF381',
+                            dark: '#120E16',
+                            purple: '#4831D4',
+                            gray: '#1F1B24',
+                            light: '#F9FAFB'
+                        }
+                    },
+                    animation: {
+                        'float': 'float 6s ease-in-out infinite',
+                        'marquee': 'marquee 25s linear infinite',
+                    },
+                    keyframes: {
+                        float: {
+                            '0%, 100%': { transform: 'translateY(0)' },
+                            '50%': { transform: 'translateY(-20px)' },
+                        },
+                        marquee: {
+                            '0%': { transform: 'translateX(0%)' },
+                            '100%': { transform: 'translateX(-100%)' },
+                        }
+                    }
+                }
+            }
+        }
+    </script>
+    <style>
+        .glass-nav { background: rgba(255, 255, 255, 0.85); backdrop-filter: blur(12px); border-bottom: 1px solid rgba(0,0,0,0.05); }
+        .reveal { opacity: 0; transform: translateY(30px); transition: all 0.8s cubic-bezier(0.5, 0, 0, 1); }
+        .reveal.active { opacity: 1; transform: translateY(0); }
+        .blob { position: absolute; filter: blur(80px); z-index: -1; opacity: 0.6; }
+        
+        /* Form specific styles */
+        .form-input {
+            width: 100%;
+            padding: 1rem 1.5rem;
+            background-color: #F9FAFB;
+            border: 1px solid #E5E7EB;
+            border-radius: 1rem;
+            transition: all 0.3s;
+            outline: none;
+            font-size: 1rem;
+        }
+        .form-input:focus {
+            background-color: #fff;
+            border-color: #4831D4;
+            box-shadow: 0 0 0 4px rgba(72, 49, 212, 0.1);
+        }
+        .checkbox-custom:checked + div {
+            background-color: #CCF381;
+            border-color: #CCF381;
+            color: #120E16;
+            font-weight: 700;
+        }
+        
+        /* Footer Specifics */
+        .footer-link {
+            position: relative;
+            display: inline-block;
+        }
+        .footer-link::after {
+            content: '';
+            position: absolute;
+            width: 0;
+            height: 1px;
+            bottom: -2px;
+            left: 0;
+            background-color: #CCF381;
+            transition: width 0.3s ease;
+        }
+        .footer-link:hover::after {
+            width: 100%;
+        }
+    </style>
+</head>
+<body class="bg-white text-brand-dark overflow-x-hidden flex flex-col min-h-screen">
+
+    <!-- Navigation -->
+    <nav id="navbar" class="fixed w-full z-50 transition-all duration-300 py-6">
+        <div class="container mx-auto px-6 md:px-12 flex justify-between items-center">
+            <a href="index.html" class="flex items-center gap-2 group">
+                <div class="w-10 h-10 bg-brand-lime rounded-xl flex items-center justify-center transform group-hover:rotate-12 transition-transform duration-300">
+                    <i data-lucide="zap" class="text-brand-dark w-6 h-6 fill-current"></i>
+                </div>
+                <span class="text-2xl font-display font-bold tracking-tight text-brand-dark">elv8<span class="font-normal opacity-70">dgtl</span></span>
+            </a>
+            <div class="hidden md:flex items-center gap-8">
+                <a href="services.html" class="text-sm font-medium text-gray-600 hover:text-brand-purple transition-colors">Services</a>
+                <a href="work.html" class="text-sm font-medium text-gray-600 hover:text-brand-purple transition-colors">Projects</a>
+                <a href="about.html" class="text-sm font-medium text-gray-600 hover:text-brand-purple transition-colors">About</a>
+                <a href="contact.html" class="px-6 py-3 bg-brand-dark text-white rounded-full text-sm font-bold hover:bg-brand-purple hover:shadow-lg hover:-translate-y-1 transition-all duration-300 flex items-center gap-2">
+                    Start a Project <i data-lucide="arrow-right" class="w-4 h-4"></i>
+                </a>
+            </div>
+            <button id="menu-btn" class="md:hidden text-brand-dark p-2"><i data-lucide="menu" class="w-8 h-8"></i></button>
+        </div>
+    </nav>
+
+    <!-- Mobile Menu -->
+    <div id="mobile-menu" class="fixed inset-0 bg-white z-40 translate-x-full transition-transform duration-300 flex flex-col justify-center items-center gap-8">
+        <button id="close-menu" class="absolute top-8 right-8 p-2"><i data-lucide="x" class="w-8 h-8 text-brand-dark"></i></button>
+        <a href="index.html" class="mobile-link text-3xl font-display font-bold text-brand-dark">Home</a>
+        <a href="services.html" class="mobile-link text-3xl font-display font-bold text-brand-dark">Services</a>
+        <a href="work.html" class="mobile-link text-3xl font-display font-bold text-brand-dark">Projects</a>
+        <a href="about.html" class="mobile-link text-3xl font-display font-bold text-brand-dark">About</a>
+        <a href="contact.html" class="mobile-link text-3xl font-display font-bold text-brand-dark">Contact</a>
+    </div>
+
+    <!-- Main Content -->
+    <main class="flex-grow pt-32 pb-24 md:pt-40 relative">
+        <!-- Blobs for theme consistency -->
+        <div class="blob bg-brand-purple w-[500px] h-[500px] rounded-full top-20 left-[-200px] opacity-20 animate-float"></div>
+        <div class="blob bg-brand-lime w-[400px] h-[400px] rounded-full bottom-0 right-[-100px] opacity-30" style="animation-delay: -2s;"></div>
+
+        <div class="container mx-auto px-6 md:px-12">
+            
+            <div class="grid lg:grid-cols-2 gap-16 xl:gap-24">
+                
+                <!-- Left Column: Info -->
+                <div class="reveal active">
+                    <span class="text-brand-purple font-bold uppercase tracking-widest text-sm mb-4 block">Contact</span>
+                    <h1 class="text-5xl md:text-6xl lg:text-7xl font-display font-bold text-brand-dark leading-[1.05] mb-8">
+                        Let's start a <br/>
+                        <span class="relative inline-block">
+                             conversation.
+                            <svg class="absolute w-full h-3 -bottom-1 left-0 text-brand-lime -z-10" viewBox="0 0 100 10" preserveAspectRatio="none"><path d="M0 5 Q 50 12 100 5" stroke="currentColor" stroke-width="12" fill="none" opacity="0.8" /></svg>
+                        </span>
+                    </h1>
+                    <p class="text-xl text-gray-600 mb-12 max-w-lg leading-relaxed">
+                        Ready to elevate your digital presence? We're currently accepting new projects for 2026. Fill out the form, or drop us a line directly.
+                    </p>
+
+                    <div class="space-y-8">
+                        <!-- Email Card -->
+                        <div class="flex items-start gap-6 group">
+                            <div class="w-14 h-14 bg-gray-50 rounded-2xl flex items-center justify-center border border-gray-100 group-hover:bg-brand-lime group-hover:border-brand-lime transition-all duration-300 shrink-0">
+                                <i data-lucide="mail" class="w-6 h-6 text-brand-dark"></i>
+                            </div>
+                            <div>
+                                <h3 class="text-lg font-bold font-display text-brand-dark mb-1">Email Us</h3>
+                                <a href="mailto:elv8dgtl@gmail.com" class="text-lg text-gray-600 hover:text-brand-purple transition-colors border-b border-transparent hover:border-brand-purple pb-0.5">elv8dgtl@gmail.com</a>
+                            </div>
+                        </div>
+
+                        <!-- Socials Card -->
+                        <div class="flex items-start gap-6 group">
+                            <div class="w-14 h-14 bg-gray-50 rounded-2xl flex items-center justify-center border border-gray-100 group-hover:bg-brand-purple group-hover:border-brand-purple group-hover:text-white transition-all duration-300 shrink-0">
+                                <i data-lucide="share-2" class="w-6 h-6 transition-colors"></i>
+                            </div>
+                            <div>
+                                <h3 class="text-lg font-bold font-display text-brand-dark mb-2">Follow Us</h3>
+                                <div class="flex gap-4">
+                                    <a href="https://instagram.com/elv8dgtl.in" target="_blank" class="px-4 py-2 bg-gray-50 rounded-full text-sm font-bold text-gray-600 hover:bg-brand-dark hover:text-white transition-all">Instagram</a>
+                                    <a href="https://www.linkedin.com/company/elv8dgtl/?viewAsMember=true" target="_blank" class="px-4 py-2 bg-gray-50 rounded-full text-sm font-bold text-gray-600 hover:bg-brand-dark hover:text-white transition-all">LinkedIn</a>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Availability Badge -->
+                         <div class="inline-flex items-center gap-3 px-5 py-3 bg-brand-dark text-white rounded-full mt-4">
+                            <span class="relative flex h-3 w-3">
+                                <span class="animate-ping absolute inline-flex h-full w-full rounded-full bg-brand-lime opacity-75"></span>
+                                <span class="relative inline-flex rounded-full h-3 w-3 bg-brand-lime"></span>
+                            </span>
+                            <span class="text-sm font-bold tracking-wide">Replying within 24 hours</span>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Right Column: Form -->
+                <div class="reveal" style="transition-delay: 200ms;">
+                    <form class="bg-white p-8 md:p-10 rounded-[2.5rem] shadow-2xl border border-gray-100 relative overflow-hidden">
+                         <div class="absolute top-0 right-0 w-32 h-32 bg-brand-lime rounded-full blur-[60px] opacity-30 pointer-events-none"></div>
+
+                        <div class="grid md:grid-cols-2 gap-6 mb-6">
+                            <div class="space-y-2">
+                                <label for="name" class="text-sm font-bold text-brand-dark uppercase tracking-wider ml-1">Name</label>
+                                <input type="text" id="name" placeholder="Jane Doe" class="form-input">
+                            </div>
+                            <div class="space-y-2">
+                                <label for="email" class="text-sm font-bold text-brand-dark uppercase tracking-wider ml-1">Email</label>
+                                <input type="email" id="email" placeholder="jane@company.com" class="form-input">
+                            </div>
+                        </div>
+
+                        <div class="mb-8">
+                            <label class="text-sm font-bold text-brand-dark uppercase tracking-wider ml-1 mb-3 block">I'm interested in...</label>
+                            <div class="flex flex-wrap gap-3">
+                                <label class="cursor-pointer">
+                                    <input type="checkbox" class="hidden checkbox-custom">
+                                    <div class="px-5 py-2.5 rounded-full border border-gray-200 text-gray-600 font-medium text-sm hover:border-brand-purple transition-all select-none">Web Design</div>
+                                </label>
+                                <label class="cursor-pointer">
+                                    <input type="checkbox" class="hidden checkbox-custom">
+                                    <div class="px-5 py-2.5 rounded-full border border-gray-200 text-gray-600 font-medium text-sm hover:border-brand-purple transition-all select-none">Development</div>
+                                </label>
+                                <label class="cursor-pointer">
+                                    <input type="checkbox" class="hidden checkbox-custom">
+                                    <div class="px-5 py-2.5 rounded-full border border-gray-200 text-gray-600 font-medium text-sm hover:border-brand-purple transition-all select-none">SEO</div>
+                                </label>
+                                <label class="cursor-pointer">
+                                    <input type="checkbox" class="hidden checkbox-custom">
+                                    <div class="px-5 py-2.5 rounded-full border border-gray-200 text-gray-600 font-medium text-sm hover:border-brand-purple transition-all select-none">Branding</div>
+                                </label>
+                            </div>
+                        </div>
+
+                        <div class="space-y-2 mb-8">
+                            <label for="message" class="text-sm font-bold text-brand-dark uppercase tracking-wider ml-1">Project Details</label>
+                            <textarea id="message" rows="4" placeholder="Tell us about your goals, timeline, and budget..." class="form-input resize-none"></textarea>
+                        </div>
+
+                        <button type="submit" class="w-full py-4 bg-brand-dark text-white rounded-xl font-bold text-lg hover:bg-brand-purple shadow-lg hover:-translate-y-1 transition-all duration-300 flex justify-center items-center gap-2 group">
+                            Send Message
+                            <i data-lucide="send" class="w-5 h-5 group-hover:translate-x-1 transition-transform"></i>
+                        </button>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <!-- Scrolling Marquee -->
+    <div class="bg-brand-lime text-brand-dark py-4 overflow-hidden border-t-2 border-brand-dark">
+        <div class="flex whitespace-nowrap animate-marquee">
+            <span class="mx-6 text-xl font-bold uppercase tracking-widest">• Web Design</span>
+            <span class="mx-6 text-xl font-bold uppercase tracking-widest">• Development</span>
+            <span class="mx-6 text-xl font-bold uppercase tracking-widest">• SEO</span>
+            <span class="mx-6 text-xl font-bold uppercase tracking-widest">• Branding</span>
+            <span class="mx-6 text-xl font-bold uppercase tracking-widest">• Strategy</span>
+            <span class="mx-6 text-xl font-bold uppercase tracking-widest">• Marketing</span>
+            <span class="mx-6 text-xl font-bold uppercase tracking-widest">• Content</span>
+             <!-- Repeat for smooth loop -->
+            <span class="mx-6 text-xl font-bold uppercase tracking-widest">• Web Design</span>
+            <span class="mx-6 text-xl font-bold uppercase tracking-widest">• Development</span>
+            <span class="mx-6 text-xl font-bold uppercase tracking-widest">• SEO</span>
+            <span class="mx-6 text-xl font-bold uppercase tracking-widest">• Branding</span>
+            <span class="mx-6 text-xl font-bold uppercase tracking-widest">• Strategy</span>
+            <span class="mx-6 text-xl font-bold uppercase tracking-widest">• Marketing</span>
+            <span class="mx-6 text-xl font-bold uppercase tracking-widest">• Content</span>
+        </div>
+    </div>
+
+    <!-- Unique Footer -->
+    <footer class="bg-brand-dark text-white relative overflow-hidden">
+        <!-- Giant Background Text -->
+        <div class="absolute bottom-0 left-1/2 -translate-x-1/2 translate-y-1/3 text-[20vw] font-display font-bold text-white/5 whitespace-nowrap pointer-events-none select-none">
+            ELV8 DGTL
+        </div>
+
+        <div class="container mx-auto px-6 md:px-12 py-20 relative z-10">
+            <div class="grid md:grid-cols-4 gap-12 mb-16">
+                <!-- Brand -->
+                <div class="md:col-span-2">
+                    <a href="index.html" class="flex items-center gap-2 group mb-6">
+                        <div class="w-10 h-10 bg-brand-lime rounded-xl flex items-center justify-center">
+                            <i data-lucide="zap" class="text-brand-dark w-6 h-6 fill-current"></i>
+                        </div>
+                        <span class="text-2xl font-display font-bold tracking-tight text-white">elv8<span class="font-normal opacity-70">dgtl</span></span>
+                    </a>
+                    <p class="text-gray-400 max-w-sm mb-6">
+                        A digital agency crafting experiences that stick. Based in the cloud, available worldwide.
+                    </p>
+                    <div class="flex gap-4">
+                        <a href="#" class="w-10 h-10 rounded-full bg-white/10 flex items-center justify-center hover:bg-brand-lime hover:text-brand-dark transition-all"><i data-lucide="instagram" class="w-5 h-5"></i></a>
+                        <a href="#" class="w-10 h-10 rounded-full bg-white/10 flex items-center justify-center hover:bg-brand-lime hover:text-brand-dark transition-all"><i data-lucide="linkedin" class="w-5 h-5"></i></a>
+                        <a href="#" class="w-10 h-10 rounded-full bg-white/10 flex items-center justify-center hover:bg-brand-lime hover:text-brand-dark transition-all"><i data-lucide="twitter" class="w-5 h-5"></i></a>
+                    </div>
+                </div>
+
+                <!-- Sitemap -->
+                <div>
+                    <h4 class="font-bold text-brand-lime uppercase tracking-widest text-sm mb-6">Explore</h4>
+                    <ul class="space-y-4">
+                        <li><a href="index.html" class="footer-link text-gray-300 hover:text-white">Home</a></li>
+                        <li><a href="work.html" class="footer-link text-gray-300 hover:text-white">Our Work</a></li>
+                        <li><a href="services.html" class="footer-link text-gray-300 hover:text-white">Services</a></li>
+                        <li><a href="about.html" class="footer-link text-gray-300 hover:text-white">About Us</a></li>
+                    </ul>
+                </div>
+
+                <!-- Contact Info -->
+                <div>
+                    <h4 class="font-bold text-brand-lime uppercase tracking-widest text-sm mb-6">Direct Line</h4>
+                    <ul class="space-y-4">
+                        <li class="flex gap-3 text-gray-300">
+                            <i data-lucide="mail" class="w-5 h-5 text-brand-lime shrink-0"></i>
+                            <a href="mailto:elv8dgtl@gmail.com" class="hover:text-white transition-colors">elv8dgtl@gmail.com</a>
+                        </li>
+                        <li class="flex gap-3 text-gray-300">
+                            <i data-lucide="map-pin" class="w-5 h-5 text-brand-lime shrink-0"></i>
+                            <span>Remote / Digital</span>
+                        </li>
+                        <li class="flex gap-3 text-gray-300">
+                            <i data-lucide="clock" class="w-5 h-5 text-brand-lime shrink-0"></i>
+                            <span>Mon-Fri: 9am - 6pm</span>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+
+            <!-- Bottom Bar -->
+            <div class="border-t border-white/10 pt-8 flex flex-col md:flex-row justify-between items-center gap-4">
+                <p class="text-sm text-gray-500">&copy; 2026 elv8 dgtl. All rights reserved.</p>
+                <button onclick="window.scrollTo({top: 0, behavior: 'smooth'})" class="text-sm font-bold text-brand-lime hover:text-white flex items-center gap-2 transition-colors">
+                    Back to Top <i data-lucide="arrow-up" class="w-4 h-4"></i>
+                </button>
+            </div>
+        </div>
+    </footer>
+
+    <script>
+        lucide.createIcons();
+        
+        // Navigation Scroll Effect
+        const navbar = document.getElementById('navbar');
+        window.addEventListener('scroll', () => {
+            if (window.scrollY > 50) navbar.classList.add('glass-nav', 'py-4');
+            else navbar.classList.remove('glass-nav', 'py-4');
+        });
+
+        // Mobile Menu Logic
+        const menuBtn = document.getElementById('menu-btn');
+        const mobileMenu = document.getElementById('mobile-menu');
+        const closeMenu = document.getElementById('close-menu');
+        
+        function toggleMenu() { mobileMenu.classList.toggle('translate-x-full'); }
+        
+        menuBtn.addEventListener('click', toggleMenu);
+        closeMenu.addEventListener('click', toggleMenu);
+        
+        // Mobile menu link closing
+        document.querySelectorAll('.mobile-link').forEach(link => {
+            link.addEventListener('click', toggleMenu);
+        });
+
+        // Reveal Animation
+        const observer = new IntersectionObserver((entries) => {
+            entries.forEach(entry => { if (entry.isIntersecting) entry.target.classList.add('active'); });
+        });
+        document.querySelectorAll('.reveal').forEach(el => observer.observe(el));
+    </script>
+</body>
+</html>
