@@ -169,9 +169,7 @@
                 
                 <a href="scarface.html" class="project-card group relative rounded-[2.5rem] overflow-hidden bg-white shadow-lg hover:shadow-2xl transition-all duration-500 block reveal aspect-[4/3]" data-category="graphics">
                    <img src="scarface-logo.webp" alt="Scarface Pride" class="project-img w-full h-full object-cover transition-transform duration-700">
-                    
                     <div class="absolute inset-0 bg-gradient-to-t from-black/80 via-black/10 to-transparent opacity-90"></div>
-                    
                     <div class="absolute bottom-0 left-0 w-full p-8 md:p-10 translate-y-4 group-hover:translate-y-0 transition-transform duration-500">
                         <div class="flex justify-between items-end mb-4">
                             <div>
@@ -185,6 +183,29 @@
                         <div class="flex gap-3 opacity-0 group-hover:opacity-100 transition-opacity duration-500 delay-100">
                             <span class="px-3 py-1 bg-white/20 backdrop-blur-md rounded-lg text-xs font-medium text-white">Social Media Post</span>
                             <span class="px-3 py-1 bg-white/20 backdrop-blur-md rounded-lg text-xs font-medium text-white">Creative</span>
+                        </div>
+                    </div>
+                </a>
+
+                <a href="midnightcafe.html" class="project-card group relative rounded-[2.5rem] overflow-hidden bg-white shadow-lg hover:shadow-2xl transition-all duration-500 block reveal aspect-[4/3]" data-category="branding graphics">
+                    <img src="#" alt="Midnight Cafe" class="project-img w-full h-full object-cover transition-transform duration-700">
+                    
+                    <div class="absolute inset-0 bg-gradient-to-t from-black/80 via-black/10 to-transparent opacity-90"></div>
+                    
+                    <div class="absolute bottom-0 left-0 w-full p-8 md:p-10 translate-y-4 group-hover:translate-y-0 transition-transform duration-500">
+                        <div class="flex justify-between items-end mb-4">
+                            <div>
+                                <span class="text-brand-lime font-bold text-xs uppercase tracking-widest mb-2 block">Branding & Graphics</span>
+                                <h3 class="text-3xl font-display font-bold text-white">Midnight Cafe</h3>
+                            </div>
+                            <div class="w-12 h-12 bg-white/20 backdrop-blur-md rounded-full flex items-center justify-center group-hover:bg-brand-lime group-hover:text-brand-dark transition-all">
+                                <i data-lucide="arrow-up-right" class="w-6 h-6 text-white group-hover:text-brand-dark"></i>
+                            </div>
+                        </div>
+                        <div class="flex gap-3 opacity-0 group-hover:opacity-100 transition-opacity duration-500 delay-100">
+                            <span class="px-3 py-1 bg-white/20 backdrop-blur-md rounded-lg text-xs font-medium text-white">Logo Design</span>
+                            <span class="px-3 py-1 bg-white/20 backdrop-blur-md rounded-lg text-xs font-medium text-white">Menu Design</span>
+                            <span class="px-3 py-1 bg-white/20 backdrop-blur-md rounded-lg text-xs font-medium text-white">Social Media Design</span>
                         </div>
                     </div>
                 </a>
@@ -405,13 +426,13 @@
         });
         document.querySelectorAll('.reveal').forEach(el => observer.observe(el));
 
-        // UPDATED Filter Logic to handle 'website' and 'graphics'
+        // UPDATED Filter Logic to handle MULTIPLE categories
         function filterProjects(category) {
             const projects = document.querySelectorAll('.project-card');
             const buttons = document.querySelectorAll('.filter-btn');
             
+            // 1. Update active button style
             buttons.forEach(btn => {
-                // If button text matches category roughly or is 'All'
                 const btnText = btn.textContent.toLowerCase().replace(' ', '');
                 if(btnText.includes(category) || (category === 'all' && btn.textContent.includes('All'))) {
                     btn.classList.add('active');
@@ -420,9 +441,13 @@
                 }
             });
 
+            // 2. Filter the projects
             projects.forEach(project => {
-                // Check if project matches or if category is 'all'
-                if (category === 'all' || project.dataset.category === category) {
+                // Get the category string (e.g., "branding graphics")
+                const projectCategories = project.dataset.category || '';
+                
+                // Check if it includes the selected category (or if 'all' is selected)
+                if (category === 'all' || projectCategories.includes(category)) {
                     project.style.display = 'block';
                     setTimeout(() => project.style.opacity = '1', 10);
                 } else {
