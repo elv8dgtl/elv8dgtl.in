@@ -1,0 +1,191 @@
+<!DOCTYPE html>
+<html lang="en" class="scroll-smooth">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Scarface Pride | Case Study | elv8 dgtl</title>
+    
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&family=Space+Grotesk:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <script src="https://unpkg.com/lucide@latest"></script>
+    
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    fontFamily: {
+                        sans: ['"Plus Jakarta Sans"', 'sans-serif'],
+                        display: ['"Space Grotesk"', 'sans-serif'],
+                    },
+                    colors: {
+                        brand: {
+                            lime: '#CCF381',
+                            dark: '#120E16',
+                            purple: '#4831D4',
+                            gray: '#1F1B24',
+                        }
+                    }
+                }
+            }
+        }
+    </script>
+    <style>
+        .reveal { opacity: 0; transform: translateY(30px); transition: all 0.8s cubic-bezier(0.5, 0, 0, 1); }
+        .reveal.active { opacity: 1; transform: translateY(0); }
+    </style>
+</head>
+<body class="bg-brand-dark text-white selection:bg-brand-lime selection:text-brand-dark">
+
+    <nav class="fixed w-full z-50 py-6 mix-blend-difference">
+        <div class="container mx-auto px-6 md:px-12 flex justify-between items-center">
+            <a href="work.html" class="group flex items-center gap-2 text-white hover:text-brand-lime transition-colors">
+                <div class="p-2 bg-white/10 rounded-full group-hover:bg-brand-lime group-hover:text-brand-dark transition-all">
+                    <i data-lucide="arrow-left" class="w-5 h-5"></i>
+                </div>
+                <span class="font-bold text-sm uppercase tracking-widest">Back to Projects</span>
+            </a>
+            <span class="font-display font-bold text-xl">elv8 dgtl</span>
+        </div>
+    </nav>
+
+    <header class="relative min-h-[80vh] flex items-end pb-24 pt-40 overflow-hidden">
+        <div class="absolute inset-0 z-0">
+            <img src="assets/work/slide-3.jpeg" alt="Scarface Pride Hero" class="w-full h-full object-cover opacity-60">
+            <div class="absolute inset-0 bg-gradient-to-t from-brand-dark via-brand-dark/80 to-transparent"></div>
+        </div>
+
+        <div class="container mx-auto px-6 md:px-12 relative z-10 reveal">
+            <span class="text-brand-lime font-bold text-sm uppercase tracking-[0.2em] mb-4 block">Graphic Design Case Study</span>
+            <h1 class="text-6xl md:text-8xl lg:text-9xl font-display font-bold leading-none mb-8">
+                Scarface<br>
+                <span class="text-transparent bg-clip-text bg-gradient-to-r from-brand-lime to-white">Pride</span>
+            </h1>
+            
+            <div class="grid grid-cols-2 md:grid-cols-4 gap-8 border-t border-white/20 pt-8 mt-12 max-w-4xl">
+                <div>
+                    <h4 class="text-gray-400 text-xs uppercase tracking-widest mb-2">Client</h4>
+                    <p class="font-bold text-lg">Scarface Pride</p>
+                </div>
+                <div>
+                    <h4 class="text-gray-400 text-xs uppercase tracking-widest mb-2">Services</h4>
+                    <p class="font-bold text-lg">Visual Identity, Social Media</p>
+                </div>
+                <div>
+                    <h4 class="text-gray-400 text-xs uppercase tracking-widest mb-2">Year</h4>
+                    <p class="font-bold text-lg">2024</p>
+                </div>
+                <div>
+                    <h4 class="text-gray-400 text-xs uppercase tracking-widest mb-2">Outcome</h4>
+                    <p class="font-bold text-brand-lime text-lg">Brand Refresh</p>
+                </div>
+            </div>
+        </div>
+    </header>
+
+    <section class="py-24 bg-white text-brand-dark">
+        <div class="container mx-auto px-6 md:px-12">
+            <div class="grid md:grid-cols-12 gap-12">
+                <div class="md:col-span-4">
+                    <h2 class="text-4xl font-display font-bold mb-6">The Challenge</h2>
+                    <p class="text-gray-600 leading-relaxed mb-8">
+                        Scarface Pride needed a visual identity that could cut through the noise. They wanted a look that was aggressive yet sophisticated, appealing to a bold, modern audience. The challenge was to create a cohesive system that worked across merchandise, social media, and digital platforms without losing its raw edge.
+                    </p>
+                    
+                    <div class="bg-gray-50 p-8 rounded-3xl border border-gray-100">
+                        <h3 class="font-bold text-xl mb-4 flex items-center gap-2">
+                            <i data-lucide="pen-tool" class="w-5 h-5 text-brand-purple"></i> Tools & Resources
+                        </h3>
+                        <ul class="space-y-3">
+                            <li class="flex items-center gap-3 text-gray-600">
+                                <span class="w-2 h-2 bg-brand-lime rounded-full"></span> Adobe Illustrator (Vector Work)
+                            </li>
+                            <li class="flex items-center gap-3 text-gray-600">
+                                <span class="w-2 h-2 bg-brand-lime rounded-full"></span> Adobe Photoshop (Compositing)
+                            </li>
+                            <li class="flex items-center gap-3 text-gray-600">
+                                <span class="w-2 h-2 bg-brand-lime rounded-full"></span> Color Palette: Neon Green & Dark
+                            </li>
+                        </ul>
+                    </div>
+                </div>
+
+                <div class="md:col-span-7 md:col-start-6">
+                    <h2 class="text-4xl font-display font-bold mb-6">The Solution</h2>
+                    <p class="text-gray-600 leading-relaxed text-lg mb-6">
+                        We developed a high-contrast visual language focusing on "Gritty Luxury." By combining distressed textures with clean, modern typography, we created a brand that feels established but rebellious.
+                    </p>
+                    <p class="text-gray-600 leading-relaxed text-lg">
+                        The new identity allows for flexibility—it looks just as good on a dark mode Instagram feed as it does printed on high-quality apparel. The engagement on their launch posts increased by over 40% following the rebrand.
+                    </p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section class="py-24 bg-gray-50">
+        <div class="container mx-auto px-6 md:px-12">
+            <h3 class="text-brand-dark font-display font-bold text-3xl mb-12 text-center">Project Gallery</h3>
+            
+            <div class="grid md:grid-cols-2 gap-8">
+                
+                <div class="group relative overflow-hidden rounded-[2rem] shadow-xl md:col-span-2 aspect-[21/9] reveal">
+                    <img src="assets/work/slide-3.jpeg" alt="Scarface Pride Main Banner" class="w-full h-full object-cover transition-transform duration-700 group-hover:scale-105">
+                </div>
+
+                <div class="group relative overflow-hidden rounded-[2rem] shadow-xl aspect-square reveal">
+                    <img src="assets/work/slide-3.jpeg" alt="Detail Shot 1" class="w-full h-full object-cover transition-transform duration-700 group-hover:scale-105">
+                    <div class="absolute inset-0 bg-black/50 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity duration-300">
+                        <span class="text-white font-bold">Social Media Asset</span>
+                    </div>
+                </div>
+
+                <div class="group relative overflow-hidden rounded-[2rem] shadow-xl aspect-square reveal">
+                    <img src="assets/work/slide-3.jpeg" alt="Detail Shot 2" class="w-full h-full object-cover transition-transform duration-700 group-hover:scale-105">
+                    <div class="absolute inset-0 bg-black/50 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity duration-300">
+                        <span class="text-white font-bold">Logo Variation</span>
+                    </div>
+                </div>
+
+                <div class="group relative overflow-hidden rounded-[2rem] shadow-xl md:row-span-2 aspect-[9/16] md:aspect-auto reveal">
+                    <img src="assets/work/slide-3.jpeg" alt="Mobile View" class="w-full h-full object-cover transition-transform duration-700 group-hover:scale-105">
+                </div>
+
+                <div class="group relative overflow-hidden rounded-[2rem] shadow-xl aspect-square reveal">
+                    <img src="assets/work/slide-3.jpeg" alt="Texture Detail" class="w-full h-full object-cover transition-transform duration-700 group-hover:scale-105">
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <footer class="bg-brand-dark text-white py-24 text-center">
+        <div class="container mx-auto px-6">
+            <p class="text-gray-500 mb-8">Next Project</p>
+            <a href="work.html" class="inline-block group">
+                <h2 class="text-5xl md:text-7xl font-display font-bold group-hover:text-brand-lime transition-colors duration-300">
+                    View All Work
+                </h2>
+                <div class="h-1 w-0 bg-brand-lime group-hover:w-full transition-all duration-300 mt-4 mx-auto"></div>
+            </a>
+            <div class="mt-12">
+                <p class="text-sm text-gray-600">&copy; 2024 elv8 dgtl. All rights reserved.</p>
+            </div>
+        </div>
+    </footer>
+
+    <script>
+        lucide.createIcons();
+        
+        // Simple Reveal Animation
+        const observer = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    entry.target.classList.add('active');
+                }
+            });
+        });
+        document.querySelectorAll('.reveal').forEach(el => observer.observe(el));
+    </script>
+</body>
+</html>
