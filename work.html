@@ -1,0 +1,461 @@
+<!DOCTYPE html>
+<html lang="en" class="scroll-smooth">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    
+    <title>Our Work | Digital Portfolio & Case Studies | elv8 dgtl</title>
+    <meta name="description" content="Browse our portfolio of high-impact digital projects. From custom web development for startups to rebranding campaigns for enterprises.">
+    <meta name="keywords" content="Web Design Portfolio, Branding Case Studies, Digital Marketing Results, elv8 dgtl projects">
+    <meta name="author" content="elv8 dgtl">
+    <meta name="robots" content="index, follow">
+    <link rel="canonical" href="https://www.elv8dgtl.in/work.html">
+
+    <meta property="og:type" content="website">
+    <meta property="og:url" content="https://www.elv8dgtl.in/work.html">
+    <meta property="og:title" content="Our Work | elv8 dgtl">
+    <meta property="og:description" content="See how we elevate brands. Real results, real growth.">
+    <meta property="og:image" content="https://www.elv8dgtl.in/og-work.jpg">
+
+    <script async src="https://www.googletagmanager.com/gtag/js?id=G-V77HPC9EX8"></script>
+    <script>
+      window.dataLayer = window.dataLayer || [];
+      function gtag(){dataLayer.push(arguments);}
+      gtag('js', new Date());
+      gtag('config', 'G-V77HPC9EX8');
+    </script>
+    
+    <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png">
+    <link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png">
+    <link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png">
+    <link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 24 24%22 fill=%22%23CCF381%22 stroke=%22%23120E16%22 stroke-width=%222%22 stroke-linecap=%22round%22 stroke-linejoin=%22round%22><polygon points=%2213 2 3 14 12 14 11 22 21 10 12 10 13 2%22/></svg>">
+    
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&family=Space+Grotesk:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <script src="https://unpkg.com/lucide@latest"></script>
+    
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    fontFamily: {
+                        sans: ['"Plus Jakarta Sans"', 'sans-serif'],
+                        display: ['"Space Grotesk"', 'sans-serif'],
+                    },
+                    colors: {
+                        brand: {
+                            lime: '#CCF381',
+                            dark: '#120E16',
+                            purple: '#4831D4',
+                            gray: '#1F1B24',
+                            light: '#F9FAFB'
+                        }
+                    },
+                    animation: {
+                        'float': 'float 6s ease-in-out infinite',
+                        'marquee': 'marquee 25s linear infinite',
+                        'fade-in-up': 'fadeInUp 0.8s ease-out forwards',
+                    },
+                    keyframes: {
+                        float: {
+                            '0%, 100%': { transform: 'translateY(0)' },
+                            '50%': { transform: 'translateY(-20px)' },
+                        },
+                        marquee: {
+                            '0%': { transform: 'translateX(0%)' },
+                            '100%': { transform: 'translateX(-100%)' },
+                        },
+                        fadeInUp: {
+                            '0%': { opacity: '0', transform: 'translateY(20px)' },
+                            '100%': { opacity: '1', transform: 'translateY(0)' },
+                        }
+                    }
+                }
+            }
+        }
+    </script>
+    <style>
+        /* Nav Blur */
+        .glass-nav { background: rgba(18, 14, 22, 0.85); backdrop-filter: blur(12px); border-bottom: 1px solid rgba(255,255,255,0.05); }
+        
+        .reveal { opacity: 0; transform: translateY(30px); transition: all 0.8s cubic-bezier(0.5, 0, 0, 1); }
+        .reveal.active { opacity: 1; transform: translateY(0); }
+        
+        /* New Filter Button Styles */
+        .filter-btn { transition: all 0.3s ease; }
+        .filter-btn:hover { background-color: #f3f4f6; color: #120E16; }
+        .filter-btn.active { background-color: #CCF381; color: #120E16; border-color: #CCF381; font-weight: 700; box-shadow: 0 4px 15px rgba(204, 243, 129, 0.3); }
+        
+        /* Project Card Interactions */
+        .project-card:hover .project-img { transform: scale(1.05); }
+        
+        /* Footer Link Hover */
+        .footer-link { position: relative; display: inline-block; }
+        .footer-link::after { content: ''; position: absolute; width: 0; height: 1px; bottom: -2px; left: 0; background-color: #CCF381; transition: width 0.3s ease; }
+        .footer-link:hover::after { width: 100%; }
+        
+        ::-webkit-scrollbar { width: 8px; }
+        ::-webkit-scrollbar-track { background: #f9fafb; }
+        ::-webkit-scrollbar-thumb { background: #d1d5db; border-radius: 4px; }
+        ::-webkit-scrollbar-thumb:hover { background: #9ca3af; }
+    </style>
+</head>
+<body class="bg-gray-50 text-brand-dark overflow-x-hidden flex flex-col min-h-screen">
+
+    <nav id="navbar" class="fixed w-full z-50 transition-all duration-300 py-6">
+        <div class="container mx-auto px-6 md:px-12 flex justify-between items-center">
+            <a href="index.html" class="flex items-center gap-2 group">
+                <div class="w-10 h-10 bg-brand-lime rounded-xl flex items-center justify-center transform group-hover:rotate-12 transition-transform duration-300">
+                    <i data-lucide="zap" class="text-brand-dark w-6 h-6 fill-current"></i>
+                </div>
+                <span id="nav-brand-text" class="text-2xl font-display font-bold tracking-tight text-white transition-colors">elv8<span class="font-normal opacity-70">dgtl</span></span>
+            </a>
+            <div class="hidden md:flex items-center gap-8">
+                <a href="services.html" class="nav-link text-sm font-medium text-gray-300 hover:text-brand-lime transition-colors">Services</a>
+                <a href="work.html" class="nav-link text-sm font-medium text-brand-lime transition-colors">Projects</a>
+                <a href="about.html" class="nav-link text-sm font-medium text-gray-300 hover:text-brand-lime transition-colors">About</a>
+                <a href="contact.html" class="px-6 py-3 bg-white text-brand-dark rounded-full text-sm font-bold hover:bg-brand-lime hover:shadow-lg hover:-translate-y-1 transition-all duration-300 flex items-center gap-2">
+                    Start a Project <i data-lucide="arrow-right" class="w-4 h-4"></i>
+                </a>
+            </div>
+            <button id="menu-btn" class="md:hidden text-white p-2"><i data-lucide="menu" class="w-8 h-8"></i></button>
+        </div>
+    </nav>
+
+    <div id="mobile-menu" class="fixed inset-0 bg-brand-dark z-40 translate-x-full transition-transform duration-300 flex flex-col justify-center items-center gap-8">
+        <button id="close-menu" class="absolute top-8 right-8 p-2"><i data-lucide="x" class="w-8 h-8 text-white"></i></button>
+        <a href="index.html" class="mobile-link text-3xl font-display font-bold text-white">Home</a>
+        <a href="services.html" class="mobile-link text-3xl font-display font-bold text-white">Services</a>
+        <a href="work.html" class="mobile-link text-3xl font-display font-bold text-brand-lime">Projects</a>
+        <a href="about.html" class="mobile-link text-3xl font-display font-bold text-white">About</a>
+        <a href="contact.html" class="mobile-link text-3xl font-display font-bold text-white">Contact</a>
+    </div>
+
+    <header class="relative pt-40 pb-24 overflow-hidden bg-brand-dark rounded-b-[3rem] shadow-2xl z-20">
+        <div class="absolute top-0 right-0 w-[600px] h-[600px] bg-brand-purple/20 rounded-full blur-[120px] translate-x-1/2 -translate-y-1/2 pointer-events-none"></div>
+        <div class="absolute bottom-0 left-0 w-[500px] h-[500px] bg-brand-lime/10 rounded-full blur-[100px] -translate-x-1/3 translate-y-1/3 pointer-events-none"></div>
+        
+        <div class="container mx-auto px-6 md:px-12 relative z-10 text-center">
+            <div class="max-w-4xl mx-auto">
+                <span class="inline-block py-1 px-3 rounded-full bg-white/5 border border-white/10 text-brand-lime text-xs font-bold uppercase tracking-widest mb-6 animate-fade-in-up">Selected Works 2024-2025</span>
+                <h1 class="text-5xl md:text-7xl lg:text-8xl font-display font-bold leading-tight mb-8 text-white animate-fade-in-up" style="animation-delay: 100ms;">
+                    We don't just create.<br>
+                    <span class="text-transparent bg-clip-text bg-gradient-to-r from-brand-lime to-white">We capitalize.</span>
+                </h1>
+                <p class="text-xl text-gray-400 max-w-2xl mx-auto leading-relaxed animate-fade-in-up" style="animation-delay: 200ms;">
+                    Explore a collection of digital experiences that have generated revenue, built communities, and elevated brands across the globe.
+                </p>
+            </div>
+        </div>
+    </header>
+
+    <div class="sticky top-0 z-30 bg-white/80 backdrop-blur-md border-b border-gray-200 py-4 transition-all duration-300" id="filter-bar">
+        <div class="container mx-auto px-6 md:px-12 overflow-x-auto no-scrollbar">
+            <div class="flex gap-3 min-w-max md:justify-center">
+                <button onclick="filterProjects('all')" class="filter-btn active px-6 py-2.5 rounded-full border border-gray-200 text-sm font-bold text-gray-600">All Projects</button>
+                <button onclick="filterProjects('website')" class="filter-btn px-6 py-2.5 rounded-full border border-gray-200 text-sm font-bold text-gray-600">Websites</button>
+                <button onclick="filterProjects('graphics')" class="filter-btn px-6 py-2.5 rounded-full border border-gray-200 text-sm font-bold text-gray-600">Graphic Design</button>
+                <button onclick="filterProjects('branding')" class="filter-btn px-6 py-2.5 rounded-full border border-gray-200 text-sm font-bold text-gray-600">Branding</button>
+                <button onclick="filterProjects('marketing')" class="filter-btn px-6 py-2.5 rounded-full border border-gray-200 text-sm font-bold text-gray-600">Marketing</button>
+            </div>
+        </div>
+    </div>
+
+    <section class="py-20 min-h-screen bg-gray-50">
+        <div class="container mx-auto px-6 md:px-12">
+            <div class="grid md:grid-cols-2 gap-8 lg:gap-12" id="project-grid">
+                
+                <a href="scarface.html" class="project-card group relative rounded-[2.5rem] overflow-hidden bg-white shadow-lg hover:shadow-2xl transition-all duration-500 block reveal aspect-[4/3]" data-category="graphics">
+                   <img src="scarface-logo.webp" alt="Scarface Pride" class="project-img w-full h-full object-cover transition-transform duration-700">
+                    <div class="absolute inset-0 bg-gradient-to-t from-black/80 via-black/10 to-transparent opacity-90"></div>
+                    <div class="absolute bottom-0 left-0 w-full p-8 md:p-10 translate-y-4 group-hover:translate-y-0 transition-transform duration-500">
+                        <div class="flex justify-between items-end mb-4">
+                            <div>
+                                <span class="text-brand-lime font-bold text-xs uppercase tracking-widest mb-2 block">Graphic Design</span>
+                                <h3 class="text-3xl font-display font-bold text-white">Scarface Pride</h3>
+                            </div>
+                            <div class="w-12 h-12 bg-white/20 backdrop-blur-md rounded-full flex items-center justify-center group-hover:bg-brand-lime group-hover:text-brand-dark transition-all">
+                                <i data-lucide="arrow-up-right" class="w-6 h-6 text-white group-hover:text-brand-dark"></i>
+                            </div>
+                        </div>
+                        <div class="flex gap-3 opacity-0 group-hover:opacity-100 transition-opacity duration-500 delay-100">
+                            <span class="px-3 py-1 bg-white/20 backdrop-blur-md rounded-lg text-xs font-medium text-white">Social Media Post</span>
+                            <span class="px-3 py-1 bg-white/20 backdrop-blur-md rounded-lg text-xs font-medium text-white">Creative</span>
+                        </div>
+                    </div>
+                </a>
+
+                <a href="midnightcafe.html" class="project-card group relative rounded-[2.5rem] overflow-hidden bg-white shadow-lg hover:shadow-2xl transition-all duration-500 block reveal aspect-[4/3]" data-category="branding graphics">
+                    <img src="#" alt="Midnight Cafe" class="project-img w-full h-full object-cover transition-transform duration-700">
+                    
+                    <div class="absolute inset-0 bg-gradient-to-t from-black/80 via-black/10 to-transparent opacity-90"></div>
+                    
+                    <div class="absolute bottom-0 left-0 w-full p-8 md:p-10 translate-y-4 group-hover:translate-y-0 transition-transform duration-500">
+                        <div class="flex justify-between items-end mb-4">
+                            <div>
+                                <span class="text-brand-lime font-bold text-xs uppercase tracking-widest mb-2 block">Branding & Graphics</span>
+                                <h3 class="text-3xl font-display font-bold text-white">Midnight Cafe</h3>
+                            </div>
+                            <div class="w-12 h-12 bg-white/20 backdrop-blur-md rounded-full flex items-center justify-center group-hover:bg-brand-lime group-hover:text-brand-dark transition-all">
+                                <i data-lucide="arrow-up-right" class="w-6 h-6 text-white group-hover:text-brand-dark"></i>
+                            </div>
+                        </div>
+                        <div class="flex gap-3 opacity-0 group-hover:opacity-100 transition-opacity duration-500 delay-100">
+                            <span class="px-3 py-1 bg-white/20 backdrop-blur-md rounded-lg text-xs font-medium text-white">Logo Design</span>
+                            <span class="px-3 py-1 bg-white/20 backdrop-blur-md rounded-lg text-xs font-medium text-white">Menu Design</span>
+                            <span class="px-3 py-1 bg-white/20 backdrop-blur-md rounded-lg text-xs font-medium text-white">Social Media Design</span>
+                        </div>
+                    </div>
+                </a>
+
+                <a href="project-nova.html" class="project-card group relative rounded-[2.5rem] overflow-hidden bg-white shadow-lg hover:shadow-2xl transition-all duration-500 block reveal aspect-[4/3]" data-category="website">
+                    <img src="https://images.unsplash.com/photo-1481487484168-9b930d5b7d9d?q=80&w=2070&auto=format&fit=crop" alt="Nova App" class="project-img w-full h-full object-cover transition-transform duration-700">
+                    <div class="absolute inset-0 bg-gradient-to-t from-black/80 via-black/10 to-transparent opacity-90"></div>
+                    <div class="absolute bottom-0 left-0 w-full p-8 md:p-10 translate-y-4 group-hover:translate-y-0 transition-transform duration-500">
+                        <div class="flex justify-between items-end mb-4">
+                            <div>
+                                <span class="text-brand-lime font-bold text-xs uppercase tracking-widest mb-2 block">Fintech</span>
+                                <h3 class="text-3xl font-display font-bold text-white">Nova Banking App</h3>
+                            </div>
+                            <div class="w-12 h-12 bg-white/20 backdrop-blur-md rounded-full flex items-center justify-center group-hover:bg-brand-lime group-hover:text-brand-dark transition-all">
+                                <i data-lucide="arrow-up-right" class="w-6 h-6 text-white group-hover:text-brand-dark"></i>
+                            </div>
+                        </div>
+                        <div class="flex gap-3 opacity-0 group-hover:opacity-100 transition-opacity duration-500 delay-100">
+                            <span class="px-3 py-1 bg-white/20 backdrop-blur-md rounded-lg text-xs font-medium text-white">React.js</span>
+                            <span class="px-3 py-1 bg-white/20 backdrop-blur-md rounded-lg text-xs font-medium text-white">UI/UX</span>
+                        </div>
+                        <div class="absolute top-8 right-8 bg-brand-lime text-brand-dark px-4 py-2 rounded-full font-bold text-sm shadow-lg transform rotate-3 group-hover:rotate-0 transition-transform">
+                            +150% Signups
+                        </div>
+                    </div>
+                </a>
+
+                <a href="project-azure.html" class="project-card group relative rounded-[2.5rem] overflow-hidden bg-white shadow-lg hover:shadow-2xl transition-all duration-500 block reveal aspect-[4/3]" data-category="branding">
+                    <img src="https://images.unsplash.com/photo-1600607686527-6fb886090705?q=80&w=2000&auto=format&fit=crop" alt="Azure Resort" class="project-img w-full h-full object-cover transition-transform duration-700">
+                    <div class="absolute inset-0 bg-gradient-to-t from-black/80 via-black/10 to-transparent opacity-90"></div>
+                    <div class="absolute bottom-0 left-0 w-full p-8 md:p-10 translate-y-4 group-hover:translate-y-0 transition-transform duration-500">
+                        <div class="flex justify-between items-end mb-4">
+                            <div>
+                                <span class="text-brand-purple font-bold text-xs uppercase tracking-widest mb-2 block">Hospitality</span>
+                                <h3 class="text-3xl font-display font-bold text-white">The Azure Resort</h3>
+                            </div>
+                            <div class="w-12 h-12 bg-white/20 backdrop-blur-md rounded-full flex items-center justify-center group-hover:bg-brand-purple group-hover:text-white transition-all">
+                                <i data-lucide="arrow-up-right" class="w-6 h-6 text-white"></i>
+                            </div>
+                        </div>
+                        <div class="flex gap-3 opacity-0 group-hover:opacity-100 transition-opacity duration-500 delay-100">
+                            <span class="px-3 py-1 bg-white/20 backdrop-blur-md rounded-lg text-xs font-medium text-white">Identity</span>
+                            <span class="px-3 py-1 bg-white/20 backdrop-blur-md rounded-lg text-xs font-medium text-white">Print</span>
+                        </div>
+                    </div>
+                </a>
+
+                <a href="#" class="project-card group relative rounded-[2.5rem] overflow-hidden bg-white shadow-lg hover:shadow-2xl transition-all duration-500 block reveal aspect-[4/3]" data-category="marketing">
+                    <img src="https://images.unsplash.com/photo-1551288049-bebda4e38f71?q=80&w=2070&auto=format&fit=crop" alt="Urban Kicks" class="project-img w-full h-full object-cover transition-transform duration-700">
+                    <div class="absolute inset-0 bg-gradient-to-t from-black/80 via-black/10 to-transparent opacity-90"></div>
+                    <div class="absolute bottom-0 left-0 w-full p-8 md:p-10 translate-y-4 group-hover:translate-y-0 transition-transform duration-500">
+                        <div class="flex justify-between items-end mb-4">
+                            <div>
+                                <span class="text-blue-400 font-bold text-xs uppercase tracking-widest mb-2 block">E-Commerce</span>
+                                <h3 class="text-3xl font-display font-bold text-white">Urban Kicks</h3>
+                            </div>
+                            <div class="w-12 h-12 bg-white/20 backdrop-blur-md rounded-full flex items-center justify-center group-hover:bg-blue-500 group-hover:text-white transition-all">
+                                <i data-lucide="arrow-up-right" class="w-6 h-6 text-white"></i>
+                            </div>
+                        </div>
+                        <div class="flex gap-3 opacity-0 group-hover:opacity-100 transition-opacity duration-500 delay-100">
+                            <span class="px-3 py-1 bg-white/20 backdrop-blur-md rounded-lg text-xs font-medium text-white">SEO</span>
+                            <span class="px-3 py-1 bg-white/20 backdrop-blur-md rounded-lg text-xs font-medium text-white">PPC</span>
+                        </div>
+                        <div class="absolute top-8 right-8 bg-blue-500 text-white px-4 py-2 rounded-full font-bold text-sm shadow-lg transform rotate-3 group-hover:rotate-0 transition-transform">
+                            10x ROAS
+                        </div>
+                    </div>
+                </a>
+
+                <a href="#" class="project-card group relative rounded-[2.5rem] overflow-hidden bg-white shadow-lg hover:shadow-2xl transition-all duration-500 block reveal aspect-[4/3]" data-category="website">
+                    <img src="https://images.unsplash.com/photo-1618005182384-a83a8bd57fbe?q=80&w=1964&auto=format&fit=crop" alt="Flow Dashboard" class="project-img w-full h-full object-cover transition-transform duration-700">
+                    <div class="absolute inset-0 bg-gradient-to-t from-black/80 via-black/10 to-transparent opacity-90"></div>
+                    <div class="absolute bottom-0 left-0 w-full p-8 md:p-10 translate-y-4 group-hover:translate-y-0 transition-transform duration-500">
+                        <div class="flex justify-between items-end mb-4">
+                            <div>
+                                <span class="text-brand-lime font-bold text-xs uppercase tracking-widest mb-2 block">SaaS</span>
+                                <h3 class="text-3xl font-display font-bold text-white">Flow Dashboard</h3>
+                            </div>
+                            <div class="w-12 h-12 bg-white/20 backdrop-blur-md rounded-full flex items-center justify-center group-hover:bg-brand-lime group-hover:text-brand-dark transition-all">
+                                <i data-lucide="arrow-up-right" class="w-6 h-6 text-white group-hover:text-brand-dark"></i>
+                            </div>
+                        </div>
+                        <div class="flex gap-3 opacity-0 group-hover:opacity-100 transition-opacity duration-500 delay-100">
+                            <span class="px-3 py-1 bg-white/20 backdrop-blur-md rounded-lg text-xs font-medium text-white">Next.js</span>
+                            <span class="px-3 py-1 bg-white/20 backdrop-blur-md rounded-lg text-xs font-medium text-white">Dashboard</span>
+                        </div>
+                    </div>
+                </a>
+
+            </div>
+        </div>
+    </section>
+
+    <div class="bg-brand-lime text-brand-dark py-4 overflow-hidden border-y border-brand-dark">
+        <div class="flex whitespace-nowrap animate-marquee">
+            <span class="mx-6 text-xl font-bold uppercase tracking-widest">• Web Design</span>
+            <span class="mx-6 text-xl font-bold uppercase tracking-widest">• Graphic Design</span>
+            <span class="mx-6 text-xl font-bold uppercase tracking-widest">• Development</span>
+            <span class="mx-6 text-xl font-bold uppercase tracking-widest">• SEO</span>
+            <span class="mx-6 text-xl font-bold uppercase tracking-widest">• Branding</span>
+            <span class="mx-6 text-xl font-bold uppercase tracking-widest">• Strategy</span>
+            <span class="mx-6 text-xl font-bold uppercase tracking-widest">• Marketing</span>
+             <span class="mx-6 text-xl font-bold uppercase tracking-widest">• Web Design</span>
+            <span class="mx-6 text-xl font-bold uppercase tracking-widest">• Graphic Design</span>
+            <span class="mx-6 text-xl font-bold uppercase tracking-widest">• Development</span>
+            <span class="mx-6 text-xl font-bold uppercase tracking-widest">• SEO</span>
+            <span class="mx-6 text-xl font-bold uppercase tracking-widest">• Branding</span>
+            <span class="mx-6 text-xl font-bold uppercase tracking-widest">• Strategy</span>
+            <span class="mx-6 text-xl font-bold uppercase tracking-widest">• Marketing</span>
+        </div>
+    </div>
+
+    <section class="py-24 bg-white relative overflow-hidden">
+        <div class="container mx-auto px-6 md:px-12 text-center relative z-10">
+            <h2 class="text-4xl md:text-6xl font-display font-bold mb-8 text-brand-dark">Ready to be our next<br>success story?</h2>
+            <p class="text-xl text-gray-600 max-w-2xl mx-auto mb-10 font-medium">We only take on a limited number of clients per quarter to ensure maximum attention and results.</p>
+            <a href="contact.html" class="inline-flex items-center gap-2 px-8 py-4 bg-brand-dark text-white rounded-full font-bold hover:bg-brand-purple transition-all shadow-xl hover:-translate-y-1">
+                Start Your Project <i data-lucide="arrow-right" class="w-5 h-5"></i>
+            </a>
+        </div>
+    </section>
+
+    <footer class="bg-brand-dark text-white relative overflow-hidden border-t border-white/10">
+        <div class="absolute bottom-0 left-1/2 -translate-x-1/2 translate-y-1/3 text-[20vw] font-display font-bold text-white/5 whitespace-nowrap pointer-events-none select-none">
+            ELV8 DGTL
+        </div>
+
+        <div class="container mx-auto px-6 md:px-12 py-20 relative z-10">
+            <div class="grid md:grid-cols-4 gap-12 mb-16">
+                <div class="md:col-span-2">
+                    <a href="index.html" class="flex items-center gap-2 group mb-6">
+                        <div class="w-10 h-10 bg-brand-lime rounded-xl flex items-center justify-center">
+                            <i data-lucide="zap" class="text-brand-dark w-6 h-6 fill-current"></i>
+                        </div>
+                        <span class="text-2xl font-display font-bold tracking-tight text-white">elv8<span class="font-normal opacity-70">dgtl</span></span>
+                    </a>
+                    <p class="text-gray-400 max-w-sm mb-6">
+                        A digital agency crafting experiences that stick. Based in the cloud, available worldwide.
+                    </p>
+                    <div class="flex gap-4">
+                        <a href="#" class="w-10 h-10 rounded-full bg-white/10 flex items-center justify-center hover:bg-brand-lime hover:text-brand-dark transition-all"><i data-lucide="instagram" class="w-5 h-5"></i></a>
+                        <a href="#" class="w-10 h-10 rounded-full bg-white/10 flex items-center justify-center hover:bg-brand-lime hover:text-brand-dark transition-all"><i data-lucide="linkedin" class="w-5 h-5"></i></a>
+                        <a href="#" class="w-10 h-10 rounded-full bg-white/10 flex items-center justify-center hover:bg-brand-lime hover:text-brand-dark transition-all"><i data-lucide="twitter" class="w-5 h-5"></i></a>
+                    </div>
+                </div>
+
+                <div>
+                    <h4 class="font-bold text-brand-lime uppercase tracking-widest text-sm mb-6">Explore</h4>
+                    <ul class="space-y-4">
+                        <li><a href="index.html" class="footer-link text-gray-300 hover:text-white">Home</a></li>
+                        <li><a href="work.html" class="footer-link text-gray-300 hover:text-white">Our Work</a></li>
+                        <li><a href="services.html" class="footer-link text-gray-300 hover:text-white">Services</a></li>
+                        <li><a href="about.html" class="footer-link text-gray-300 hover:text-white">About Us</a></li>
+                    </ul>
+                </div>
+
+                <div>
+                    <h4 class="font-bold text-brand-lime uppercase tracking-widest text-sm mb-6">Direct Line</h4>
+                    <ul class="space-y-4">
+                        <li class="flex gap-3 text-gray-300">
+                            <i data-lucide="mail" class="w-5 h-5 text-brand-lime shrink-0"></i>
+                            <a href="mailto:elv8dgtl@gmail.com" class="hover:text-white transition-colors">elv8dgtl@gmail.com</a>
+                        </li>
+                        <li class="flex gap-3 text-gray-300">
+                            <i data-lucide="map-pin" class="w-5 h-5 text-brand-lime shrink-0"></i>
+                            <span>Remote / Digital</span>
+                        </li>
+                        <li class="flex gap-3 text-gray-300">
+                            <i data-lucide="clock" class="w-5 h-5 text-brand-lime shrink-0"></i>
+                            <span>Mon-Fri: 9am - 6pm</span>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+
+            <div class="border-t border-white/10 pt-8 flex flex-col md:flex-row justify-between items-center gap-4">
+                <p class="text-sm text-gray-500">&copy; 2026 elv8 dgtl. All rights reserved.</p>
+                <button onclick="window.scrollTo({top: 0, behavior: 'smooth'})" class="text-sm font-bold text-brand-lime hover:text-white flex items-center gap-2 transition-colors">
+                    Back to Top <i data-lucide="arrow-up" class="w-4 h-4"></i>
+                </button>
+            </div>
+        </div>
+    </footer>
+
+    <script>
+        lucide.createIcons();
+        
+        // Navigation Logic
+        const navbar = document.getElementById('navbar');
+        const navBrandText = document.getElementById('nav-brand-text');
+        const navLinks = document.querySelectorAll('.nav-link');
+        const menuBtn = document.getElementById('menu-btn');
+        const stickyBar = document.getElementById('filter-bar');
+
+        window.addEventListener('scroll', () => {
+            const scrollY = window.scrollY;
+            if (scrollY > 50) {
+                navbar.classList.add('glass-nav', 'py-4');
+                navbar.classList.remove('py-6');
+            } else {
+                navbar.classList.remove('glass-nav', 'py-4');
+                navbar.classList.add('py-6');
+            }
+        });
+
+        // Mobile Menu Logic
+        const mobileMenu = document.getElementById('mobile-menu');
+        const closeMenu = document.getElementById('close-menu');
+        function toggleMenu() { mobileMenu.classList.toggle('translate-x-full'); }
+        menuBtn.addEventListener('click', toggleMenu);
+        closeMenu.addEventListener('click', toggleMenu);
+        document.querySelectorAll('.mobile-link').forEach(link => link.addEventListener('click', toggleMenu));
+
+        // Reveal Animation
+        const observer = new IntersectionObserver((entries) => {
+            entries.forEach(entry => { if (entry.isIntersecting) entry.target.classList.add('active'); });
+        });
+        document.querySelectorAll('.reveal').forEach(el => observer.observe(el));
+
+        // UPDATED Filter Logic to handle MULTIPLE categories
+        function filterProjects(category) {
+            const projects = document.querySelectorAll('.project-card');
+            const buttons = document.querySelectorAll('.filter-btn');
+            
+            // 1. Update active button style
+            buttons.forEach(btn => {
+                const btnText = btn.textContent.toLowerCase().replace(' ', '');
+                if(btnText.includes(category) || (category === 'all' && btn.textContent.includes('All'))) {
+                    btn.classList.add('active');
+                } else {
+                    btn.classList.remove('active');
+                }
+            });
+
+            // 2. Filter the projects
+            projects.forEach(project => {
+                // Get the category string (e.g., "branding graphics")
+                const projectCategories = project.dataset.category || '';
+                
+                // Check if it includes the selected category (or if 'all' is selected)
+                if (category === 'all' || projectCategories.includes(category)) {
+                    project.style.display = 'block';
+                    setTimeout(() => project.style.opacity = '1', 10);
+                } else {
+                    project.style.opacity = '0';
+                    setTimeout(() => project.style.display = 'none', 300);
+                }
+            });
+        }
+    </script>
+</body>
+</html>
