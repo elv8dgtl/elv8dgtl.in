@@ -3,13 +3,32 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Scarface Pride | Case Study | elv8 dgtl</title>
+    
+    <title>Scarface Pride Case Study | Brand Identity & Creative Design | elv8 dgtl</title>
+    <meta name="description" content="Case study: How elv8 dgtl revitalized the Scarface Pride brand with a gritty, high-contrast visual identity and social media strategy.">
+    
+    <meta property="og:type" content="article">
+    <meta property="og:title" content="Scarface Pride - Visual Identity by elv8 dgtl">
+    <meta property="og:image" content="assets/work/Project-1.jpg">
+    <meta property="og:url" content="https://www.elv8dgtl.in/project-scarface.html">
+
+    <script type="application/ld+json">
+    {
+      "@context": "https://schema.org",
+      "@type": "CreativeWork",
+      "name": "Scarface Pride Brand Refresh",
+      "author": { "@type": "Organization", "name": "elv8 dgtl" },
+      "image": "assets/work/Project-1.jpg"
+    }
+    </script>
     
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&family=Space+Grotesk:wght@400;500;600;700&display=swap" rel="stylesheet">
-    <script src="https://unpkg.com/lucide@latest"></script>
     
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/photoswipe@5.4.3/dist/photoswipe.css">
+    
+    <script src="https://unpkg.com/lucide@latest"></script>
     <script src="https://cdn.tailwindcss.com"></script>
     <script>
         tailwind.config = {
@@ -34,25 +53,34 @@
     <style>
         .reveal { opacity: 0; transform: translateY(30px); transition: all 0.8s cubic-bezier(0.5, 0, 0, 1); }
         .reveal.active { opacity: 1; transform: translateY(0); }
+        .glass-nav { background: rgba(18, 14, 22, 0.85); backdrop-filter: blur(12px); border-bottom: 1px solid rgba(255,255,255,0.05); }
     </style>
 </head>
 <body class="bg-brand-dark text-white selection:bg-brand-lime selection:text-brand-dark">
 
-    <nav class="fixed w-full z-50 py-6 mix-blend-difference">
+    <nav id="navbar" class="fixed w-full z-50 py-6 transition-all duration-300">
         <div class="container mx-auto px-6 md:px-12 flex justify-between items-center">
             <a href="work.html" class="group flex items-center gap-2 text-white hover:text-brand-lime transition-colors">
                 <div class="p-2 bg-white/10 rounded-full group-hover:bg-brand-lime group-hover:text-brand-dark transition-all">
                     <i data-lucide="arrow-left" class="w-5 h-5"></i>
                 </div>
-                <span class="font-bold text-sm uppercase tracking-widest">Back to Projects</span>
+                <span class="font-bold text-sm uppercase tracking-widest hidden md:inline">Back to Projects</span>
             </a>
-            <span class="font-display font-bold text-xl">elv8 dgtl</span>
+            <span class="font-display font-bold text-xl tracking-tight">elv8 dgtl</span>
+            
+            <button onclick="sharePage()" class="md:hidden text-white"><i data-lucide="share-2" class="w-5 h-5"></i></button>
         </div>
     </nav>
 
-    <header class="relative min-h-[80vh] flex items-end pb-24 pt-40 overflow-hidden">
+    <div class="fixed bottom-8 right-8 z-40 hidden md:block animate-bounce">
+        <button onclick="sharePage()" class="bg-brand-lime text-brand-dark px-6 py-3 rounded-full font-bold shadow-lg hover:shadow-brand-lime/50 transition-all hover:-translate-y-1 flex items-center gap-2">
+            Share Study <i data-lucide="share-2" class="w-4 h-4"></i>
+        </button>
+    </div>
+
+    <header class="relative min-h-[85vh] flex items-end pb-24 pt-40 overflow-hidden">
         <div class="absolute inset-0 z-0">
-            
+            <img src="assets/work/Project-1.jpg" alt="Scarface Pride Hero" class="w-full h-full object-cover opacity-60">
             <div class="absolute inset-0 bg-gradient-to-t from-brand-dark via-brand-dark/80 to-transparent"></div>
         </div>
 
@@ -70,7 +98,7 @@
                 </div>
                 <div>
                     <h4 class="text-gray-400 text-xs uppercase tracking-widest mb-2">Services</h4>
-                    <p class="font-bold text-lg">Social Media Post, Creative</p>
+                    <p class="font-bold text-lg">Social Media, Creative</p>
                 </div>
                 <div>
                     <h4 class="text-gray-400 text-xs uppercase tracking-widest mb-2">Year</h4>
@@ -90,7 +118,7 @@
                 <div class="md:col-span-4">
                     <h2 class="text-4xl font-display font-bold mb-6">The Challenge</h2>
                     <p class="text-gray-600 leading-relaxed mb-8">
-                        Scarface Pride needed a visual identity that could cut through the noise. They wanted a look that was aggressive yet sophisticated, appealing to a bold, modern audience. The challenge was to create a cohesive system that worked across merchandise, social media, and digital platforms without losing its raw edge.
+                        Scarface Pride needed a visual identity that could cut through the noise. They wanted a look that was aggressive yet sophisticated. The challenge was to create a cohesive carousel system that worked across merchandise and social media.
                     </p>
                     
                     <div class="bg-gray-50 p-8 rounded-3xl border border-gray-100">
@@ -98,13 +126,9 @@
                             <i data-lucide="pen-tool" class="w-5 h-5 text-brand-purple"></i> Tools & Resources
                         </h3>
                         <ul class="space-y-3">
-                            
-                            <li class="flex items-center gap-3 text-gray-600">
-                                <span class="w-2 h-2 bg-brand-lime rounded-full"></span> Adobe Photoshop (Compositing)
-                            </li>
-                            <li class="flex items-center gap-3 text-gray-600">
-                                <span class="w-2 h-2 bg-brand-lime rounded-full"></span> Color Palette: Neon Green & Dark
-                            </li>
+                            <li class="flex items-center gap-3 text-gray-600"><span class="w-2 h-2 bg-brand-lime rounded-full"></span> Adobe Photoshop</li>
+                            <li class="flex items-center gap-3 text-gray-600"><span class="w-2 h-2 bg-brand-lime rounded-full"></span> Adobe Illustrator</li>
+                            <li class="flex items-center gap-3 text-gray-600"><span class="w-2 h-2 bg-brand-lime rounded-full"></span> Custom Typography</li>
                         </ul>
                     </div>
                 </div>
@@ -114,45 +138,72 @@
                     <p class="text-gray-600 leading-relaxed text-lg mb-6">
                         We developed a high-contrast visual language focusing on "Gritty Luxury." By combining distressed textures with clean, modern typography, we created a brand that feels established but rebellious.
                     </p>
-                    <p class="text-gray-600 leading-relaxed text-lg">
-                        The new identity allows for flexibility—it looks just as good on a dark mode Instagram feed as it does printed on high-quality apparel. The engagement on their launch posts increased by over 40% following the rebrand.
-                    </p>
+                    <div class="grid grid-cols-3 gap-6 mt-8 border-t border-gray-100 pt-8">
+                        <div>
+                            <span class="block text-4xl font-display font-bold text-brand-purple">40%</span>
+                            <span class="text-sm text-gray-500 font-bold uppercase">Engagement</span>
+                        </div>
+                        <div>
+                            <span class="block text-4xl font-display font-bold text-brand-purple">2x</span>
+                            <span class="text-sm text-gray-500 font-bold uppercase">Shares</span>
+                        </div>
+                    </div>
                 </div>
             </div>
         </div>
     </section>
 
-    <section class="py-24 bg-gray-50">
+    <section class="py-24 bg-gray-50" id="gallery-section">
         <div class="container mx-auto px-6 md:px-12">
-            <h3 class="text-brand-dark font-display font-bold text-3xl mb-12 text-center">Project Gallery</h3>
+            <h3 class="text-brand-dark font-display font-bold text-3xl mb-12 text-center">Project Gallery <span class="text-sm font-sans font-normal text-gray-500 block mt-2">(Double-tap to Zoom)</span></h3>
             
-            <div class="grid md:grid-cols-2 gap-8">
+            <div class="grid md:grid-cols-3 gap-4 pswp-gallery" id="my-gallery">
                 
-                <div class="group relative overflow-hidden rounded-[2rem] shadow-xl md:col-span-2 aspect-[21/9] reveal">
-                    <img src="assets/work/Project-1.jpg" alt="Scarface Pride Main Banner" class="w-full h-full object-cover transition-transform duration-700 group-hover:scale-105">
+                <div class="md:col-span-3">
+                    <a href="assets/work/Project-1.jpg" 
+                       data-pswp-width="3240" 
+                       data-pswp-height="1080" 
+                       target="_blank"
+                       class="group relative overflow-hidden rounded-[1.5rem] shadow-xl aspect-[3/1] block cursor-zoom-in reveal">
+                        <img src="assets/work/Project-1.jpg" alt="Scarface Pride Wide Banner" class="w-full h-full object-cover transition-transform duration-700 group-hover:scale-105">
+                    </a>
+                    <p class="text-center text-sm text-gray-400 mt-2 uppercase tracking-widest">Main Banner</p>
                 </div>
 
-                <div class="group relative overflow-hidden rounded-[2rem] shadow-xl aspect-square reveal">
-                    <img src="assets/work/Slide-1.jpeg" alt="Detail Shot 1" class="w-full h-full object-cover transition-transform duration-700 group-hover:scale-105">
-                    <div class="absolute inset-0 bg-black/50 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity duration-300">
-                        <span class="text-white font-bold">Social Media Post</span>
-                    </div>
+                <div class="reveal delay-100">
+                    <a href="assets/work/Slide-1.jpeg" 
+                       data-pswp-width="1080" 
+                       data-pswp-height="1080" 
+                       target="_blank"
+                       class="group relative overflow-hidden rounded-[1.5rem] shadow-xl aspect-square block cursor-zoom-in">
+                        <img src="assets/work/Slide-1.jpeg" alt="Carousel Slide 1" class="w-full h-full object-cover transition-transform duration-700 group-hover:scale-105">
+                    </a>
                 </div>
 
-                <div class="group relative overflow-hidden rounded-[2rem] shadow-xl aspect-square reveal">
-                    <img src="assets/work/Slide-2.jpeg" alt="Detail Shot 2" class="w-full h-full object-cover transition-transform duration-700 group-hover:scale-105">
-                    <div class="absolute inset-0 bg-black/50 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity duration-300">
-                        <span class="text-white font-bold">in Seamless-Crousel</span>
-                    </div>
+                <div class="reveal delay-200">
+                    <a href="assets/work/Slide-2.jpeg" 
+                       data-pswp-width="1080" 
+                       data-pswp-height="1080" 
+                       target="_blank"
+                       class="group relative overflow-hidden rounded-[1.5rem] shadow-xl aspect-square block cursor-zoom-in">
+                        <img src="assets/work/Slide-2.jpeg" alt="Carousel Slide 2" class="w-full h-full object-cover transition-transform duration-700 group-hover:scale-105">
+                    </a>
                 </div>
 
-                <div class="group relative overflow-hidden rounded-[2rem] shadow-xl md:row-span-2 aspect-[9/16] md:aspect-auto reveal">
-                    <img src="assets/work/Slide-3.jpeg" alt="Mobile View" class="w-full h-full object-cover transition-transform duration-700 group-hover:scale-105">
+                <div class="reveal delay-300">
+                    <a href="assets/work/Slide-3.jpeg" 
+                       data-pswp-width="1080" 
+                       data-pswp-height="1080" 
+                       target="_blank"
+                       class="group relative overflow-hidden rounded-[1.5rem] shadow-xl aspect-square block cursor-zoom-in">
+                        <img src="assets/work/Slide-3.jpeg" alt="Carousel Slide 3" class="w-full h-full object-cover transition-transform duration-700 group-hover:scale-105">
+                    </a>
+                </div>
+                
+                <div class="md:col-span-3 text-center mt-2">
+                     <p class="text-sm text-gray-400 uppercase tracking-widest">Instagram Seamless Carousel</p>
                 </div>
 
-                <div class="group relative overflow-hidden rounded-[2rem] shadow-xl aspect-square reveal">
-                    <img src="assets/work/slide-3.jpeg" alt="Texture Detail" class="w-full h-full object-cover transition-transform duration-700 group-hover:scale-105">
-                </div>
             </div>
         </div>
     </section>
@@ -167,7 +218,7 @@
                 <div class="h-1 w-0 bg-brand-lime group-hover:w-full transition-all duration-300 mt-4 mx-auto"></div>
             </a>
             <div class="mt-12">
-                <p class="text-sm text-gray-600">&copy; 2024 elv8 dgtl. All rights reserved.</p>
+                <p class="text-sm text-gray-600">&copy; 2026 elv8 dgtl. All rights reserved.</p>
             </div>
         </div>
     </footer>
@@ -175,7 +226,7 @@
     <script>
         lucide.createIcons();
         
-        // Simple Reveal Animation
+        // 1. Reveal Animation
         const observer = new IntersectionObserver((entries) => {
             entries.forEach(entry => {
                 if (entry.isIntersecting) {
@@ -184,6 +235,47 @@
             });
         });
         document.querySelectorAll('.reveal').forEach(el => observer.observe(el));
+
+        // 2. Sticky Nav Logic
+        const navbar = document.getElementById('navbar');
+        window.addEventListener('scroll', () => {
+            if (window.scrollY > 50) navbar.classList.add('glass-nav');
+            else navbar.classList.remove('glass-nav');
+        });
+
+        // 3. Share Functionality
+        function sharePage() {
+            if (navigator.share) {
+                navigator.share({
+                    title: 'Scarface Pride | Case Study by elv8 dgtl',
+                    url: window.location.href,
+                }).catch(console.error);
+            } else {
+                navigator.clipboard.writeText(window.location.href);
+                alert('Link copied to clipboard!');
+            }
+        }
+    </script>
+
+    <script type="module">
+        import PhotoSwipeLightbox from 'https://cdn.jsdelivr.net/npm/photoswipe@5.4.3/dist/photoswipe-lightbox.esm.js';
+        import PhotoSwipe from 'https://cdn.jsdelivr.net/npm/photoswipe@5.4.3/dist/photoswipe.esm.js';
+
+        const lightbox = new PhotoSwipeLightbox({
+            gallery: '#my-gallery',
+            children: 'a',
+            pswpModule: PhotoSwipe,
+            zoom: true, 
+            doubleTapAction: 'zoom',
+            maxZoomLevel: 3,
+            paddingFn: (viewportSize) => ({
+                top: viewportSize.x < 600 ? 10 : 30,
+                bottom: viewportSize.x < 600 ? 10 : 30,
+                left: viewportSize.x < 600 ? 10 : 30,
+                right: viewportSize.x < 600 ? 10 : 30
+            })
+        });
+        lightbox.init();
     </script>
 </body>
 </html>
