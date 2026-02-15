@@ -2,17 +2,29 @@
 <html lang="en" class="scroll-smooth">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     
-    <title>Hotel Rass | Web Development Case Study | elv8 dgtl</title>
-    <meta name="description" content="Case study: A high-performance hotel booking website developed for Hotel Rass.">
+    <title>Midnight Cafe | Branding & Social Grid | elv8 dgtl</title>
+    <meta name="description" content="Case study: A 9-slide social media grid and brand identity launch for Midnight Cafe.">
     
     <meta property="og:type" content="article">
-    <meta property="og:title" content="Hotel Rass - Digital Experience by elv8 dgtl">
-    <meta property="og:image" content="assets/work/rass/hero-laptop.png">
+    <meta property="og:title" content="Midnight Cafe - Branding by elv8 dgtl">
+    <meta property="og:image" content="assets/work/crousel_5.jpg"> 
+    <meta property="og:url" content="https://www.elv8dgtl.in/midnight-cafe.html">
+
+    <script type="application/ld+json">
+    {
+      "@context": "https://schema.org",
+      "@type": "CreativeWork",
+      "name": "Midnight Cafe Social Launch",
+      "author": { "@type": "Organization", "name": "elv8 dgtl" },
+      "image": "assets/work/midnight-logo.png"
+    }
+    </script>
     
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&family=Space+Grotesk:wght@400;500;600;700&display=swap" rel="stylesheet">
     
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/photoswipe@5.4.3/dist/photoswipe.css">
@@ -33,7 +45,6 @@
                             dark: '#120E16',
                             purple: '#4831D4',
                             gray: '#1F1B24',
-                            gold: '#D4AF37',
                         }
                     }
                 }
@@ -44,22 +55,11 @@
         .reveal { opacity: 0; transform: translateY(30px); transition: all 0.8s cubic-bezier(0.5, 0, 0, 1); }
         .reveal.active { opacity: 1; transform: translateY(0); }
         .glass-nav { background: rgba(18, 14, 22, 0.85); backdrop-filter: blur(12px); border-bottom: 1px solid rgba(255,255,255,0.05); }
-        
-        .aspect-16-9 { aspect-ratio: 16 / 9; }
-        .aspect-iphone { aspect-ratio: 9 / 19.5; }
-
-        body {
-            padding-left: env(safe-area-inset-left);
-            padding-right: env(safe-area-inset-right);
-        }
-
-        .hide-scrollbar::-webkit-scrollbar { display: none; }
-        .hide-scrollbar { -ms-overflow-style: none; scrollbar-width: none; }
     </style>
 </head>
 <body class="bg-brand-dark text-white selection:bg-brand-lime selection:text-brand-dark">
 
-    <nav id="navbar" class="fixed w-full z-50 transition-all duration-300 pt-[calc(1.5rem+env(safe-area-inset-top))] pb-6">
+    <nav id="navbar" class="fixed w-full z-50 py-6 transition-all duration-300">
         <div class="container mx-auto px-6 md:px-12 flex justify-between items-center">
             <a href="work.html" class="group flex items-center gap-2 text-white hover:text-brand-lime transition-colors">
                 <div class="p-2 bg-white/10 rounded-full group-hover:bg-brand-lime group-hover:text-brand-dark transition-all">
@@ -68,289 +68,190 @@
                 <span class="font-bold text-sm uppercase tracking-widest hidden md:inline">Back to Projects</span>
             </a>
             <span class="font-display font-bold text-xl tracking-tight">elv8 dgtl</span>
+            
             <button onclick="sharePage()" class="md:hidden text-white"><i data-lucide="share-2" class="w-5 h-5"></i></button>
         </div>
     </nav>
 
-    <div class="fixed bottom-[calc(2rem+env(safe-area-inset-bottom))] right-8 z-40 hidden md:block animate-bounce">
+    <div class="fixed bottom-8 right-8 z-40 hidden md:block animate-bounce">
         <button onclick="sharePage()" class="bg-brand-lime text-brand-dark px-6 py-3 rounded-full font-bold shadow-lg hover:shadow-brand-lime/50 transition-all hover:-translate-y-1 flex items-center gap-2">
             Share Study <i data-lucide="share-2" class="w-4 h-4"></i>
         </button>
     </div>
 
-    <header class="relative min-h-[90vh] flex items-end pb-24 pt-40 overflow-hidden">
+    <header class="relative min-h-[85vh] flex items-end pb-24 pt-40 overflow-hidden">
         <div class="absolute inset-0 z-0">
-            <img src="assets/work/hero-laptop.png" alt="Hotel Rass Background" class="w-full h-full object-cover opacity-20 blur-xl">
+            <img src="assets/work/crousel_5.jpg" alt="Midnight Cafe Hero" class="w-full h-full object-cover opacity-40 blur-sm">
             <div class="absolute inset-0 bg-gradient-to-t from-brand-dark via-brand-dark/90 to-transparent"></div>
         </div>
 
         <div class="container mx-auto px-6 md:px-12 relative z-10 reveal">
-            <span class="text-brand-lime font-bold text-sm uppercase tracking-[0.2em] mb-4 block">Web Development & Strategy</span>
-            
+            <span class="text-brand-lime font-bold text-sm uppercase tracking-[0.2em] mb-4 block">Branding & Social</span>
             <h1 class="text-6xl md:text-8xl lg:text-9xl font-display font-bold leading-none mb-8">
-                
-                <span class="text-transparent bg-clip-text bg-gradient-to-r from-white to-brand-lime">Hotel Rass</span>
+                Midnight<br>
+                <span class="text-transparent bg-clip-text bg-gradient-to-r from-brand-lime to-white">Cafe</span>
             </h1>
             
             <div class="grid grid-cols-2 md:grid-cols-4 gap-8 border-t border-white/20 pt-8 mt-12 max-w-4xl">
                 <div>
                     <h4 class="text-gray-400 text-xs uppercase tracking-widest mb-2">Client</h4>
-                    <p class="font-bold text-lg">Hotel Rass</p>
+                    <p class="font-bold text-lg">Midnight Cafe</p>
                 </div>
                 <div>
                     <h4 class="text-gray-400 text-xs uppercase tracking-widest mb-2">Services</h4>
-                    <p class="font-bold text-lg">Web Design, Dev</p>
+                    <p class="font-bold text-lg">Logo, Social Grid</p>
                 </div>
                 <div>
                     <h4 class="text-gray-400 text-xs uppercase tracking-widest mb-2">Year</h4>
-                    <p class="font-bold text-lg">2025</p>
+                    <p class="font-bold text-lg">2024</p>
                 </div>
                 <div>
                     <h4 class="text-gray-400 text-xs uppercase tracking-widest mb-2">Outcome</h4>
-                    <p class="font-bold text-brand-lime text-lg">+40% Bookings</p>
+                    <p class="font-bold text-brand-lime text-lg">Identity Launch</p>
                 </div>
             </div>
         </div>
     </header>
-
-    <section class="relative z-20 -mt-16 mb-24">
-        <div class="container mx-auto px-6 md:px-12">
-            <div class="relative w-full max-w-5xl mx-auto reveal delay-100">
-                <div class="relative bg-gray-800 rounded-t-lg md:rounded-t-2xl p-2 md:p-4 pb-0 shadow-2xl border border-gray-700 mx-auto w-full">
-                    <div class="bg-white rounded-t md:rounded-t-lg overflow-hidden w-full aspect-16-9 relative pswp-gallery" id="hero-gallery">
-                        <a href="assets/work/hero-laptop.png" 
-                           data-pswp-width="1920" 
-                           data-pswp-height="1080" 
-                           target="_blank" 
-                           class="block w-full h-full cursor-zoom-in">
-                            <img src="assets/work/hero-laptop.png" 
-                                 alt="Hotel Rass Website Preview" 
-                                 class="w-full h-full object-contain bg-white">
-                        </a>
-                    </div>
-                    <div class="absolute top-1.5 md:top-2 left-1/2 -translate-x-1/2 w-1 md:w-1.5 h-1 md:h-1.5 bg-gray-600 rounded-full"></div>
-                </div>
-                <div class="bg-gray-700 h-3 md:h-6 rounded-b-lg md:rounded-b-xl w-[104%] -ml-[2%] shadow-xl relative z-10"></div>
-            </div>
-        </div>
-    </section>
 
     <section class="py-24 bg-white text-brand-dark">
         <div class="container mx-auto px-6 md:px-12">
             <div class="grid md:grid-cols-12 gap-12">
                 
                 <div class="md:col-span-4">
-                    <h2 class="text-4xl font-display font-bold mb-6">The Challenge</h2>
-                    <p class="text-gray-600 leading-relaxed mb-8">
-                        Hotel Rass required a digital presence that mirrored their physical hospitality. The goal was to reduce dependency on third-party booking apps (OTAs) and increase direct reservations through a custom, high-speed platform with integrated payment solutions.
+                    <h2 class="text-4xl font-display font-bold mb-6">The Brief</h2>
+                    <p class="text-gray-600 leading-relaxed mb-8 font-light">
+                        Midnight Cafe wanted to capture the essence of "late-night conversations." They needed a comprehensive social media launch grid that felt cohesive, cozy, and mysterious.
                     </p>
                     
-                    <div class="bg-gray-50 p-8 rounded-3xl border border-gray-100 shadow-sm">
+                    <div class="bg-gray-50 p-8 rounded-3xl border border-gray-100">
                         <h3 class="font-bold text-xl mb-4 flex items-center gap-2">
-                            <i data-lucide="code-2" class="w-5 h-5 text-brand-lime"></i> Tech Stack
+                            <i data-lucide="pen-tool" class="w-5 h-5 text-brand-lime"></i> Project Tech Stack
                         </h3>
-                        <div class="flex flex-wrap gap-2">
-                            <span class="px-3 py-1 bg-white border border-gray-200 rounded-lg text-sm font-medium text-gray-700">HTML5</span>
-                            <span class="px-3 py-1 bg-white border border-gray-200 rounded-lg text-sm font-medium text-gray-700">Tailwind CSS</span>
-                            <span class="px-3 py-1 bg-white border border-gray-200 rounded-lg text-sm font-medium text-gray-700">JS ES6</span>
-                            <span class="px-3 py-1 bg-white border border-gray-200 rounded-lg text-sm font-medium text-gray-700">Python Flask</span>
-                            <span class="px-3 py-1 bg-white border border-gray-200 rounded-lg text-sm font-medium text-gray-700">Razorpay API</span>
-                        </div>
+                        <ul class="space-y-3">
+                            <li class="flex items-center gap-3 text-gray-600"><span class="w-2 h-2 bg-brand-lime rounded-full"></span> Adobe Illustrator</li>
+                            <li class="flex items-center gap-3 text-gray-600"><span class="w-2 h-2 bg-brand-lime rounded-full"></span> Adobe Photoshop</li>
+                        </ul>
                     </div>
                 </div>
 
                 <div class="md:col-span-7 md:col-start-6">
                     <h2 class="text-4xl font-display font-bold mb-6">The Solution</h2>
-                    <p class="text-gray-600 leading-relaxed text-lg mb-8">
-                        We developed a fully responsive web application focusing on the "Guest Journey." From the moment a user lands on the site, the navigation guides them seamlessly from room exploration to payment.
+                    <p class="text-gray-600 leading-relaxed text-lg mb-6">
+                        We designed a 9-post grid layout that functions as a single continuous canvas while ensuring each individual post stands on its own. The aesthetic relies on deep blacks and glowing warm accents.
                     </p>
-
-                    <div class="grid grid-cols-1 md:grid-cols-2 gap-6 mb-8">
-                        <div class="flex gap-4 items-start">
-                            <div class="p-3 bg-brand-lime/20 rounded-xl text-brand-dark"><i data-lucide="smartphone" class="w-6 h-6"></i></div>
-                            <div>
-                                <h4 class="font-bold text-lg">Mobile First</h4>
-                                <p class="text-sm text-gray-500">Optimized for booking on the go.</p>
-                            </div>
-                        </div>
-                        <div class="flex gap-4 items-start">
-                            <div class="p-3 bg-brand-purple/10 rounded-xl text-brand-purple"><i data-lucide="credit-card" class="w-6 h-6"></i></div>
-                            <div>
-                                <h4 class="font-bold text-lg">Razorpay Integrated</h4>
-                                <p class="text-sm text-gray-500">Secure, instant booking payments.</p>
-                            </div>
-                        </div>
-                        <div class="flex gap-4 items-start">
-                            <div class="p-3 bg-brand-gold/10 rounded-xl text-brand-gold"><i data-lucide="image" class="w-6 h-6"></i></div>
-                            <div>
-                                <h4 class="font-bold text-lg">High-Fidelity Visuals</h4>
-                                <p class="text-sm text-gray-500">100% High-Res PNG Assets.</p>
-                            </div>
-                        </div>
-                        <div class="flex gap-4 items-start">
-                            <div class="p-3 bg-gray-100 rounded-xl text-gray-800"><i data-lucide="map-pin" class="w-6 h-6"></i></div>
-                            <div>
-                                <h4 class="font-bold text-lg">Live Location</h4>
-                                <p class="text-sm text-gray-500">Integrated Google Maps API.</p>
-                            </div>
-                        </div>
-                    </div>
-
-                    <div class="border-t border-gray-100 pt-6">
-                        <div class="grid grid-cols-2 gap-6">
-                            <div>
-                                <span class="block text-4xl font-display font-bold text-brand-lime">100%</span>
-                                <span class="text-sm text-gray-500 font-bold uppercase">Mobile Responsive</span>
-                            </div>
-                            <div>
-                                <span class="block text-4xl font-display font-bold text-brand-lime">&lt;1s&gt;</span>
-                                <span class="text-sm text-gray-500 font-bold uppercase">Load Time</span>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </section>
-
-    <section class="py-16 bg-gray-50 border-y border-gray-200">
-        <div class="container mx-auto px-6 md:px-12 text-center">
-            <h4 class="text-gray-400 uppercase tracking-widest font-bold text-sm mb-8">Design System</h4>
-            <div class="flex flex-wrap justify-center gap-12 items-center">
-                <div class="flex gap-4">
-                    <div class="text-center">
-                        <div class="w-16 h-16 rounded-full bg-[#D4AF37] shadow-lg mb-2"></div>
-                        <span class="text-xs font-mono text-gray-500">#D4AF37</span>
-                    </div>
-                    <div class="text-center">
-                        <div class="w-16 h-16 rounded-full bg-[#1A1A1A] shadow-lg mb-2"></div>
-                        <span class="text-xs font-mono text-gray-500">#1A1A1A</span>
-                    </div>
-                    <div class="text-center">
-                        <div class="w-16 h-16 rounded-full bg-[#FFFFFF] border border-gray-200 shadow-lg mb-2"></div>
-                        <span class="text-xs font-mono text-gray-500">#FFFFFF</span>
-                    </div>
-                </div>
-                <div class="h-12 w-px bg-gray-300 hidden md:block"></div>
-                <div class="text-left">
-                    <p class="text-3xl font-display font-bold text-gray-900">Aa</p>
-                    <p class="text-sm text-gray-500">Space Grotesk (Headers)</p>
-                </div>
-                <div class="text-left">
-                    <p class="text-3xl font-sans font-light text-gray-900">Aa</p>
-                    <p class="text-sm text-gray-500">Poppins (Body)</p>
-                </div>
-            </div>
-        </div>
-    </section>
-
-    <section class="py-24 bg-gray-100">
-        <div class="container mx-auto px-6 md:px-12 text-center">
-            <h3 class="text-brand-dark font-display font-bold text-3xl mb-4">Mobile-First Experience</h3>
-            <p class="text-gray-500 mb-16 max-w-xl mx-auto">Designed to look and feel like a native app. We prioritized thumb-friendly navigation.</p>
-            
-            <div class="flex flex-wrap justify-center gap-8 md:gap-16 pswp-gallery" id="mobile-gallery">
-                
-                <div class="relative w-72 aspect-iphone bg-black rounded-[3rem] border-8 border-gray-900 shadow-2xl overflow-hidden reveal group">
-                    <div class="absolute top-0 left-0 w-full h-12 z-20 flex justify-between items-center px-6 text-white text-xs font-medium pointer-events-none mix-blend-difference">
-                        <span>9:41</span>
-                        <div class="flex gap-1.5 items-center">
-                            <i data-lucide="signal" class="w-3 h-3"></i>
-                            <i data-lucide="wifi" class="w-3 h-3"></i>
-                            <i data-lucide="battery-full" class="w-3 h-3"></i>
-                        </div>
-                    </div>
-                    <div class="absolute top-0 left-1/2 -translate-x-1/2 w-28 h-7 bg-black rounded-b-xl z-10"></div>
                     
-                    <a href="assets/work/mobile-1.PNG" data-pswp-width="1080" data-pswp-height="1920" target="_blank" class="block w-full h-full bg-white cursor-zoom-in">
-                        <img src="assets/work/mobile-1.PNG" alt="Mobile Home" class="w-full h-full object-cover transition-transform duration-700 group-hover:scale-105">
-                    </a>
-                </div>
-
-                <div class="relative w-72 aspect-iphone bg-black rounded-[3rem] border-8 border-gray-900 shadow-2xl overflow-hidden reveal delay-100 group">
-                     <div class="absolute top-0 left-0 w-full h-12 z-20 flex justify-between items-center px-6 text-white text-xs font-medium pointer-events-none mix-blend-difference">
-                        <span>9:41</span>
-                        <div class="flex gap-1.5 items-center">
-                            <i data-lucide="signal" class="w-3 h-3"></i>
-                            <i data-lucide="wifi" class="w-3 h-3"></i>
-                            <i data-lucide="battery-full" class="w-3 h-3"></i>
-                        </div>
+                    <div class="mt-8 border-l-4 border-brand-lime pl-6 py-2">
+                        <h4 class="font-bold uppercase tracking-widest text-sm text-gray-400 mb-3">Brand Voice</h4>
+                        <p class="text-xl font-display font-medium text-brand-dark italic mb-4">
+                            "Where the city sleeps, but the conversation awakens. Your midnight brew awaits."
+                        </p>
                     </div>
-                    <div class="absolute top-0 left-1/2 -translate-x-1/2 w-28 h-7 bg-black rounded-b-xl z-10"></div>
-
-                    <a href="assets/work/mobile-2.PNG" data-pswp-width="1080" data-pswp-height="1920" target="_blank" class="block w-full h-full bg-white cursor-zoom-in">
-                        <img src="assets/work/mobile-2.PNG" alt="Mobile Booking" class="w-full h-full object-cover transition-transform duration-700 group-hover:scale-105">
-                    </a>
                 </div>
             </div>
         </div>
     </section>
 
-    <section class="py-24 bg-white border-t border-gray-100">
+    <section class="py-24 bg-gray-50" id="gallery-section">
         <div class="container mx-auto px-6 md:px-12">
-            <div class="flex justify-between items-end mb-12">
-                <div>
-                    <h3 class="text-brand-dark font-display font-bold text-3xl">Project Gallery</h3>
-                    <p class="text-gray-500 mt-2">Explore the key interfaces and layouts of the platform.</p>
-                </div>
-                <div class="hidden md:block text-brand-lime animate-bounce"><i data-lucide="arrow-down" class="w-6 h-6"></i></div>
-            </div>
+            <h3 class="text-brand-dark font-display font-bold text-3xl mb-12 text-center">Visual Identity <span class="text-sm font-sans font-normal text-gray-500 block mt-2">(Double-tap to Zoom)</span></h3>
             
-            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 pswp-gallery" id="full-gallery">
+            <div class="pswp-gallery space-y-20" id="my-gallery">
                 
-                <a href="assets/work/rass/full-page.png" 
-                   data-pswp-width="1920" data-pswp-height="5000" target="_blank" 
-                   class="block w-full aspect-[4/5] overflow-hidden rounded-2xl shadow-lg border border-gray-100 cursor-zoom-in group reveal">
-                    <div class="relative w-full h-full bg-gray-50">
-                        <img src="assets/work/full-page.png" alt="Homepage Full" class="w-full h-full object-cover object-top transition-transform duration-700 group-hover:scale-105">
-                        <div class="absolute bottom-6 left-6 text-brand-dark font-bold bg-white px-4 py-1 rounded-full text-sm shadow">Homepage</div>
+                <div class="flex flex-col items-center justify-center reveal">
+                    <div class="relative group">
+                        <div class="absolute -inset-1 bg-gradient-to-r from-brand-lime to-brand-purple rounded-full blur opacity-25 group-hover:opacity-75 transition duration-1000 group-hover:duration-200"></div>
+                        <a href="assets/work/midnight-logo.png" 
+                           data-pswp-width="500" 
+                           data-pswp-height="500" 
+                           target="_blank"
+                           class="relative block w-64 h-64 rounded-full overflow-hidden shadow-2xl border-4 border-white cursor-zoom-in">
+                            <img src="assets/work/midnight-logo.png" alt="Midnight Cafe Logo" class="w-full h-full object-cover transition-transform duration-700 group-hover:scale-110">
+                        </a>
                     </div>
-                </a>
+                    <p class="text-center text-sm text-gray-400 mt-6 uppercase tracking-widest font-bold">Primary Logo Mark</p>
+                </div>
 
-                <a href="assets/work/rass/booking.png" 
-                   data-pswp-width="1920" data-pswp-height="1080" target="_blank" 
-                   class="block w-full aspect-[4/5] overflow-hidden rounded-2xl shadow-lg border border-gray-100 cursor-zoom-in group reveal delay-100">
-                    <div class="relative w-full h-full bg-gray-50">
-                        <img src="assets/work/hero-laptop.png" alt="Booking Interface" class="w-full h-full object-cover object-center transition-transform duration-700 group-hover:scale-105 opacity-90">
-                        <div class="absolute bottom-6 left-6 text-brand-dark font-bold bg-white px-4 py-1 rounded-full text-sm shadow">Booking Flow</div>
-                    </div>
-                </a>
+                <div>
+                    <h4 class="text-center text-xl font-display font-bold mb-8 text-brand-dark">Social Media Launch Grid</h4>
+                    
+                    <div class="grid grid-cols-3 gap-1 md:gap-4 max-w-4xl mx-auto">
+                        
+                        <div class="aspect-square reveal delay-100">
+                            <a href="assets/work/crousel_01.jpg" data-pswp-width="1080" data-pswp-height="1080" target="_blank" class="block w-full h-full cursor-zoom-in group overflow-hidden rounded-lg shadow-md">
+                                <img src="assets/work/crousel_01.jpg" class="w-full h-full object-cover transition-transform duration-500 group-hover:scale-105" alt="Grid 1">
+                            </a>
+                        </div>
+                        <div class="aspect-square reveal delay-150">
+                            <a href="assets/work/crousel_02.jpg" data-pswp-width="1080" data-pswp-height="1080" target="_blank" class="block w-full h-full cursor-zoom-in group overflow-hidden rounded-lg shadow-md">
+                                <img src="assets/work/crousel_02.jpg" class="w-full h-full object-cover transition-transform duration-500 group-hover:scale-105" alt="Grid 2">
+                            </a>
+                        </div>
+                        <div class="aspect-square reveal delay-200">
+                            <a href="assets/work/crousel_03.jpg" data-pswp-width="1080" data-pswp-height="1080" target="_blank" class="block w-full h-full cursor-zoom-in group overflow-hidden rounded-lg shadow-md">
+                                <img src="assets/work/crousel_03.jpg" class="w-full h-full object-cover transition-transform duration-500 group-hover:scale-105" alt="Grid 3">
+                            </a>
+                        </div>
 
-                <a href="assets/work/mobile-1.PNG" 
-                   data-pswp-width="1080" data-pswp-height="1920" target="_blank" 
-                   class="block w-full aspect-[4/5] overflow-hidden rounded-2xl shadow-lg border border-gray-100 cursor-zoom-in group reveal delay-200">
-                     <div class="relative w-full h-full bg-gray-50">
-                        <img src="assets/work/mobile-1.PNG" alt="Mobile Detail" class="w-full h-full object-cover object-top transition-transform duration-700 group-hover:scale-105">
-                         <div class="absolute bottom-6 left-6 text-brand-dark font-bold bg-white px-4 py-1 rounded-full text-sm shadow">Mobile View</div>
-                    </div>
-                </a>
+                        <div class="aspect-square reveal delay-100">
+                            <a href="assets/work/crousel_04.jpg" data-pswp-width="1080" data-pswp-height="1080" target="_blank" class="block w-full h-full cursor-zoom-in group overflow-hidden rounded-lg shadow-md">
+                                <img src="assets/work/crousel_04.jpg" class="w-full h-full object-cover transition-transform duration-500 group-hover:scale-105" alt="Grid 4">
+                            </a>
+                        </div>
+                        <div class="aspect-square reveal delay-150">
+                            <a href="assets/work/crousel_05.jpg" data-pswp-width="1080" data-pswp-height="1080" target="_blank" class="block w-full h-full cursor-zoom-in group overflow-hidden rounded-lg shadow-md">
+                                <img src="assets/work/crousel_05.jpg" class="w-full h-full object-cover transition-transform duration-500 group-hover:scale-105" alt="Grid 5">
+                            </a>
+                        </div>
+                        <div class="aspect-square reveal delay-200">
+                            <a href="assets/work/crousel_06.jpg" data-pswp-width="1080" data-pswp-height="1080" target="_blank" class="block w-full h-full cursor-zoom-in group overflow-hidden rounded-lg shadow-md">
+                                <img src="assets/work/crousel_06.jpg" class="w-full h-full object-cover transition-transform duration-500 group-hover:scale-105" alt="Grid 6">
+                            </a>
+                        </div>
 
-                <a href="assets/work/hero-laptop.png" 
-                   data-pswp-width="1920" data-pswp-height="1080" target="_blank" 
-                   class="block w-full aspect-[4/5] overflow-hidden rounded-2xl shadow-lg border border-gray-100 cursor-zoom-in group reveal delay-300">
-                     <div class="relative w-full h-full bg-gray-100 flex items-center justify-center">
-                        <img src="assets/work/hero-laptop.png" alt="Details" class="w-full h-full object-cover opacity-50">
-                         <span class="absolute text-brand-dark font-bold bg-white px-4 py-2 rounded-full shadow">Add Image 4</span>
-                    </div>
-                </a>
+                        <div class="aspect-square reveal delay-100">
+                            <a href="assets/work/crousel_07.jpg" data-pswp-width="1080" data-pswp-height="1080" target="_blank" class="block w-full h-full cursor-zoom-in group overflow-hidden rounded-lg shadow-md">
+                                <img src="assets/work/crousel_07.jpg" class="w-full h-full object-cover transition-transform duration-500 group-hover:scale-105" alt="Grid 7">
+                            </a>
+                        </div>
+                        <div class="aspect-square reveal delay-150">
+                            <a href="assets/work/crousel_08.jpg" data-pswp-width="1080" data-pswp-height="1080" target="_blank" class="block w-full h-full cursor-zoom-in group overflow-hidden rounded-lg shadow-md">
+                                <img src="assets/work/crousel_08.jpg" class="w-full h-full object-cover transition-transform duration-500 group-hover:scale-105" alt="Grid 8">
+                            </a>
+                        </div>
+                        <div class="aspect-square reveal delay-200">
+                            <a href="assets/work/crousel_09.jpg" data-pswp-width="1080" data-pswp-height="1080" target="_blank" class="block w-full h-full cursor-zoom-in group overflow-hidden rounded-lg shadow-md">
+                                <img src="assets/work/crousel_09.jpg" class="w-full h-full object-cover transition-transform duration-500 group-hover:scale-105" alt="Grid 9">
+                            </a>
+                        </div>
 
-                <a href="assets/work/hero-laptop.png" 
-                   data-pswp-width="1920" data-pswp-height="1080" target="_blank" 
-                   class="block w-full aspect-[4/5] overflow-hidden rounded-2xl shadow-lg border border-gray-100 cursor-zoom-in group reveal delay-400">
-                     <div class="relative w-full h-full bg-gray-100 flex items-center justify-center">
-                        <img src="assets/work/hero-laptop.png" alt="Details" class="w-full h-full object-cover opacity-50">
-                         <span class="absolute text-brand-dark font-bold bg-white px-4 py-2 rounded-full shadow">Add Image 5</span>
                     </div>
-                </a>
+                </div>
 
-                <a href="assets/work/hero-laptop.png" 
-                   data-pswp-width="1920" data-pswp-height="1080" target="_blank" 
-                   class="block w-full aspect-[4/5] overflow-hidden rounded-2xl shadow-lg border border-gray-100 cursor-zoom-in group reveal delay-500">
-                     <div class="relative w-full h-full bg-gray-100 flex items-center justify-center">
-                        <img src="assets/work/hero-laptop.png" alt="Details" class="w-full h-full object-cover opacity-50">
-                         <span class="absolute text-brand-dark font-bold bg-white px-4 py-2 rounded-full shadow">Add Image 6</span>
+                <div>
+                    <h4 class="text-center text-xl font-display font-bold mb-8 text-brand-dark">Brand Mockups</h4>
+                    
+                    <div class="grid grid-cols-1 md:grid-cols-3 gap-8 max-w-6xl mx-auto">
+                        
+                        <div class="aspect-square reveal delay-100">
+                            <a href="assets/work/mockup-1.webp" data-pswp-width="1080" data-pswp-height="1080" target="_blank" class="block w-full h-full cursor-zoom-in group overflow-hidden rounded-[1.5rem] shadow-xl">
+                                <img src="assets/work/mockup-1.webp" class="w-full h-full object-cover transition-transform duration-500 group-hover:scale-105" alt="Mockup 1">
+                            </a>
+                        </div>
+                        
+                        <div class="aspect-square reveal delay-150">
+                            <a href="assets/work/mockup-2.webp" data-pswp-width="1080" data-pswp-height="1080" target="_blank" class="block w-full h-full cursor-zoom-in group overflow-hidden rounded-[1.5rem] shadow-xl">
+                                <img src="assets/work/mockup-2.webp" class="w-full h-full object-cover transition-transform duration-500 group-hover:scale-105" alt="Mockup 2">
+                            </a>
+                        </div>
+                        
+                        <div class="aspect-square reveal delay-200">
+                            <a href="assets/work/mockup-3.webp" data-pswp-width="1080" data-pswp-height="1080" target="_blank" class="block w-full h-full cursor-zoom-in group overflow-hidden rounded-[1.5rem] shadow-xl">
+                                <img src="assets/work/mockup-3.webp" class="w-full h-full object-cover transition-transform duration-500 group-hover:scale-105" alt="Mockup 3">
+                            </a>
+                        </div>
+
                     </div>
-                </a>
+                </div>
 
             </div>
         </div>
@@ -376,10 +277,11 @@
         
         const observer = new IntersectionObserver((entries) => {
             entries.forEach(entry => {
-                if (entry.isIntersecting) entry.target.classList.add('active');
+                if (entry.isIntersecting) {
+                    entry.target.classList.add('active');
+                }
             });
-        }, { threshold: 0.1 });
-        
+        });
         document.querySelectorAll('.reveal').forEach(el => observer.observe(el));
 
         const navbar = document.getElementById('navbar');
@@ -390,10 +292,13 @@
 
         function sharePage() {
             if (navigator.share) {
-                navigator.share({ title: 'Hotel Rass Website | elv8 dgtl', url: window.location.href }).catch(console.error);
+                navigator.share({
+                    title: 'Midnight Cafe | Branding by elv8 dgtl',
+                    url: window.location.href,
+                }).catch(console.error);
             } else {
                 navigator.clipboard.writeText(window.location.href);
-                alert('Link copied!');
+                alert('Link copied to clipboard!');
             }
         }
     </script>
@@ -403,12 +308,18 @@
         import PhotoSwipe from 'https://cdn.jsdelivr.net/npm/photoswipe@5.4.3/dist/photoswipe.esm.js';
 
         const lightbox = new PhotoSwipeLightbox({
-            gallery: '.pswp-gallery',
+            gallery: '#my-gallery',
             children: 'a',
             pswpModule: PhotoSwipe,
-            zoom: true,
+            zoom: true, 
             doubleTapAction: 'zoom',
-            maxZoomLevel: 4
+            maxZoomLevel: 3,
+            paddingFn: (viewportSize) => ({
+                top: viewportSize.x < 600 ? 10 : 30,
+                bottom: viewportSize.x < 600 ? 10 : 30,
+                left: viewportSize.x < 600 ? 10 : 30,
+                right: viewportSize.x < 600 ? 10 : 30
+            })
         });
         lightbox.init();
     </script>
