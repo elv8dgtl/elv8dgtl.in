@@ -2,7 +2,7 @@
 <html lang="en" class="scroll-smooth">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
     
     <title>Hotel Rass | Web Development Case Study | elv8 dgtl</title>
     <meta name="description" content="Case study: A high-performance hotel booking website developed for Hotel Rass, featuring real-time availability, Razorpay integration, and a seamless mobile experience.">
@@ -61,11 +61,20 @@
         
         /* Ensures the 16:9 image stays proportional */
         .aspect-16-9 { aspect-ratio: 16 / 9; }
+        
+        /* CHANGED: Added correct iPhone aspect ratio */
+        .aspect-iphone { aspect-ratio: 9 / 19.5; }
+
+        /* CHANGED: Handle safe areas for landscape/notch */
+        body {
+            padding-left: env(safe-area-inset-left);
+            padding-right: env(safe-area-inset-right);
+        }
     </style>
 </head>
 <body class="bg-brand-dark text-white selection:bg-brand-lime selection:text-brand-dark">
 
-    <nav id="navbar" class="fixed w-full z-50 py-6 transition-all duration-300">
+    <nav id="navbar" class="fixed w-full z-50 transition-all duration-300 pt-[calc(1.5rem+env(safe-area-inset-top))] pb-6">
         <div class="container mx-auto px-6 md:px-12 flex justify-between items-center">
             <a href="work.html" class="group flex items-center gap-2 text-white hover:text-brand-lime transition-colors">
                 <div class="p-2 bg-white/10 rounded-full group-hover:bg-brand-lime group-hover:text-brand-dark transition-all">
@@ -78,7 +87,7 @@
         </div>
     </nav>
 
-    <div class="fixed bottom-8 right-8 z-40 hidden md:block animate-bounce">
+    <div class="fixed bottom-[calc(2rem+env(safe-area-inset-bottom))] right-8 z-40 hidden md:block animate-bounce">
         <button onclick="sharePage()" class="bg-brand-lime text-brand-dark px-6 py-3 rounded-full font-bold shadow-lg hover:shadow-brand-lime/50 transition-all hover:-translate-y-1 flex items-center gap-2">
             Share Study <i data-lucide="share-2" class="w-4 h-4"></i>
         </button>
@@ -102,16 +111,16 @@
                 </a>
             </div>
 
-            <div class="relative max-w-5xl mx-auto reveal delay-100">
-                <div class="relative bg-gray-800 rounded-t-2xl p-2 md:p-4 pb-0 shadow-2xl border border-gray-700 mx-auto w-full">
-                    <div class="bg-white rounded-t-lg overflow-hidden w-full aspect-16-9 relative group cursor-pointer">
+            <div class="relative w-[110%] -ml-[5%] md:w-full md:ml-0 max-w-5xl mx-auto reveal delay-100">
+                <div class="relative bg-gray-800 rounded-t-lg md:rounded-t-2xl p-2 md:p-4 pb-0 shadow-2xl border border-gray-700 mx-auto w-full">
+                    <div class="bg-white rounded-t md:rounded-t-lg overflow-hidden w-full aspect-16-9 relative group cursor-pointer">
                         <img src="assets/work/hero-laptop.png" 
                              alt="Hotel Rass Website Preview" 
                              class="w-full h-full object-contain transition-transform duration-700 ease-in-out group-hover:scale-105">
                     </div>
-                    <div class="absolute top-2 left-1/2 -translate-x-1/2 w-1.5 h-1.5 bg-gray-600 rounded-full"></div>
+                    <div class="absolute top-1.5 md:top-2 left-1/2 -translate-x-1/2 w-1 md:w-1.5 h-1 md:h-1.5 bg-gray-600 rounded-full"></div>
                 </div>
-                <div class="bg-gray-700 h-4 md:h-6 rounded-b-xl w-[104%] -ml-[2%] shadow-xl relative z-10"></div>
+                <div class="bg-gray-700 h-3 md:h-6 rounded-b-lg md:rounded-b-xl w-[104%] -ml-[2%] shadow-xl relative z-10"></div>
             </div>
         </div>
     </header>
@@ -230,17 +239,15 @@
             <p class="text-gray-500 mb-16 max-w-xl mx-auto">Over 70% of bookings happen on mobile. We prioritized a thumb-friendly interface with easy navigation.</p>
             
             <div class="flex flex-wrap justify-center gap-8 md:gap-16 pswp-gallery" id="mobile-gallery">
-                <div class="relative w-72 h-[580px] bg-gray-900 rounded-[3rem] border-8 border-gray-900 shadow-2xl overflow-hidden reveal group">
-                    <div class="absolute top-0 left-1/2 -translate-x-1/2 w-32 h-6 bg-gray-900 rounded-b-xl z-20"></div>
+                <div class="relative w-72 aspect-iphone bg-gray-900 rounded-[3rem] border-8 border-gray-900 shadow-2xl overflow-hidden reveal group">
                     <a href="assets/work/mobile-1.PNG" data-pswp-width="1080" data-pswp-height="1920" target="_blank" class="block w-full h-full bg-white cursor-zoom-in">
-                        <img src="assets/work/mobile-1.PNG" alt="Mobile Home" class="w-full h-full object-cover transition-transform duration-700 group-hover:scale-105">
+                        <img src="assets/work/mobile-1.PNG" alt="Mobile Home" class="w-full h-full object-fill transition-transform duration-700 group-hover:scale-105">
                     </a>
                 </div>
 
-                <div class="relative w-72 h-[580px] bg-gray-900 rounded-[3rem] border-8 border-gray-900 shadow-2xl overflow-hidden reveal delay-100 group">
-                    <div class="absolute top-0 left-1/2 -translate-x-1/2 w-32 h-6 bg-gray-900 rounded-b-xl z-20"></div>
+                <div class="relative w-72 aspect-iphone bg-gray-900 rounded-[3rem] border-8 border-gray-900 shadow-2xl overflow-hidden reveal delay-100 group">
                     <a href="assets/work/mobile-2.png" data-pswp-width="1080" data-pswp-height="1920" target="_blank" class="block w-full h-full bg-white cursor-zoom-in">
-                        <img src="assets/work/mobile-2.png" alt="Mobile Booking" class="w-full h-full object-cover transition-transform duration-700 group-hover:scale-105">
+                        <img src="assets/work/mobile-2.png" alt="Mobile Booking" class="w-full h-full object-fill transition-transform duration-700 group-hover:scale-105">
                     </a>
                 </div>
             </div>
