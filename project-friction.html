@@ -113,16 +113,6 @@
             background: linear-gradient(135deg, #120E16 0%, #2a2a2a 100%);
             z-index: 0;
         }
-
-        /* Hide scrollbar for Chrome, Safari and Opera */
-        .scrollbar-hide::-webkit-scrollbar {
-            display: none;
-        }
-        /* Hide scrollbar for IE, Edge and Firefox */
-        .scrollbar-hide {
-            -ms-overflow-style: none;  /* IE and Edge */
-            scrollbar-width: none;  /* Firefox */
-        }
     </style>
 </head>
 <body class="bg-brand-dark text-white selection:bg-brand-lime selection:text-brand-dark">
@@ -492,7 +482,7 @@
 
                 <!-- Seamless Carousel Block -->
                 <div class="gallery-item image break-inside-avoid rounded-2xl overflow-hidden shadow-lg reveal mb-6">
-                    <div class="flex flex-row gap-0 overflow-x-auto snap-x scrollbar-hide">
+                    <div class="flex flex-row gap-0 overflow-x-auto snap-x w-full">
                         <a href="assets/work/crousel-1.jpg" data-pswp-width="1080" data-pswp-height="1080" target="_blank" class="min-w-full shrink-0 snap-center block">
                             <img src="assets/work/crousel-1.jpg" class="w-full block" loading="lazy">
                         </a>
@@ -630,6 +620,29 @@
                 alert('Link copied!');
             }
         }
+
+        // Fix for PhotoSwipe Image Stretching/Shrinking
+        // This script automatically updates the data-pswp-width and height attributes 
+        // to match the real image dimensions once they load.
+        document.addEventListener('DOMContentLoaded', () => {
+            const galleryImages = document.querySelectorAll('.pswp-gallery a img');
+            
+            galleryImages.forEach(img => {
+                const updateDimensions = () => {
+                    const anchor = img.closest('a');
+                    if (anchor && img.naturalWidth > 0 && img.naturalHeight > 0) {
+                        anchor.setAttribute('data-pswp-width', img.naturalWidth);
+                        anchor.setAttribute('data-pswp-height', img.naturalHeight);
+                    }
+                };
+
+                if (img.complete) {
+                    updateDimensions();
+                } else {
+                    img.onload = updateDimensions;
+                }
+            });
+        });
     </script>
 
     <script type="module">
