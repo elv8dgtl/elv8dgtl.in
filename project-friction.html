@@ -113,6 +113,16 @@
             background: linear-gradient(135deg, #120E16 0%, #2a2a2a 100%);
             z-index: 0;
         }
+
+        /* Hide scrollbar for Chrome, Safari and Opera */
+        .scrollbar-hide::-webkit-scrollbar {
+            display: none;
+        }
+        /* Hide scrollbar for IE, Edge and Firefox */
+        .scrollbar-hide {
+            -ms-overflow-style: none;  /* IE and Edge */
+            scrollbar-width: none;  /* Firefox */
+        }
     </style>
 </head>
 <body class="bg-brand-dark text-white selection:bg-brand-lime selection:text-brand-dark">
@@ -394,7 +404,7 @@
                 </div>
 
                 <div class="gallery-item image break-inside-avoid rounded-2xl overflow-hidden shadow-lg reveal mb-6">
-                    <a href="assets/work/crousel-instagram.jpg" data-pswp-width="1080" data-pswp-height="1080" target="_blank" class="block group relative">
+                    <a href="assets/work/crousel-instagram.jpg" data-pswp-width="1080" data-pswp-height="1350" target="_blank" class="block group relative">
                         <img src="assets/work/crousel-instagram.jpg" class="w-full hover:scale-105 transition-transform duration-500" loading="lazy">
                         <div class="absolute bottom-4 left-4 bg-white/90 px-2 py-1 rounded text-xs font-bold opacity-0 group-hover:opacity-100 transition-opacity text-black">Flyer</div>
                     </a>
@@ -480,10 +490,25 @@
                     <div class="play-overlay"><div class="play-icon w-14 h-14 bg-white/20 backdrop-blur-md rounded-full flex items-center justify-center transition-transform duration-300"><i data-lucide="maximize-2" class="w-6 h-6 text-white"></i></div></div>
                 </div>
 
+                <!-- Seamless Carousel Block -->
                 <div class="gallery-item image break-inside-avoid rounded-2xl overflow-hidden shadow-lg reveal mb-6">
-                    <a href="assets/work/crousel-1.jpg" data-pswp-width="1080" data-pswp-height="1080" target="_blank">
-                        <img src="assets/work/crousel-1.jpg" class="w-full hover:scale-105 transition-transform duration-500" loading="lazy">
-                    </a>
+                    <div class="flex flex-row gap-0 overflow-x-auto snap-x scrollbar-hide">
+                        <a href="assets/work/crousel-1.jpg" data-pswp-width="1080" data-pswp-height="1080" target="_blank" class="min-w-full shrink-0 snap-center block">
+                            <img src="assets/work/crousel-1.jpg" class="w-full block" loading="lazy">
+                        </a>
+                        <a href="assets/work/crousel-2.jpg" data-pswp-width="1080" data-pswp-height="1080" target="_blank" class="min-w-full shrink-0 snap-center block">
+                            <img src="assets/work/crousel-2.jpg" class="w-full block" loading="lazy">
+                        </a>
+                        <a href="assets/work/crousel-3.jpg" data-pswp-width="1080" data-pswp-height="1080" target="_blank" class="min-w-full shrink-0 snap-center block">
+                            <img src="assets/work/crousel-3.jpg" class="w-full block" loading="lazy">
+                        </a>
+                        <a href="assets/work/crousel-4.jpg" data-pswp-width="1080" data-pswp-height="1080" target="_blank" class="min-w-full shrink-0 snap-center block">
+                            <img src="assets/work/crousel-4.jpg" class="w-full block" loading="lazy">
+                        </a>
+                    </div>
+                    <div class="absolute bottom-3 left-3 bg-black/50 backdrop-blur-sm px-2 py-1 rounded text-[10px] font-bold text-white pointer-events-none uppercase tracking-wide flex items-center gap-1">
+                        <i data-lucide="gallery-horizontal" class="w-3 h-3"></i> Swipe Carousel
+                    </div>
                 </div>
 
                 <div class="gallery-item video break-inside-avoid rounded-2xl overflow-hidden shadow-lg reveal mb-6 aspect-[9/16] bg-black relative cursor-pointer group" onclick="openDriveModal('1b-eNKxBFQhpG67w4lVhuyfMY48yiDeF2')">
