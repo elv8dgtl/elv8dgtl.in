@@ -4,9 +4,10 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     
-    <title>About Us | Best Digital Marketing Team in Kanpur & India | elv8 dgtl</title>
-    <meta name="description" content="Meet the experts behind elv8 dgtl. Led by Madhur Tiwari, we are Kanpur's premier digital agency delivering custom web design, branding, and marketing solutions across India.">
-    <meta name="keywords" content="Madhur Tiwari, Digital Agency Kanpur, Web Design Team India, Best Marketing Agency Uttar Pradesh, Boutique Agency Culture, SEO Experts North India, elv8 dgtl team">
+    <!-- FIX 1: Removed "Best" from title -->
+    <title>About Us | Digital Marketing Team in Kanpur & India | elv8 dgtl</title>
+    <meta name="description" content="Meet the experts behind elv8 dgtl. Led by Madhur Tiwari, we are Kanpur's boutique digital agency delivering custom web design, branding, and marketing solutions across India.">
+    <meta name="keywords" content="Madhur Tiwari, Digital Agency Kanpur, Web Design Team India, Marketing Agency Uttar Pradesh, Boutique Agency Culture, SEO Experts North India, elv8 dgtl team">
     <meta name="author" content="elv8 dgtl">
     <meta name="robots" content="index, follow">
     <meta name="geo.region" content="IN-UP" />
@@ -19,6 +20,7 @@
     <meta property="og:description" content="Small team, massive impact. Meet the creators behind the code in Kanpur.">
     <meta property="og:image" content="https://www.elv8dgtl.in/og-about.jpg">
 
+    <!-- FIX 2: Corrected Twitter URL in structured data -->
     <script type="application/ld+json">
     {
       "@context": "https://schema.org",
@@ -39,7 +41,7 @@
       "sameAs": [
         "https://instagram.com/elv8dgtl.in",
         "https://linkedin.com/company/elv8dgtl",
-        "https://twitter.com/elv8dgtl"
+        "https://x.com/elv8dgtl"
       ]
     }
     </script>
@@ -109,52 +111,67 @@
         .reveal { opacity: 0; transform: translateY(30px); transition: all 0.8s cubic-bezier(0.5, 0, 0, 1); }
         .reveal.active { opacity: 1; transform: translateY(0); }
         .blob { position: absolute; filter: blur(80px); z-index: -1; opacity: 0.6; }
-        
-        /* Footer Link Hover */
         .footer-link { position: relative; display: inline-block; }
         .footer-link::after { content: ''; position: absolute; width: 0; height: 1px; bottom: -2px; left: 0; background-color: #CCF381; transition: width 0.3s ease; }
         .footer-link:hover::after { width: 100%; }
-        
         ::-webkit-scrollbar { width: 8px; }
         ::-webkit-scrollbar-track { background: #f9fafb; }
         ::-webkit-scrollbar-thumb { background: #d1d5db; border-radius: 4px; }
         ::-webkit-scrollbar-thumb:hover { background: #9ca3af; }
+
+        /* WhatsApp pulse */
+        @keyframes whatsapp-ping {
+            0%, 100% { box-shadow: 0 0 0 0 rgba(37, 211, 102, 0.4); }
+            50% { box-shadow: 0 0 0 10px rgba(37, 211, 102, 0); }
+        }
+        .whatsapp-btn { animation: whatsapp-ping 2s ease-in-out infinite; }
     </style>
 </head>
 <body class="bg-gray-50 text-brand-dark overflow-x-hidden flex flex-col min-h-screen">
 
+    <!-- Navigation -->
     <nav id="navbar" class="fixed w-full z-50 transition-all duration-300 py-6">
         <div class="container mx-auto px-6 md:px-12 flex justify-between items-center">
             <a href="index.html" class="flex items-center gap-2 group">
                 <div class="w-10 h-10 bg-brand-lime rounded-xl flex items-center justify-center transform group-hover:rotate-12 transition-transform duration-300">
                     <i data-lucide="zap" class="text-brand-dark w-6 h-6 fill-current"></i>
                 </div>
-                <span id="nav-brand-text" class="text-2xl font-display font-bold tracking-tight text-white transition-colors">elv8<span class="font-normal opacity-70">dgtl</span></span>
+                <!-- FIX 3: Added "elevate digital" tagline (consistent with all pages) -->
+                <div class="flex flex-col leading-tight">
+                    <span id="nav-brand-text" class="text-2xl font-display font-bold tracking-tight text-white transition-colors">elv8<span class="font-normal opacity-70">dgtl</span></span>
+                    <span class="text-[10px] font-medium uppercase tracking-widest text-gray-500 hidden sm:block">elevate digital</span>
+                </div>
             </a>
             <div class="hidden md:flex items-center gap-8">
                 <a href="services.html" class="nav-link text-sm font-medium text-gray-300 hover:text-brand-lime transition-colors">Services</a>
                 <a href="work.html" class="nav-link text-sm font-medium text-gray-300 hover:text-brand-lime transition-colors">Projects</a>
                 <a href="about.html" class="nav-link text-sm font-medium text-brand-lime transition-colors">About</a>
+                <!-- FIX 4: "Start a Project" → "Get a Quote" -->
                 <a href="contact.html" class="px-6 py-3 bg-white text-brand-dark rounded-full text-sm font-bold hover:bg-brand-lime hover:shadow-lg hover:-translate-y-1 transition-all duration-300 flex items-center gap-2">
-                    Start a Project <i data-lucide="arrow-right" class="w-4 h-4"></i>
+                    Get a Quote <i data-lucide="arrow-right" class="w-4 h-4"></i>
                 </a>
             </div>
             <button id="menu-btn" class="md:hidden text-white p-2"><i data-lucide="menu" class="w-8 h-8"></i></button>
         </div>
     </nav>
 
-    <div id="mobile-menu" class="fixed inset-0 bg-brand-dark z-40 translate-x-full transition-transform duration-300 flex flex-col justify-center items-center gap-8">
+    <!-- Mobile Menu -->
+    <div id="mobile-menu" class="fixed inset-0 bg-brand-dark z-[60] translate-x-full transition-transform duration-300 flex flex-col justify-center items-center gap-8">
         <button id="close-menu" class="absolute top-8 right-8 p-2"><i data-lucide="x" class="w-8 h-8 text-white"></i></button>
         <a href="index.html" class="mobile-link text-3xl font-display font-bold text-white">Home</a>
         <a href="services.html" class="mobile-link text-3xl font-display font-bold text-white">Services</a>
-        <a href="work.html" class="mobile-link text-3xl font-display font-bold text-brand-lime">Projects</a>
-        <a href="about.html" class="mobile-link text-3xl font-display font-bold text-white">About</a>
+        <a href="work.html" class="mobile-link text-3xl font-display font-bold text-white">Projects</a>
+        <a href="about.html" class="mobile-link text-3xl font-display font-bold text-brand-lime">About</a>
         <a href="contact.html" class="mobile-link text-3xl font-display font-bold text-white">Contact</a>
+        <!-- FIX 5: WhatsApp in mobile menu with real number -->
+        <a href="https://wa.me/918052743378" target="_blank" class="mt-4 px-8 py-4 bg-[#25D366] text-white rounded-full font-bold flex items-center gap-3">
+            <i data-lucide="message-circle" class="w-5 h-5"></i> WhatsApp Us
+        </a>
     </div>
 
+    <!-- Hero Header -->
     <header class="relative pt-40 pb-24 md:pt-48 md:pb-32 overflow-hidden bg-brand-dark rounded-b-[3rem] shadow-2xl z-20">
         <div class="absolute inset-0 bg-[linear-gradient(rgba(255,255,255,0.03)_1px,transparent_1px),linear-gradient(90deg,rgba(255,255,255,0.03)_1px,transparent_1px)] bg-[size:4rem_4rem] [mask-image:radial-gradient(ellipse_60%_50%_at_50%_0%,#000_70%,transparent_100%)]"></div>
-        
         <div class="absolute top-0 right-0 w-[600px] h-[600px] bg-brand-purple/20 rounded-full blur-[120px] translate-x-1/2 -translate-y-1/2 pointer-events-none"></div>
         <div class="absolute bottom-0 left-0 w-[500px] h-[500px] bg-brand-lime/10 rounded-full blur-[100px] -translate-x-1/3 translate-y-1/3 pointer-events-none"></div>
         
@@ -174,6 +191,7 @@
         </div>
     </header>
 
+    <!-- Founder Section -->
     <section class="py-24 bg-white">
         <div class="container mx-auto px-6 md:px-12">
             <div class="bg-brand-dark text-white rounded-[3rem] p-8 md:p-16 relative overflow-hidden reveal shadow-2xl">
@@ -182,21 +200,17 @@
                 <div class="absolute inset-0 bg-[linear-gradient(rgba(255,255,255,0.02)_1px,transparent_1px),linear-gradient(90deg,rgba(255,255,255,0.02)_1px,transparent_1px)] bg-[size:4rem_4rem]"></div>
 
                 <div class="grid lg:grid-cols-12 gap-12 lg:gap-16 items-center relative z-10">
-                    
                     <div class="lg:col-span-7 order-2 lg:order-1">
                         <div class="inline-flex items-center gap-3 mb-8">
                             <div class="h-px w-12 bg-brand-lime"></div>
                             <span class="text-brand-lime text-xs font-bold uppercase tracking-widest">Founder's Note</span>
                         </div>
-                        
                         <blockquote class="text-3xl md:text-4xl lg:text-5xl font-display font-bold leading-tight mb-8">
                             "Businesses don't need another vendor. They need a partner who obsesses over the <span class="text-brand-lime">details</span> others overlook."
                         </blockquote>
-                        
                         <p class="text-gray-400 text-lg leading-relaxed mb-10 max-w-2xl">
                             I founded elv8 dgtl with a simple premise: digital identities should breathe. We aren't here to fill templates; we're here to engineer growth engines that scale with your ambition.
                         </p>
-                        
                         <div class="flex flex-col sm:flex-row items-start sm:items-center gap-6 sm:gap-12">
                             <div>
                                 <div class="font-signature text-4xl text-white mb-1">Madhur Tiwari</div>
@@ -218,18 +232,18 @@
                     <div class="lg:col-span-5 order-1 lg:order-2 flex justify-center lg:justify-end">
                         <div class="relative w-full max-w-md">
                             <div class="absolute -top-4 -right-4 w-full h-full border-2 border-brand-lime/30 rounded-3xl"></div>
-                            
                             <div class="relative aspect-[4/5] rounded-3xl overflow-hidden shadow-2xl bg-gray-800 group">
-                                <img src="assets/work/myself.jpg" alt="Madhur Tiwari" class="w-full h-full object-cover transition-transform duration-700 group-hover:scale-105 filter grayscale group-hover:grayscale-0">
+                                <img src="assets/work/myself.jpg" alt="Madhur Tiwari — Founder, elv8 dgtl" class="w-full h-full object-cover transition-transform duration-700 group-hover:scale-105 filter grayscale group-hover:grayscale-0">
                                 <div class="absolute inset-0 bg-gradient-to-t from-brand-dark/90 via-transparent to-transparent opacity-60"></div>
-                                
+                                <!-- FIX 6: Correct social links for Madhur's personal profile -->
                                 <div class="absolute bottom-6 left-6 right-6 p-4 bg-white/10 backdrop-blur-md border border-white/10 rounded-xl">
                                     <div class="flex justify-between items-center">
                                         <span class="text-white text-sm font-bold">Connect directly</span>
                                         <div class="flex gap-3">
-                                            <a href="https://www.linkedin.com/in/corruptshots" class="text-white hover:text-brand-lime transition-colors"><i data-lucide="linkedin" class="w-4 h-4"></i></a>
-                                            <a href="https://instagram.com/corruptshots" class="text-white hover:text-brand-lime transition-colors"><i data-lucide="instagram" class="w-4 h-4"></i></a>
-                                            <a href="mailto:madhurwork02@gmail.com" class="text-white hover:text-brand-lime transition-colors"><i data-lucide="mail" class="w-4 h-4"></i></a>
+                                            <a href="https://www.linkedin.com/in/corruptshots" target="_blank" rel="noopener" aria-label="LinkedIn" class="text-white hover:text-brand-lime transition-colors"><i data-lucide="linkedin" class="w-4 h-4"></i></a>
+                                            <a href="https://instagram.com/corruptshots" target="_blank" rel="noopener" aria-label="Instagram" class="text-white hover:text-brand-lime transition-colors"><i data-lucide="instagram" class="w-4 h-4"></i></a>
+                                            <!-- FIX 7: WhatsApp direct link on founder card -->
+                                            <a href="https://wa.me/918052743378" target="_blank" rel="noopener" aria-label="WhatsApp" class="text-white hover:text-[#25D366] transition-colors"><i data-lucide="message-circle" class="w-4 h-4"></i></a>
                                         </div>
                                     </div>
                                 </div>
@@ -241,6 +255,7 @@
         </div>
     </section>
 
+    <!-- Stats Bar -->
     <section class="py-12 bg-gray-900 text-white border-y border-white/10">
         <div class="container mx-auto px-6 md:px-12">
             <div class="grid grid-cols-2 md:grid-cols-4 gap-8 text-center divide-x divide-white/10">
@@ -264,6 +279,7 @@
         </div>
     </section>
 
+    <!-- Core Values -->
     <section class="py-24 bg-white">
         <div class="container mx-auto px-6 md:px-12">
             <div class="text-center mb-16">
@@ -296,6 +312,7 @@
         </div>
     </section>
 
+    <!-- Culture Section -->
     <section class="py-24 bg-gray-50">
         <div class="container mx-auto px-6 md:px-12">
             <div class="grid lg:grid-cols-2 gap-16 items-center">
@@ -326,14 +343,16 @@
                 </div>
                 <div class="reveal" style="transition-delay: 200ms;">
                     <div class="grid grid-cols-2 gap-4">
-                        <img src="https://images.unsplash.com/photo-1522202176988-66273c2fd55f?ixlib=rb-1.2.1&auto=format&fit=crop&w=800&q=80" class="rounded-2xl shadow-lg transform translate-y-8" alt="Team">
-                        <img src="https://images.unsplash.com/photo-1531498860502-7c67cf5a1881?ixlib=rb-1.2.1&auto=format&fit=crop&w=800&q=80" class="rounded-2xl shadow-lg" alt="Culture">
+                        <img src="https://images.unsplash.com/photo-1522202176988-66273c2fd55f?ixlib=rb-1.2.1&auto=format&fit=crop&w=800&q=80" class="rounded-2xl shadow-lg transform translate-y-8" alt="Team collaboration">
+                        <img src="https://images.unsplash.com/photo-1531498860502-7c67cf5a1881?ixlib=rb-1.2.1&auto=format&fit=crop&w=800&q=80" class="rounded-2xl shadow-lg" alt="Agency culture">
                     </div>
                 </div>
             </div>
         </div>
     </section>
 
+    <!-- FIX 8: Removed fake team members (Sarah, David, Elena, Marcus).
+         Replaced with a "We're Hiring" / collaborators card — more honest for a boutique agency. -->
     <section class="py-24 bg-white border-t border-gray-100">
         <div class="container mx-auto px-6 md:px-12">
             <div class="flex flex-col md:flex-row justify-between items-end mb-16 reveal">
@@ -341,82 +360,75 @@
                     <span class="text-brand-purple font-bold uppercase tracking-widest text-sm mb-4 block">The Squad</span>
                     <h2 class="text-4xl md:text-5xl font-display font-bold text-brand-dark">Meet the minds.</h2>
                 </div>
-                <p class="text-gray-500 text-right max-w-sm mt-4 md:mt-0">A distributed team of experts working in sync to deliver excellence.</p>
+                <p class="text-gray-500 text-right max-w-sm mt-4 md:mt-0">A tight-knit team of creators and strategists working in sync to deliver excellence.</p>
             </div>
 
-            <div class="grid md:grid-cols-2 lg:grid-cols-4 gap-8">
-                
-                <div class="group reveal" style="transition-delay: 0ms;">
+            <div class="grid md:grid-cols-2 lg:grid-cols-3 gap-8">
+
+                <!-- Madhur — Founder -->
+                <div class="group reveal">
                     <div class="relative overflow-hidden rounded-[2rem] aspect-[3/4] mb-6 shadow-md bg-gray-100">
-                        <img src="https://images.unsplash.com/photo-1494790108377-be9c29b29330?q=80&w=1000&auto=format&fit=crop" alt="Sarah Jenkins" class="w-full h-full object-cover transition-transform duration-700 group-hover:scale-110">
+                        <img src="assets/work/myself.jpg" alt="Madhur Tiwari" class="w-full h-full object-cover transition-transform duration-700 group-hover:scale-110 filter grayscale group-hover:grayscale-0">
                         <div class="absolute inset-0 bg-brand-purple/90 opacity-0 group-hover:opacity-100 transition-opacity duration-300 flex flex-col items-center justify-center gap-2 p-6 text-center">
-                            <p class="text-white text-sm italic">"Design is intelligence made visible."</p>
+                            <p class="text-white text-sm italic">"Build it right. Build it to scale."</p>
                             <div class="flex gap-4 mt-2">
-                                <a href="#" class="w-8 h-8 bg-white rounded-full flex items-center justify-center text-brand-purple hover:scale-110 transition-transform"><i data-lucide="linkedin" class="w-4 h-4"></i></a>
+                                <a href="https://www.linkedin.com/in/corruptshots" target="_blank" rel="noopener" aria-label="LinkedIn" class="w-8 h-8 bg-white rounded-full flex items-center justify-center text-brand-purple hover:scale-110 transition-transform"><i data-lucide="linkedin" class="w-4 h-4"></i></a>
+                                <a href="https://instagram.com/corruptshots" target="_blank" rel="noopener" aria-label="Instagram" class="w-8 h-8 bg-white rounded-full flex items-center justify-center text-brand-purple hover:scale-110 transition-transform"><i data-lucide="instagram" class="w-4 h-4"></i></a>
+                                <a href="https://wa.me/918052743378" target="_blank" rel="noopener" aria-label="WhatsApp" class="w-8 h-8 bg-white rounded-full flex items-center justify-center text-brand-purple hover:scale-110 transition-transform"><i data-lucide="message-circle" class="w-4 h-4"></i></a>
                             </div>
                         </div>
                     </div>
-                    <h3 class="text-xl font-bold text-brand-dark group-hover:text-brand-purple transition-colors">Sarah Jenkins</h3>
-                    <p class="text-sm text-gray-500 font-medium">Creative Director</p>
+                    <h3 class="text-xl font-bold text-brand-dark group-hover:text-brand-purple transition-colors">Madhur Tiwari</h3>
+                    <p class="text-sm text-gray-500 font-medium">Founder & Principal Strategist</p>
                 </div>
 
+                <!-- Collaborators card -->
                 <div class="group reveal" style="transition-delay: 100ms;">
-                    <div class="relative overflow-hidden rounded-[2rem] aspect-[3/4] mb-6 shadow-md bg-gray-100">
-                        <img src="https://images.unsplash.com/photo-1500648767791-00dcc994a43e?q=80&w=1000&auto=format&fit=crop" alt="David Chen" class="w-full h-full object-cover transition-transform duration-700 group-hover:scale-110">
-                        <div class="absolute inset-0 bg-brand-lime/90 opacity-0 group-hover:opacity-100 transition-opacity duration-300 flex flex-col items-center justify-center gap-2 p-6 text-center">
-                            <p class="text-brand-dark text-sm italic">"Clean code, clean mind."</p>
-                            <div class="flex gap-4 mt-2">
-                                <a href="#" class="w-8 h-8 bg-brand-dark rounded-full flex items-center justify-center text-brand-lime hover:scale-110 transition-transform"><i data-lucide="github" class="w-4 h-4"></i></a>
-                            </div>
+                    <div class="relative overflow-hidden rounded-[2rem] aspect-[3/4] mb-6 shadow-md bg-gray-50 border-2 border-dashed border-gray-200 flex flex-col items-center justify-center text-center p-8 hover:border-brand-lime transition-colors">
+                        <div class="w-16 h-16 bg-brand-lime rounded-full flex items-center justify-center mb-4">
+                            <i data-lucide="users" class="w-8 h-8 text-brand-dark"></i>
                         </div>
+                        <h3 class="text-lg font-bold text-brand-dark mb-2">Expert Collaborators</h3>
+                        <p class="text-sm text-gray-500 leading-relaxed">We work with a vetted network of designers, developers, and marketers to scale projects as needed.</p>
                     </div>
-                    <h3 class="text-xl font-bold text-brand-dark group-hover:text-brand-lime transition-colors">David Chen</h3>
-                    <p class="text-sm text-gray-500 font-medium">Lead Developer</p>
+                    <h3 class="text-xl font-bold text-brand-dark">The Network</h3>
+                    <p class="text-sm text-gray-500 font-medium">Specialists On-Demand</p>
                 </div>
 
+                <!-- Join Us card -->
                 <div class="group reveal" style="transition-delay: 200ms;">
-                    <div class="relative overflow-hidden rounded-[2rem] aspect-[3/4] mb-6 shadow-md bg-gray-100">
-                        <img src="https://images.unsplash.com/photo-1534528741775-53994a69daeb?q=80&w=1000&auto=format&fit=crop" alt="Elena Rodriguez" class="w-full h-full object-cover transition-transform duration-700 group-hover:scale-110">
-                        <div class="absolute inset-0 bg-brand-purple/90 opacity-0 group-hover:opacity-100 transition-opacity duration-300 flex flex-col items-center justify-center gap-2 p-6 text-center">
-                            <p class="text-white text-sm italic">"Data tells the story."</p>
-                            <div class="flex gap-4 mt-2">
-                                <a href="#" class="w-8 h-8 bg-white rounded-full flex items-center justify-center text-brand-purple hover:scale-110 transition-transform"><i data-lucide="linkedin" class="w-4 h-4"></i></a>
-                            </div>
+                    <div class="relative overflow-hidden rounded-[2rem] aspect-[3/4] mb-6 shadow-md bg-brand-dark flex flex-col items-center justify-center text-center p-8 hover:scale-[1.02] transition-transform">
+                        <div class="w-16 h-16 bg-brand-purple rounded-full flex items-center justify-center mb-4">
+                            <i data-lucide="sparkles" class="w-8 h-8 text-white"></i>
                         </div>
+                        <h3 class="text-lg font-bold text-white mb-2">Could be you.</h3>
+                        <p class="text-sm text-gray-400 leading-relaxed mb-6">Obsessed with quality? We're always looking for exceptional talent to join the team.</p>
+                        <a href="mailto:hello@elv8dgtl.in" class="px-6 py-2 bg-brand-lime text-brand-dark rounded-full text-sm font-bold hover:scale-105 transition-transform">
+                            Say Hello →
+                        </a>
                     </div>
-                    <h3 class="text-xl font-bold text-brand-dark group-hover:text-brand-purple transition-colors">Elena Rodriguez</h3>
-                    <p class="text-sm text-gray-500 font-medium">Growth Strategist</p>
-                </div>
-
-                <div class="group reveal" style="transition-delay: 300ms;">
-                    <div class="relative overflow-hidden rounded-[2rem] aspect-[3/4] mb-6 shadow-md bg-gray-100">
-                        <img src="https://images.unsplash.com/photo-1539571696357-5a69c17a67c6?q=80&w=1000&auto=format&fit=crop" alt="Marcus Johnson" class="w-full h-full object-cover transition-transform duration-700 group-hover:scale-110">
-                        <div class="absolute inset-0 bg-brand-lime/90 opacity-0 group-hover:opacity-100 transition-opacity duration-300 flex flex-col items-center justify-center gap-2 p-6 text-center">
-                            <p class="text-brand-dark text-sm italic">"Efficiency is key."</p>
-                            <div class="flex gap-4 mt-2">
-                                <a href="#" class="w-8 h-8 bg-brand-dark rounded-full flex items-center justify-center text-brand-lime hover:scale-110 transition-transform"><i data-lucide="linkedin" class="w-4 h-4"></i></a>
-                            </div>
-                        </div>
-                    </div>
-                    <h3 class="text-xl font-bold text-brand-dark group-hover:text-brand-lime transition-colors">Marcus Johnson</h3>
-                    <p class="text-sm text-gray-500 font-medium">Operations Lead</p>
+                    <h3 class="text-xl font-bold text-brand-dark">Open Position</h3>
+                    <p class="text-sm text-gray-500 font-medium">Remote · Full-time / Freelance</p>
                 </div>
 
             </div>
         </div>
     </section>
 
+    <!-- Careers CTA -->
     <section class="py-20 bg-brand-purple text-white relative overflow-hidden">
         <div class="absolute inset-0 bg-[url('data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iMjAiIGhlaWdodD0iMjAiIHhtbG5zPSJodHRwOi8vd3d3LnczLm9yZy8yMDAwL3N2ZyI+PGNpcmNsZSBjeD0iMiIgY3k9IjIiIHI9IjEiIGZpbGw9InJnYmEoMjU1LDI1NSwyNTUsMC4xKSIvPjwvc3ZnPg==')] [mask-image:linear-gradient(to_bottom,transparent,black)]"></div>
         <div class="container mx-auto px-6 md:px-12 text-center relative z-10">
             <h2 class="text-3xl font-display font-bold mb-4">Want to join the revolution?</h2>
             <p class="text-white/80 max-w-lg mx-auto mb-8">We are always looking for exceptional talent to join our remote team. If you are obsessed with quality, we want to hear from you.</p>
-            <a href="mailto:careers@elv8dgtl.com" class="inline-flex items-center gap-2 px-6 py-3 bg-white text-brand-purple rounded-full font-bold hover:bg-brand-lime hover:text-brand-dark transition-all">
+            <!-- FIX 9: Updated careers email to domain email -->
+            <a href="mailto:hello@elv8dgtl.in" class="inline-flex items-center gap-2 px-6 py-3 bg-white text-brand-purple rounded-full font-bold hover:bg-brand-lime hover:text-brand-dark transition-all">
                 View Openings <i data-lucide="arrow-right" class="w-4 h-4"></i>
             </a>
         </div>
     </section>
 
+    <!-- Marquee -->
     <div class="bg-brand-lime text-brand-dark py-4 overflow-hidden border-y border-brand-dark">
         <div class="flex whitespace-nowrap animate-marquee">
             <span class="mx-6 text-xl font-bold uppercase tracking-widest">• Web Design</span>
@@ -426,7 +438,7 @@
             <span class="mx-6 text-xl font-bold uppercase tracking-widest">• Strategy</span>
             <span class="mx-6 text-xl font-bold uppercase tracking-widest">• Marketing</span>
             <span class="mx-6 text-xl font-bold uppercase tracking-widest">• Content</span>
-             <span class="mx-6 text-xl font-bold uppercase tracking-widest">• Web Design</span>
+            <span class="mx-6 text-xl font-bold uppercase tracking-widest">• Web Design</span>
             <span class="mx-6 text-xl font-bold uppercase tracking-widest">• Development</span>
             <span class="mx-6 text-xl font-bold uppercase tracking-widest">• SEO</span>
             <span class="mx-6 text-xl font-bold uppercase tracking-widest">• Branding</span>
@@ -436,11 +448,11 @@
         </div>
     </div>
 
+    <!-- Footer -->
     <footer class="bg-brand-dark text-white relative overflow-hidden border-t border-white/10">
         <div class="absolute bottom-0 left-1/2 -translate-x-1/2 translate-y-1/3 text-[20vw] font-display font-bold text-white/5 whitespace-nowrap pointer-events-none select-none">
             ELV8 DGTL
         </div>
-
         <div class="container mx-auto px-6 md:px-12 py-20 relative z-10">
             <div class="grid md:grid-cols-4 gap-12 mb-16">
                 <div class="md:col-span-2">
@@ -450,16 +462,14 @@
                         </div>
                         <span class="text-2xl font-display font-bold tracking-tight text-white">elv8<span class="font-normal opacity-70">dgtl</span></span>
                     </a>
-                    <p class="text-gray-400 max-w-sm mb-6">
-                        A digital agency crafting experiences that stick. Based in the cloud, available worldwide.
-                    </p>
+                    <p class="text-gray-400 max-w-sm mb-6">A digital agency crafting experiences that stick. Based in the cloud, available worldwide.</p>
+                    <!-- FIX 10: All correct social links -->
                     <div class="flex gap-4">
-                        <a href="#" class="w-10 h-10 rounded-full bg-white/10 flex items-center justify-center hover:bg-brand-lime hover:text-brand-dark transition-all"><i data-lucide="instagram" class="w-5 h-5"></i></a>
-                        <a href="#" class="w-10 h-10 rounded-full bg-white/10 flex items-center justify-center hover:bg-brand-lime hover:text-brand-dark transition-all"><i data-lucide="linkedin" class="w-5 h-5"></i></a>
-                        <a href="#" class="w-10 h-10 rounded-full bg-white/10 flex items-center justify-center hover:bg-brand-lime hover:text-brand-dark transition-all"><i data-lucide="twitter" class="w-5 h-5"></i></a>
+                        <a href="https://instagram.com/elv8dgtl.in" target="_blank" rel="noopener" aria-label="Instagram" class="w-10 h-10 rounded-full bg-white/10 flex items-center justify-center hover:bg-brand-lime hover:text-brand-dark transition-all"><i data-lucide="instagram" class="w-5 h-5"></i></a>
+                        <a href="https://linkedin.com/company/elv8dgtl" target="_blank" rel="noopener" aria-label="LinkedIn" class="w-10 h-10 rounded-full bg-white/10 flex items-center justify-center hover:bg-brand-lime hover:text-brand-dark transition-all"><i data-lucide="linkedin" class="w-5 h-5"></i></a>
+                        <a href="https://x.com/elv8dgtl?s=21" target="_blank" rel="noopener" aria-label="X / Twitter" class="w-10 h-10 rounded-full bg-white/10 flex items-center justify-center hover:bg-brand-lime hover:text-brand-dark transition-all"><i data-lucide="twitter" class="w-5 h-5"></i></a>
                     </div>
                 </div>
-
                 <div>
                     <h4 class="font-bold text-brand-lime uppercase tracking-widest text-sm mb-6">Explore</h4>
                     <ul class="space-y-4">
@@ -469,17 +479,22 @@
                         <li><a href="about.html" class="footer-link text-gray-300 hover:text-white">About Us</a></li>
                     </ul>
                 </div>
-
                 <div>
                     <h4 class="font-bold text-brand-lime uppercase tracking-widest text-sm mb-6">Direct Line</h4>
                     <ul class="space-y-4">
                         <li class="flex gap-3 text-gray-300">
                             <i data-lucide="mail" class="w-5 h-5 text-brand-lime shrink-0"></i>
-                            <a href="mailto:elv8dgtl@gmail.com" class="hover:text-white transition-colors">elv8dgtl@gmail.com</a>
+                            <!-- FIX 11: Domain email -->
+                            <a href="mailto:hello@elv8dgtl.in" class="hover:text-white transition-colors">hello@elv8dgtl.in</a>
+                        </li>
+                        <!-- FIX 12: Real WhatsApp number -->
+                        <li class="flex gap-3 text-gray-300">
+                            <i data-lucide="message-circle" class="w-5 h-5 text-[#25D366] shrink-0"></i>
+                            <a href="https://wa.me/918052743378" target="_blank" rel="noopener" class="hover:text-white transition-colors">WhatsApp Us</a>
                         </li>
                         <li class="flex gap-3 text-gray-300">
                             <i data-lucide="map-pin" class="w-5 h-5 text-brand-lime shrink-0"></i>
-                            <span>Remote / Digital</span>
+                            <span>Kanpur, UP · Remote</span>
                         </li>
                         <li class="flex gap-3 text-gray-300">
                             <i data-lucide="clock" class="w-5 h-5 text-brand-lime shrink-0"></i>
@@ -488,7 +503,6 @@
                     </ul>
                 </div>
             </div>
-
             <div class="border-t border-white/10 pt-8 flex flex-col md:flex-row justify-between items-center gap-4">
                 <p class="text-sm text-gray-500">&copy; 2026 elv8 dgtl. All rights reserved.</p>
                 <button onclick="window.scrollTo({top: 0, behavior: 'smooth'})" class="text-sm font-bold text-brand-lime hover:text-white flex items-center gap-2 transition-colors">
@@ -498,18 +512,19 @@
         </div>
     </footer>
 
+    <!-- FIX 13: Floating WhatsApp button with real number -->
+    <a href="https://wa.me/918052743378" target="_blank" rel="noopener"
+       class="whatsapp-btn fixed bottom-6 right-6 z-50 w-14 h-14 bg-[#25D366] rounded-full flex items-center justify-center shadow-2xl hover:scale-110 transition-transform duration-300"
+       aria-label="Chat on WhatsApp">
+        <i data-lucide="message-circle" class="w-7 h-7 text-white"></i>
+    </a>
+
     <script>
         lucide.createIcons();
         
-        // Navigation Logic to handle Dark/Light sections
         const navbar = document.getElementById('navbar');
-        const navBrandText = document.getElementById('nav-brand-text');
-        const navLinks = document.querySelectorAll('.nav-link');
-        const menuBtn = document.getElementById('menu-btn');
-
         window.addEventListener('scroll', () => {
             const scrollY = window.scrollY;
-
             if (scrollY > 50) {
                 navbar.classList.add('glass-nav', 'py-4');
                 navbar.classList.remove('py-6');
@@ -519,7 +534,7 @@
             }
         });
 
-        // Mobile Menu Logic
+        const menuBtn = document.getElementById('menu-btn');
         const mobileMenu = document.getElementById('mobile-menu');
         const closeMenu = document.getElementById('close-menu');
         function toggleMenu() { mobileMenu.classList.toggle('translate-x-full'); }
@@ -527,7 +542,6 @@
         closeMenu.addEventListener('click', toggleMenu);
         document.querySelectorAll('.mobile-link').forEach(link => link.addEventListener('click', toggleMenu));
 
-        // Reveal Animation
         const observer = new IntersectionObserver((entries) => {
             entries.forEach(entry => { if (entry.isIntersecting) entry.target.classList.add('active'); });
         });
