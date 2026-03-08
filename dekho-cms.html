@@ -785,7 +785,7 @@ table.t tr:hover td{background:var(--paper);}
 <!-- ════════════════════════ SCRIPT ════════════════════════════ -->
 <script>
 // ── CONFIG ─────────────────────────────────────────────────────
-var API = 'https://script.google.com/macros/s/AKfycbyFtGvUQnioGE21cOmZhV5HS4wvRXEFydMVgnsVM-vjeHdVh4aPUKb9g5AZHUbIuFAV/exec';
+var API = 'YOUR_APPS_SCRIPT_WEB_APP_URL_HERE';
 
 // ── STATE ───────────────────────────────────────────────────────
 var $ = {
@@ -1475,33 +1475,48 @@ function closeSidebar() {
   }, true);
 
   // 3. Detect devtools open via window size difference
-  // When devtools dock to side, window.outerWidth - window.innerWidth > threshold
-  // When docked to bottom, window.outerHeight - window.innerHeight > threshold
+  // iOS Safari has unreliable outerWidth/outerHeight — skip on mobile entirely
+  // Only run on desktop where devtools actually dock and change window dimensions
   var _devopen = false;
-  function checkDevTools() {
-    var threshold = 160;
-    var widthDiff  = window.outerWidth  - window.innerWidth;
-    var heightDiff = window.outerHeight - window.innerHeight;
-    var open = widthDiff > threshold || heightDiff > threshold;
-    if (open && !_devopen) {
-      _devopen = true;
-      nukeContent();
-    } else if (!open && _devopen) {
-      _devopen = false;
-    }
-  }
-  setInterval(checkDevTools, 1000);
+  var _isIOS = /iphone|ipad|ipod/i.test(navigator.userAgent);
+  var _isMobile = _isIOS || /android/i.test(navigator.userAgent);
 
-  // 4. Detect via debugger timing trick (most reliable)
-  var _dbgCheck = setInterval(function() {
-    var t = Date.now();
-    // eslint-disable-next-line no-debugger
-    (function(){}).constructor('debugger')();
-    if (Date.now() - t > 100) {
-      clearInterval(_dbgCheck);
-      nukeContent();
-    }
-  }, 2000);
+  if (!_isMobile) {
+    // Wait for page to fully settle before starting size checks
+    // (avoids false positives during browser chrome resize on load)
+    setTimeout(function() {
+      function checkDevTools() {
+        var threshold = 200; // raised from 160 — browser chrome on some systems uses up to 180px
+        var widthDiff  = window.outerWidth  - window.innerWidth;
+        var heightDiff = window.outerHeight - window.innerHeight;
+        var open = widthDiff > threshold || heightDiff > threshold;
+        if (open && !_devopen) {
+          _devopen = true;
+          nukeContent();
+        } else if (!open && _devopen) {
+          _devopen = false;
+        }
+      }
+      setInterval(checkDevTools, 1000);
+    }, 3000); // 3 second delay — page fully loaded and stable before first check
+  }
+
+  // 4. Detect via debugger timing trick
+  // iOS Safari JS engine is slow on cold start — skip on iOS to prevent false triggers
+  // On desktop, raise threshold and delay start significantly
+  if (!_isMobile) {
+    setTimeout(function() {
+      var _dbgCheck = setInterval(function() {
+        var t = Date.now();
+        // eslint-disable-next-line no-debugger
+        (function(){}).constructor('debugger')();
+        if (Date.now() - t > 200) { // raised from 100ms — more headroom for slower machines
+          clearInterval(_dbgCheck);
+          nukeContent();
+        }
+      }, 2000);
+    }, 4000); // 4 second delay before first debugger check
+  }
 
   // 5. Wipe and warn
   function nukeContent() {
