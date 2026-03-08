@@ -8,7 +8,7 @@
 <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Instrument+Sans:ital,wght@0,400;0,500;0,600;0,700;1,400&family=DM+Mono:wght@400;500&display=swap" rel="stylesheet">
 
 <style>
-/* ─── RESET & BASE ────────────────────────────────────────────── */
+/* ─── RESET & BASE ────────────────────────────────────────────────────────── */
 *,*::before,*::after{box-sizing:border-box;margin:0;padding:0;}
 :root{
   --ink:#0D0D0D;--paper:#FAFAF8;--surface:#F4F3F0;--border:#E2E0DA;
@@ -24,16 +24,16 @@ a{text-decoration:none;color:inherit;}
 .bb{font-family:'Bebas Neue',sans-serif;letter-spacing:.03em;}
 .mm{font-family:'DM Mono',monospace;}
 
-/* ─── PAGE VISIBILITY ─────────────────────────────────────────── */
+/* ─── PAGE VISIBILITY ─────────────────────────────────────────────────────── */
 #pg-login,#pg-app{
   display:none;
   position:fixed;inset:0;
   overflow-y:auto;
 }
-#pg-login.on{display:flex;z-index:200;}   /* always above everything */
+#pg-login.on{display:flex;z-index:200;}
 #pg-app.on{display:flex;z-index:1;}
 
-/* ─── LOGIN ───────────────────────────────────────────────────── */
+/* ─── LOGIN ───────────────────────────────────────────────────────────────── */
 #pg-login{
   min-height:100vh;align-items:center;justify-content:center;
   background:#0D0D0D;
@@ -57,7 +57,7 @@ a{text-decoration:none;color:inherit;}
 .lbtn:disabled{opacity:.45;cursor:not-allowed;}
 .lerr{display:none;margin-top:.75rem;padding:9px 13px;background:#2a0f0f;border:1px solid #5a1f1f;border-radius:7px;font-size:12px;color:#ff9a9a;line-height:1.5;}
 
-/* ─── APP SHELL ───────────────────────────────────────────────── */
+/* ─── APP SHELL ───────────────────────────────────────────────────────────── */
 #pg-app{flex-direction:row;min-height:100vh;}
 
 /* Sidebar */
@@ -109,7 +109,7 @@ a{text-decoration:none;color:inherit;}
 .panel{display:none;padding:1.75rem;flex:1;}
 .panel.on{display:block;}
 
-/* ─── COMPONENTS ──────────────────────────────────────────────── */
+/* ─── COMPONENTS ──────────────────────────────────────────────────────────── */
 /* Buttons */
 .btn{display:inline-flex;align-items:center;gap:6px;padding:7px 16px;border-radius:7px;font-size:13px;font-weight:600;cursor:pointer;border:1.5px solid transparent;transition:all .15s;}
 .btn-p{background:var(--ink);color:#fff;border-color:var(--ink);}
@@ -159,7 +159,7 @@ table.t tr:hover td{background:var(--paper);}
 .txa{resize:vertical;min-height:80px;line-height:1.65;}
 .sel{cursor:pointer;}
 
-/* ─── EDITOR ──────────────────────────────────────────────────── */
+/* ─── EDITOR ──────────────────────────────────────────────────────────────── */
 #p-editor{padding:0;}
 .ed-shell{display:flex;height:calc(100vh - 56px);overflow:hidden;}
 .ed-main{flex:1;min-width:0;display:flex;flex-direction:column;overflow-y:auto;}
@@ -180,6 +180,17 @@ table.t tr:hover td{background:var(--paper);}
 .taff{display:flex;align-items:center;gap:4px;padding:0 9px;height:27px;background:var(--surface);border:1.5px solid var(--border);border-radius:5px;font-size:11px;font-family:'DM Mono',monospace;color:var(--accent);cursor:pointer;transition:all .15s;margin-left:auto;}
 .taff:hover{background:var(--accent);color:#fff;border-color:var(--accent);}
 .taff svg{width:12px;height:12px;}
+
+/* ── Upload button in toolbar ── */
+.tb-upload{
+  display:flex;align-items:center;gap:5px;height:27px;padding:0 10px;
+  background:var(--surface);border:1.5px solid var(--border);border-radius:5px;
+  font-size:11px;font-family:'DM Mono',monospace;color:var(--blue);
+  cursor:pointer;transition:all .15s;flex-shrink:0;white-space:nowrap;
+}
+.tb-upload:hover{background:var(--blue);color:#fff;border-color:var(--blue);}
+.tb-upload svg{width:12px;height:12px;}
+.tb-upload:disabled{opacity:.45;cursor:not-allowed;}
 
 /* Rich content */
 .ed-body{flex:1;padding:1.5rem 2rem;outline:none;font-size:15px;line-height:1.9;color:#2a2a2a;min-height:400px;}
@@ -218,7 +229,58 @@ table.t tr:hover td{background:var(--paper);}
 .rating-row input[type=range]{flex:1;accent-color:var(--accent);}
 .rval{font-family:'Bebas Neue',sans-serif;font-size:1.3rem;color:var(--accent);min-width:30px;}
 
-/* ─── MODALS ──────────────────────────────────────────────────── */
+/* ── Upload progress bar (inline in toolbar area) ── */
+.uprog-bar{
+  display:none;position:fixed;top:0;left:0;right:0;height:3px;
+  background:var(--blue);z-index:9999;
+  animation:uprog-anim 1.2s ease-in-out infinite alternate;
+}
+@keyframes uprog-anim{from{opacity:.5;transform:scaleX(.7);}to{opacity:1;transform:scaleX(1);}}
+.uprog-bar.on{display:block;transform-origin:left;}
+
+/* ─── UPLOAD IMAGE MODAL ──────────────────────────────────────────────────── */
+/* Drop zone */
+.dropzone{
+  border:2px dashed var(--border);border-radius:12px;
+  padding:2rem 1rem;text-align:center;cursor:pointer;
+  transition:all .2s;position:relative;background:var(--surface);
+}
+.dropzone:hover,.dropzone.drag{border-color:var(--blue);background:#EEF4FF;}
+.dropzone input[type=file]{
+  position:absolute;inset:0;opacity:0;cursor:pointer;width:100%;height:100%;
+}
+.dropzone-icon{color:var(--blue);margin-bottom:.6rem;}
+.dropzone-txt{font-size:13px;font-weight:600;color:var(--ink);margin-bottom:3px;}
+.dropzone-sub{font-size:11px;color:var(--muted);font-family:'DM Mono',monospace;}
+
+/* Preview inside modal */
+.upl-preview{
+  display:none;border-radius:10px;overflow:hidden;border:1.5px solid var(--border);
+  position:relative;aspect-ratio:16/9;background:var(--surface);
+}
+.upl-preview img{width:100%;height:100%;object-fit:contain;display:block;}
+.upl-preview .upl-clear{
+  position:absolute;top:6px;right:6px;width:24px;height:24px;
+  background:rgba(13,13,13,.75);color:#fff;border:none;border-radius:50%;
+  cursor:pointer;display:flex;align-items:center;justify-content:center;font-size:14px;
+  transition:background .15s;
+}
+.upl-preview .upl-clear:hover{background:var(--red);}
+
+/* Upload progress inside modal */
+.upl-prog{display:none;margin-top:.75rem;}
+.upl-prog-bar{height:4px;background:var(--border);border-radius:999px;overflow:hidden;}
+.upl-prog-fill{height:100%;background:var(--blue);border-radius:999px;transition:width .3s;width:0%;}
+.upl-prog-lbl{font-size:11px;color:var(--muted);font-family:'DM Mono',monospace;margin-top:4px;text-align:center;}
+
+/* Result URL row */
+.upl-result{
+  display:none;padding:9px 12px;background:var(--surface);border:1.5px solid var(--border);
+  border-radius:8px;font-size:12px;font-family:'DM Mono',monospace;
+  word-break:break-all;color:var(--blue);
+}
+
+/* ─── MODALS ──────────────────────────────────────────────────────────────── */
 .ov{position:fixed;inset:0;background:rgba(0,0,0,.45);z-index:100;display:none;align-items:center;justify-content:center;backdrop-filter:blur(4px);}
 .ov.on{display:flex;}
 .modal{background:#fff;border-radius:16px;padding:1.75rem;width:min(460px,90vw);border:1.5px solid var(--border);max-height:90vh;overflow-y:auto;}
@@ -227,7 +289,7 @@ table.t tr:hover td{background:var(--paper);}
 .modal-form{display:flex;flex-direction:column;gap:.75rem;}
 .mact{display:flex;gap:.6rem;justify-content:flex-end;margin-top:1.25rem;}
 
-/* ─── TOASTS ──────────────────────────────────────────────────── */
+/* ─── TOASTS ──────────────────────────────────────────────────────────────── */
 #toasts{position:fixed;bottom:1.25rem;right:1.25rem;z-index:999;display:flex;flex-direction:column;gap:.4rem;pointer-events:none;}
 .toast{display:flex;align-items:center;gap:.6rem;padding:.6rem 1.1rem;border-radius:9px;font-size:13px;min-width:220px;background:#fff;border:1.5px solid var(--border);box-shadow:0 4px 14px rgba(0,0,0,.1);animation:tin .3s ease;}
 .toast.ok{background:#F0FDE8;border-color:#B6EDAA;color:var(--green);}
@@ -238,86 +300,41 @@ table.t tr:hover td{background:var(--paper);}
 .spin{width:15px;height:15px;border:2px solid rgba(255,255,255,.3);border-top-color:#fff;border-radius:50%;animation:rot .7s linear infinite;display:inline-block;vertical-align:middle;}
 @keyframes rot{to{transform:rotate(360deg);}}
 
-/* ─── RESPONSIVE ──────────────────────────────────────────────── */
-
-/* Tablet (768–1024px) */
+/* ─── RESPONSIVE ──────────────────────────────────────────────────────────── */
 @media(max-width:1024px){
   :root{--sw:200px;}
   .stats{grid-template-columns:repeat(2,1fr);}
   .ed-side{width:230px;}
 }
-
-/* Mobile + small tablet (≤768px) */
 @media(max-width:768px){
   :root{--sw:260px;}
-
-  /* Sidebar slides in as drawer */
-  #sb{
-    position:fixed;left:0;top:0;bottom:0;z-index:150;
-    transform:translateX(-110%);transition:transform .28s cubic-bezier(.4,0,.2,1);
-    box-shadow:4px 0 24px rgba(0,0,0,.18);
-    height:100%;
-  }
+  #sb{position:fixed;left:0;top:0;bottom:0;z-index:150;transform:translateX(-110%);transition:transform .28s cubic-bezier(.4,0,.2,1);box-shadow:4px 0 24px rgba(0,0,0,.18);height:100%;}
   #sb.on{transform:translateX(0);}
-
-  /* Overlay behind open sidebar */
-  #sb-overlay{
-    display:none;position:fixed;inset:0;background:rgba(0,0,0,.4);
-    z-index:140;
-  }
+  #sb-overlay{display:none;position:fixed;inset:0;background:rgba(0,0,0,.4);z-index:140;}
   #sb-overlay.on{display:block;}
-
-  /* Show hamburger */
   #mbtn{display:flex !important;}
-
-  /* Main area full width */
   #main-area{width:100%;}
-
-  /* Panels less padding */
   .panel{padding:1rem;}
-
-  /* Stats 2-col on tablet, 1-col on small phone */
   .stats{grid-template-columns:repeat(2,1fr);gap:.75rem;margin-bottom:1rem;}
-
-  /* Tables scroll horizontally */
   .tw{overflow-x:auto;-webkit-overflow-scrolling:touch;}
   table.t th,table.t td{white-space:nowrap;}
-
-  /* Topbar */
   .topbar{padding:0 1rem;}
   .topbar-t{font-size:14px;}
-
-  /* Editor: stack vertically */
   .ed-shell{flex-direction:column;height:auto;overflow:visible;}
   .ed-main{overflow-y:visible;}
-  .ed-side{
-    width:100%;border-left:none;
-    border-top:1.5px solid var(--border);
-  }
+  .ed-side{width:100%;border-left:none;border-top:1.5px solid var(--border);}
   .ed-body{min-height:280px;padding:1rem;}
   .ed-titlebar{padding:.75rem 1rem;}
   .ed-title{font-size:1.1rem;}
-
-  /* Toolbar wraps tightly */
   .tbar{padding:6px 8px;gap:1px;}
   .tb{width:30px;height:30px;}
   .taff{font-size:10px;padding:0 7px;}
-
-  /* Cards */
   .card{border-radius:10px;}
-
-  /* Buttons smaller on mobile */
   .btn{padding:6px 12px;font-size:12px;}
   .btn-sm{padding:4px 9px;font-size:11px;}
-
-  /* Modals full-width on small screens */
   .modal{width:calc(100vw - 2rem);border-radius:12px;padding:1.25rem;}
-
-  /* Login box */
   .lbox{padding:1.75rem 1.25rem;}
 }
-
-/* Very small phones (≤380px) */
 @media(max-width:380px){
   .stats{grid-template-columns:1fr;}
   .llogo h1{font-size:2.2rem;}
@@ -326,8 +343,9 @@ table.t tr:hover td{background:var(--paper);}
 </head>
 
 <body>
+<div class="uprog-bar" id="uprog-bar"></div>
 
-<!-- ═══════════════════════════════════ LOGIN ══════════════════ -->
+<!-- ═══════════ LOGIN ══════════════════════════════════════════════════════ -->
 <div id="pg-login">
   <div class="lbox">
     <div class="llogo">
@@ -344,7 +362,6 @@ table.t tr:hover td{background:var(--paper);}
         <div class="pwrap">
           <input class="li" id="l-pass" type="password" placeholder="Your password" autocomplete="current-password">
           <button class="peye" type="button" onclick="eyeToggle('l-pass',this)" tabindex="-1">
-            <!-- eye icon inline -->
             <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/><circle cx="12" cy="12" r="3"/></svg>
           </button>
         </div>
@@ -358,10 +375,8 @@ table.t tr:hover td{background:var(--paper);}
   </div>
 </div>
 
-<!-- ═══════════════════════════════════ APP ════════════════════ -->
+<!-- ═══════════ APP ═════════════════════════════════════════════════════════ -->
 <div id="pg-app">
-
-  <!-- Mobile sidebar overlay -->
   <div id="sb-overlay" onclick="closeSidebar()"></div>
 
   <!-- Sidebar -->
@@ -535,9 +550,7 @@ table.t tr:hover td{background:var(--paper);}
       </div>
       <div class="card tw">
         <table class="t">
-          <thead><tr>
-            <th>Title</th><th>Category</th><th>Deleted</th><th>Expires In</th><th>Actions</th>
-          </tr></thead>
+          <thead><tr><th>Title</th><th>Category</th><th>Deleted</th><th>Expires In</th><th>Actions</th></tr></thead>
           <tbody id="trash-tbody"><tr><td colspan="5" class="te">Loading…</td></tr></tbody>
         </table>
       </div>
@@ -566,43 +579,32 @@ table.t tr:hover td{background:var(--paper);}
               <option value="5">XL</option>
             </select>
             <div class="tsep"></div>
-            <!-- Bold -->
             <button class="tb" onclick="fmt('bold')" title="Bold"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M6 4h8a4 4 0 0 1 4 4 4 4 0 0 1-4 4H6z"/><path d="M6 12h9a4 4 0 0 1 4 4 4 4 0 0 1-4 4H6z"/></svg></button>
-            <!-- Italic -->
             <button class="tb" onclick="fmt('italic')" title="Italic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><line x1="19" y1="4" x2="10" y2="4"/><line x1="14" y1="20" x2="5" y2="20"/><line x1="15" y1="4" x2="9" y2="20"/></svg></button>
-            <!-- Underline -->
             <button class="tb" onclick="fmt('underline')" title="Underline"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M6 3v7a6 6 0 0 0 6 6 6 6 0 0 0 6-6V3"/><line x1="4" y1="21" x2="20" y2="21"/></svg></button>
-            <!-- Strike -->
             <button class="tb" onclick="fmt('strikeThrough')" title="Strike"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="5" y1="12" x2="19" y2="12"/><path d="M16 6C16 6 14.5 4 12 4s-5 1.5-5 4c0 5 9 3.5 9 8 0 2.5-2 4-4 4s-5-1.5-5-4"/></svg></button>
             <div class="tsep"></div>
-            <!-- Bullet list -->
             <button class="tb" onclick="fmt('insertUnorderedList')" title="Bullet List"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="9" y1="6" x2="20" y2="6"/><line x1="9" y1="12" x2="20" y2="12"/><line x1="9" y1="18" x2="20" y2="18"/><circle cx="4" cy="6" r="1" fill="currentColor"/><circle cx="4" cy="12" r="1" fill="currentColor"/><circle cx="4" cy="18" r="1" fill="currentColor"/></svg></button>
-            <!-- Ordered list -->
             <button class="tb" onclick="fmt('insertOrderedList')" title="Numbered List"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="10" y1="6" x2="21" y2="6"/><line x1="10" y1="12" x2="21" y2="12"/><line x1="10" y1="18" x2="21" y2="18"/><path d="M4 6h1v4"/><path d="M4 10h2"/><path d="M6 18H4c0-1 2-2 2-3s-1-1.5-2-1"/></svg></button>
             <div class="tsep"></div>
-            <!-- Align left -->
             <button class="tb" onclick="fmt('justifyLeft')" title="Align Left"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="3" y1="6" x2="21" y2="6"/><line x1="3" y1="12" x2="15" y2="12"/><line x1="3" y1="18" x2="18" y2="18"/></svg></button>
-            <!-- Center -->
             <button class="tb" onclick="fmt('justifyCenter')" title="Center"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="3" y1="6" x2="21" y2="6"/><line x1="6" y1="12" x2="18" y2="12"/><line x1="4" y1="18" x2="20" y2="18"/></svg></button>
             <div class="tsep"></div>
-            <!-- Link -->
             <button class="tb" onclick="insLink()" title="Insert Link"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M10 13a5 5 0 0 0 7.54.54l3-3a5 5 0 0 0-7.07-7.07l-1.72 1.71"/><path d="M14 11a5 5 0 0 0-7.54-.54l-3 3a5 5 0 0 0 7.07 7.07l1.71-1.71"/></svg></button>
-            <!-- Image -->
-            <button class="tb" onclick="insImg()" title="Insert Image"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="18" height="18" rx="2"/><circle cx="8.5" cy="8.5" r="1.5"/><polyline points="21 15 16 10 5 21"/></svg></button>
-            <!-- Table -->
+            <!-- ── NEW: Upload Image button ── -->
+            <button class="tb-upload" id="tb-upload-btn" onclick="openUpload()" title="Upload image from device to Drive">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="16 16 12 12 8 16"/><line x1="12" y1="12" x2="12" y2="21"/><path d="M20.39 18.39A5 5 0 0 0 18 9h-1.26A8 8 0 1 0 3 16.3"/></svg>
+              Upload
+            </button>
+            <!-- legacy URL-based image insert kept as separate button -->
+            <button class="tb" onclick="insImg()" title="Insert image by URL"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="18" height="18" rx="2"/><circle cx="8.5" cy="8.5" r="1.5"/><polyline points="21 15 16 10 5 21"/></svg></button>
             <button class="tb" onclick="insTable()" title="Insert Table"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="18" height="18" rx="2"/><line x1="3" y1="9" x2="21" y2="9"/><line x1="3" y1="15" x2="21" y2="15"/><line x1="9" y1="3" x2="9" y2="21"/><line x1="15" y1="3" x2="15" y2="21"/></svg></button>
-            <!-- HR -->
             <button class="tb" onclick="insHR()" title="Divider"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="3" y1="12" x2="21" y2="12"/></svg></button>
-            <!-- Blockquote -->
             <button class="tb" onclick="insBQ()" title="Blockquote"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 21c3 0 7-1 7-8V5c0-1.25-.756-2.017-2-2H4c-1.25 0-2 .75-2 1.972V11c0 1.25.75 2 2 2 1 0 1 0 1 1v1c0 1-1 2-2 2s-1 .008-1 1.031V20c0 1 0 1 1 1z"/><path d="M15 21c3 0 7-1 7-8V5c0-1.25-.757-2.017-2-2h-4c-1.25 0-2 .75-2 1.972V11c0 1.25.75 2 2 2h.75c0 2.25.25 4-2.75 4v3c0 1 0 1 1 1z"/></svg></button>
             <div class="tsep"></div>
-            <!-- Undo -->
             <button class="tb" onclick="fmt('undo')" title="Undo"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="1 4 1 10 7 10"/><path d="M3.51 15a9 9 0 1 0 .49-3"/></svg></button>
-            <!-- Redo -->
             <button class="tb" onclick="fmt('redo')" title="Redo"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="23 4 23 10 17 10"/><path d="M20.49 15a9 9 0 1 1-.49-3"/></svg></button>
-            <!-- HTML -->
             <button class="tb" onclick="togHTML()" id="tb-html" title="HTML Source"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="16 18 22 12 16 6"/><polyline points="8 6 2 12 8 18"/></svg></button>
-            <!-- Aff button -->
             <button class="taff" onclick="insAff()">
               <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="9" cy="21" r="1"/><circle cx="20" cy="21" r="1"/><path d="M1 1h4l2.68 13.39a2 2 0 0 0 2 1.61h9.72a2 2 0 0 0 2-1.61L23 6H6"/></svg>
               Amazon Card
@@ -620,7 +622,6 @@ table.t tr:hover td{background:var(--paper);}
 
         <!-- Meta sidebar -->
         <div class="ed-side">
-          <!-- Publish -->
           <div class="ms">
             <div class="mst">Publish</div>
             <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:.7rem;">
@@ -643,8 +644,6 @@ table.t tr:hover td{background:var(--paper);}
             </div>
             <p style="font-size:10px;color:var(--muted);margin-top:.5rem;font-family:'DM Mono',monospace;line-height:1.5;">Ctrl+S saves draft anytime</p>
           </div>
-
-          <!-- Settings -->
           <div class="ms">
             <div class="mst">Settings</div>
             <div style="display:flex;flex-direction:column;gap:.6rem;">
@@ -663,10 +662,9 @@ table.t tr:hover td{background:var(--paper);}
               <div class="fld"><label>Slug</label><input class="inp" id="ed-slug" placeholder="auto from title"></div>
             </div>
           </div>
-
-          <!-- Cover -->
           <div class="ms">
             <div class="mst">Cover Image</div>
+            <!-- Cover also gets an upload button -->
             <div class="cover-box" onclick="setCover()" id="cover-box">
               <img id="cover-img" src="" alt="">
               <div class="cover-ph" id="cover-ph">
@@ -674,16 +672,16 @@ table.t tr:hover td{background:var(--paper);}
                 <span>Click to set URL</span>
               </div>
             </div>
-            <input class="inp" id="ed-cover" placeholder="https://…" oninput="upCover()" style="margin-top:.5rem;">
+            <input class="inp" id="ed-cover" placeholder="https://… or upload below" oninput="upCover()" style="margin-top:.5rem;">
+            <button class="btn btn-s" style="width:100%;margin-top:.4rem;font-size:12px;" onclick="openCoverUpload()">
+              <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="16 16 12 12 8 16"/><line x1="12" y1="12" x2="12" y2="21"/><path d="M20.39 18.39A5 5 0 0 0 18 9h-1.26A8 8 0 1 0 3 16.3"/></svg>
+              Upload Cover from Device
+            </button>
           </div>
-
-          <!-- Excerpt -->
           <div class="ms">
             <div class="mst">Excerpt</div>
             <textarea class="txa" id="ed-excerpt" placeholder="2–3 sentence summary…" rows="3"></textarea>
           </div>
-
-          <!-- Affiliate card builder -->
           <div class="ms">
             <div class="mst">Amazon Card</div>
             <div style="display:flex;flex-direction:column;gap:.45rem;">
@@ -701,10 +699,11 @@ table.t tr:hover td{background:var(--paper);}
       </div>
     </div>
 
-  </div><!-- end main-area -->
-</div><!-- end pg-app -->
+  </div>
+</div>
 
-<!-- Modals -->
+<!-- ═══════════ MODALS ══════════════════════════════════════════════════════ -->
+
 <!-- Delete -->
 <div class="ov" id="m-del"><div class="modal">
   <h3>Move to Trash?</h3>
@@ -741,8 +740,8 @@ table.t tr:hover td{background:var(--paper);}
     </div>
     <div class="fld"><label>Role</label>
       <select class="sel" id="au-role">
-        <option value="writer">Writer — write & submit for review</option>
-        <option value="admin">Admin — can approve & publish directly</option>
+        <option value="writer">Writer — write &amp; submit for review</option>
+        <option value="admin">Admin — can approve &amp; publish directly</option>
       </select>
     </div>
   </div>
@@ -766,9 +765,9 @@ table.t tr:hover td{background:var(--paper);}
   </div>
 </div></div>
 
-<!-- Insert image -->
+<!-- Insert image by URL -->
 <div class="ov" id="m-img"><div class="modal">
-  <h3>Insert Image</h3>
+  <h3>Insert Image by URL</h3>
   <div class="modal-form">
     <div class="fld"><label>Image URL</label><input class="inp" id="im-url" type="url" placeholder="https://images.unsplash.com/…"></div>
     <div class="fld"><label>Alt Text</label><input class="inp" id="im-alt" placeholder="Describe the image"></div>
@@ -780,35 +779,79 @@ table.t tr:hover td{background:var(--paper);}
   </div>
 </div></div>
 
+<!-- ── NEW: Upload Image modal ── -->
+<div class="ov" id="m-upload"><div class="modal">
+  <h3>Upload Image to Drive</h3>
+  <p style="margin-bottom:1rem;">Image is saved to your Google Drive (<strong>elv8dgtl@gmail.com</strong>) and inserted into the article automatically. Supports JPEG, PNG, WEBP, GIF — max 8 MB.</p>
+
+  <!-- Drop zone (hidden once file selected) -->
+  <div class="dropzone" id="upl-dropzone"
+    ondragover="uplDragOver(event)" ondragleave="uplDragLeave(event)" ondrop="uplDrop(event)">
+    <input type="file" id="upl-file" accept="image/jpeg,image/png,image/webp,image/gif"
+      onchange="uplFileChosen(this.files[0])">
+    <div class="dropzone-icon">
+      <svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><polyline points="16 16 12 12 8 16"/><line x1="12" y1="12" x2="12" y2="21"/><path d="M20.39 18.39A5 5 0 0 0 18 9h-1.26A8 8 0 1 0 3 16.3"/></svg>
+    </div>
+    <div class="dropzone-txt">Drop image here or click to browse</div>
+    <div class="dropzone-sub">JPEG · PNG · WEBP · GIF &nbsp;/&nbsp; max 8 MB</div>
+  </div>
+
+  <!-- Preview -->
+  <div class="upl-preview" id="upl-preview">
+    <img id="upl-prev-img" src="" alt="">
+    <button class="upl-clear" onclick="uplClear()" title="Remove">✕</button>
+  </div>
+
+  <!-- File info -->
+  <div id="upl-info" style="display:none;margin-top:.6rem;font-size:12px;color:var(--muted);font-family:'DM Mono',monospace;"></div>
+
+  <!-- Alt & caption fields -->
+  <div id="upl-fields" style="display:none;margin-top:.75rem;display:none;flex-direction:column;gap:.55rem;">
+    <div class="fld"><label>Alt Text <span style="color:var(--accent);">*</span></label><input class="inp" id="upl-alt" placeholder="Describe the image for accessibility"></div>
+    <div class="fld"><label>Caption (optional)</label><input class="inp" id="upl-cap" placeholder="Caption shown below image"></div>
+  </div>
+
+  <!-- Progress -->
+  <div class="upl-prog" id="upl-prog">
+    <div class="upl-prog-bar"><div class="upl-prog-fill" id="upl-prog-fill"></div></div>
+    <div class="upl-prog-lbl" id="upl-prog-lbl">Uploading…</div>
+  </div>
+
+  <!-- Result URL (copy-able) -->
+  <div class="upl-result" id="upl-result"></div>
+
+  <div class="mact" id="upl-act">
+    <button class="btn btn-s" onclick="uplCancel()">Cancel</button>
+    <button class="btn btn-p" id="upl-submit-btn" onclick="doUpload()" disabled>
+      <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="16 16 12 12 8 16"/><line x1="12" y1="12" x2="12" y2="21"/><path d="M20.39 18.39A5 5 0 0 0 18 9h-1.26A8 8 0 1 0 3 16.3"/></svg>
+      Upload &amp; Insert
+    </button>
+  </div>
+</div></div>
+
 <div id="toasts"></div>
 
-<!-- ════════════════════════ SCRIPT ════════════════════════════ -->
+<!-- ═══════════ SCRIPT ══════════════════════════════════════════════════════ -->
 <script>
-// ── CONFIG ─────────────────────────────────────────────────────
+// ── CONFIG ──────────────────────────────────────────────────────────────────
 var API = 'https://script.google.com/macros/s/AKfycbyFtGvUQnioGE21cOmZhV5HS4wvRXEFydMVgnsVM-vjeHdVh4aPUKb9g5AZHUbIuFAV/exec';
 
-// ── STATE ───────────────────────────────────────────────────────
+// ── STATE ────────────────────────────────────────────────────────────────────
 var $ = {
   token: null, user: null, arts: [],
-  editId: null, delId: null, rejId: null, sel: null
+  editId: null, delId: null, rejId: null, sel: null,
+  uplFile: null,          // File object staged for upload
+  uplTarget: 'body'       // 'body' | 'cover'  — where to insert after upload
 };
 
-// ── BOOT — runs after DOM is fully parsed ───────────────────────
+// ── BOOT ─────────────────────────────────────────────────────────────────────
 (function boot() {
-  // Try to restore session
   var t = '';
   try { t = localStorage.getItem('dekho_token') || ''; } catch(e){}
-
   if (!t) { showLogin(); return; }
-
   call('getMe', { token: t }).then(function(r) {
-    if (r.ok) {
-      $.token = t; $.user = r.user;
-      bootApp();
-    } else {
-      try { localStorage.removeItem('dekho_token'); } catch(e){}
-      showLogin();
-    }
+    if (r.ok) { $.token = t; $.user = r.user; bootApp(); }
+    else { try { localStorage.removeItem('dekho_token'); } catch(e){} showLogin(); }
   }).catch(function() { showLogin(); });
 })();
 
@@ -816,80 +859,68 @@ function showLogin() {
   document.getElementById('pg-app').classList.remove('on');
   document.getElementById('pg-login').classList.add('on');
 }
-
 function bootApp() {
   var u = $.user;
-  document.getElementById('sb-av').textContent  = u.name[0].toUpperCase();
-  document.getElementById('sb-nm').textContent  = u.name;
-  document.getElementById('sb-rl').textContent  = u.role;
+  document.getElementById('sb-av').textContent = u.name[0].toUpperCase();
+  document.getElementById('sb-nm').textContent = u.name;
+  document.getElementById('sb-rl').textContent = u.role;
   if (u.role === 'admin') {
     document.querySelectorAll('.admin-grp').forEach(function(el){ el.style.display = 'block'; });
     document.querySelectorAll('.admin-only').forEach(function(el){ el.style.display = 'flex'; });
   }
-  document.getElementById('pg-login').classList.remove('on'); // ← critical: hide login first
+  document.getElementById('pg-login').classList.remove('on');
   document.getElementById('pg-app').classList.add('on');
   go('dashboard');
   loadArts();
 }
 
-// ── API ─────────────────────────────────────────────────────────
+// ── API ──────────────────────────────────────────────────────────────────────
 function call(action, body) {
   return fetch(API, {
     method: 'POST',
-    headers: { 'Content-Type': 'text/plain' }, // avoids CORS preflight
+    headers: { 'Content-Type': 'text/plain' },
     body: JSON.stringify(Object.assign({ action: action }, body || {}))
   })
   .then(function(r) { return r.json(); })
-  .catch(function(e) { return { ok: false, error: 'Network error — is the API URL set correctly?' }; });
+  .catch(function() { return { ok: false, error: 'Network error — is the API URL set correctly?' }; });
 }
 
-// ── LOGIN ───────────────────────────────────────────────────────
+// ── LOGIN ────────────────────────────────────────────────────────────────────
 function doLogin() {
   var email = document.getElementById('l-email').value.trim();
   var pass  = document.getElementById('l-pass').value;
   var btn   = document.getElementById('l-btn');
   var err   = document.getElementById('l-err');
   err.style.display = 'none';
-
   if (!email || !pass) { showLErr('Please enter both email and password.'); return; }
-
   btn.disabled = true;
   btn.innerHTML = '<span class="spin"></span> Signing in…';
-
   call('login', { email: email, password: pass }).then(function(r) {
-    btn.disabled = false;
-    btn.textContent = 'Sign In';
+    btn.disabled = false; btn.textContent = 'Sign In';
     if (r.ok) {
       $.token = r.token; $.user = r.user;
       try { localStorage.setItem('dekho_token', r.token); } catch(e){}
       bootApp();
-    } else {
-      showLErr(r.error || 'Login failed.');
-    }
+    } else { showLErr(r.error || 'Login failed.'); }
   });
 }
-
-function showLErr(m) {
-  var e = document.getElementById('l-err');
-  e.textContent = m; e.style.display = 'block';
-}
-
+function showLErr(m) { var e = document.getElementById('l-err'); e.textContent = m; e.style.display = 'block'; }
 document.addEventListener('keydown', function(e) {
   if (e.key === 'Enter' && document.getElementById('pg-login').classList.contains('on')) doLogin();
 });
 
-// ── LOGOUT ──────────────────────────────────────────────────────
+// ── LOGOUT ───────────────────────────────────────────────────────────────────
 function doLogout() {
   call('logout', { token: $.token });
   $.token = null; $.user = null; $.arts = [];
-  try { localStorage.removeItem('dekho_token'); } catch(e) {}
+  try { localStorage.removeItem('dekho_token'); } catch(e){}
   document.getElementById('l-email').value = '';
-  document.getElementById('l-pass').value = '';
+  document.getElementById('l-pass').value  = '';
   document.getElementById('l-err').style.display = 'none';
   showLogin();
 }
 
-// ── NAVIGATION ──────────────────────────────────────────────────
+// ── NAVIGATION ───────────────────────────────────────────────────────────────
 function go(p) {
   document.querySelectorAll('.panel').forEach(function(el){ el.classList.remove('on'); });
   document.querySelectorAll('.ni').forEach(function(el){ el.classList.remove('on'); });
@@ -907,50 +938,43 @@ function go(p) {
   closeSidebar();
 }
 
-// ── LOAD ARTICLES ───────────────────────────────────────────────
+// ── LOAD ARTICLES ────────────────────────────────────────────────────────────
 function loadArts() {
   call('listArticles', { token: $.token }).then(function(r) {
     if (!r.ok) { toast(r.error || 'Failed to load articles', 'bad'); return; }
     $.arts = r.articles || [];
     document.getElementById('bdg-a').textContent = $.arts.length;
-    var pending = $.arts.filter(function(a){ return a.status === 'review'; }).length;
-    document.getElementById('bdg-r').textContent = pending;
-    renderDash();
-    renderArts();
-    renderRev();
-    // Refresh trash badge silently
+    document.getElementById('bdg-r').textContent = $.arts.filter(function(a){ return a.status === 'review'; }).length;
+    renderDash(); renderArts(); renderRev();
     call('listTrash', { token: $.token }).then(function(tr) {
       if (tr.ok) document.getElementById('bdg-trash').textContent = tr.trash.length;
     });
   });
 }
 
-// ── DASHBOARD ───────────────────────────────────────────────────
+// ── DASHBOARD ────────────────────────────────────────────────────────────────
 function renderDash() {
   var a = $.arts;
   document.getElementById('s-total').textContent = a.length;
   document.getElementById('s-pub').textContent   = a.filter(function(x){ return x.status==='published'; }).length;
   document.getElementById('s-dft').textContent   = a.filter(function(x){ return x.status==='draft'; }).length;
   document.getElementById('s-rev').textContent   = a.filter(function(x){ return x.status==='review'; }).length;
-
   var recent = a.slice(0, 6);
   var dl = document.getElementById('dash-list');
   if (!recent.length) {
     dl.innerHTML = '<div class="te">No articles yet. <a href="#" onclick="newArt()" style="color:var(--accent)">Write your first one →</a></div>';
     return;
   }
-  var rows = recent.map(function(a) {
-    return '<tr>' +
-      '<td><strong style="display:block;max-width:240px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;">' + esc(a.title||'Untitled') + '</strong></td>' +
-      '<td><span class="pill p-' + a.status + '">' + a.status + '</span></td>' +
-      '<td style="color:var(--muted);font-size:12px;">' + fmtD(a.updatedAt) + '</td>' +
-      '<td><button class="btn btn-s btn-sm" onclick="openEdit(\'' + a.id + '\')">Edit</button></td>' +
-      '</tr>';
-  }).join('');
-  dl.innerHTML = '<table class="t"><thead><tr><th>Title</th><th>Status</th><th>Updated</th><th></th></tr></thead><tbody>' + rows + '</tbody></table>';
+  dl.innerHTML = '<table class="t"><thead><tr><th>Title</th><th>Status</th><th>Updated</th><th></th></tr></thead><tbody>' +
+    recent.map(function(a) {
+      return '<tr><td><strong style="display:block;max-width:240px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;">' + esc(a.title||'Untitled') + '</strong></td>' +
+        '<td><span class="pill p-' + a.status + '">' + a.status + '</span></td>' +
+        '<td style="color:var(--muted);font-size:12px;">' + fmtD(a.updatedAt) + '</td>' +
+        '<td><button class="btn btn-s btn-sm" onclick="openEdit(\'' + a.id + '\')">Edit</button></td></tr>';
+    }).join('') + '</tbody></table>';
 }
 
-// ── ARTICLES TABLE ───────────────────────────────────────────────
+// ── ARTICLES TABLE ────────────────────────────────────────────────────────────
 function renderArts() {
   var q  = (document.getElementById('asearch')  ? document.getElementById('asearch').value  : '').toLowerCase();
   var st = document.getElementById('afilter') ? document.getElementById('afilter').value : '';
@@ -961,12 +985,9 @@ function renderArts() {
   if (!list.length) { tbody.innerHTML = '<tr><td colspan="5" class="te">No articles found.</td></tr>'; return; }
   tbody.innerHTML = list.map(function(a) {
     var acts = '<button class="btn btn-p btn-sm" onclick="openEdit(\'' + a.id + '\')">Edit</button> ';
-    if (a.status === 'draft' || a.status === 'rejected') {
-      acts += '<button class="btn btn-s btn-sm" onclick="quickSubmit(\'' + a.id + '\')">Submit</button> ';
-    }
+    if (a.status === 'draft' || a.status === 'rejected') acts += '<button class="btn btn-s btn-sm" onclick="quickSubmit(\'' + a.id + '\')">Submit</button> ';
     acts += '<button class="btn btn-d btn-sm" onclick="askDel(\'' + a.id + '\')">Delete</button>';
-    return '<tr>' +
-      '<td style="max-width:230px;"><div style="font-weight:600;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;max-width:210px;">' + esc(a.title||'Untitled') + '</div>' +
+    return '<tr><td style="max-width:230px;"><div style="font-weight:600;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;max-width:210px;">' + esc(a.title||'Untitled') + '</div>' +
       (a.rejectReason ? '<div style="font-size:11px;color:var(--accent);margin-top:2px;">⚠ ' + esc(a.rejectReason) + '</div>' : '') + '</td>' +
       '<td><span class="pill" style="background:var(--surface);color:var(--muted);border-color:var(--border);">' + esc(a.category||'—') + '</span></td>' +
       '<td><span class="pill p-' + a.status + '">' + a.status + '</span></td>' +
@@ -975,14 +996,13 @@ function renderArts() {
   }).join('');
 }
 
-// ── REVIEW QUEUE ────────────────────────────────────────────────
+// ── REVIEW QUEUE ─────────────────────────────────────────────────────────────
 function renderRev() {
   var list = $.arts.filter(function(a){ return a.status === 'review'; });
   var tbody = document.getElementById('rev-tbody');
   if (!list.length) { tbody.innerHTML = '<tr><td colspan="5" class="te">No articles pending review 🎉</td></tr>'; return; }
   tbody.innerHTML = list.map(function(a) {
-    return '<tr>' +
-      '<td style="font-weight:600;max-width:220px;">' + esc(a.title||'Untitled') + '</td>' +
+    return '<tr><td style="font-weight:600;max-width:220px;">' + esc(a.title||'Untitled') + '</td>' +
       '<td style="font-size:12px;color:var(--muted);">' + esc(a.authorName||a.authorEmail||'—') + '</td>' +
       '<td><span class="pill" style="background:var(--surface);color:var(--muted);border-color:var(--border);">' + esc(a.category||'—') + '</span></td>' +
       '<td style="font-size:12px;color:var(--muted);">' + fmtD(a.updatedAt) + '</td>' +
@@ -994,7 +1014,6 @@ function renderRev() {
   }).join('');
 }
 
-// ── APPROVE / REJECT ────────────────────────────────────────────
 function doApprove(id) {
   call('approveArticle', { token: $.token, id: id }).then(function(r) {
     if (r.ok) { toast('Published! 🎉', 'ok'); loadArts(); }
@@ -1012,7 +1031,7 @@ function confRej() {
   });
 }
 
-// ── DELETE ──────────────────────────────────────────────────────
+// ── DELETE ────────────────────────────────────────────────────────────────────
 function askDel(id) { $.delId = id; openM('m-del'); }
 function confDel() {
   call('deleteArticle', { token: $.token, id: $.delId }).then(function(r) {
@@ -1028,48 +1047,45 @@ function quickSubmit(id) {
   });
 }
 
-// ── EDITOR ──────────────────────────────────────────────────────
+// ── EDITOR ───────────────────────────────────────────────────────────────────
 function newArt() {
   $.editId = null;
   ['ed-title','ed-slug','ed-tag','ed-cover','ed-excerpt'].forEach(function(id){ document.getElementById(id).value = ''; });
   document.getElementById('ed-body').innerHTML = '';
   document.getElementById('ed-html-src').value = '';
-  document.getElementById('ed-cat').value   = 'review';
-  document.getElementById('ed-rt').value    = '5';
-  document.getElementById('ed-rate').value  = '0';
-  ratDisp(); upCover();
-  setPill('draft'); setSv('Ready');
+  document.getElementById('ed-cat').value  = 'review';
+  document.getElementById('ed-rt').value   = '5';
+  document.getElementById('ed-rate').value = '0';
+  ratDisp(); upCover(); setPill('draft'); setSv('Ready');
   go('editor');
   document.getElementById('tb-title').textContent = 'New Article';
   setTimeout(function(){ document.getElementById('ed-title').focus(); }, 100);
 }
-
 function openEdit(id) {
   call('getArticle', { token: $.token, id: id }).then(function(r) {
     if (!r.ok) { toast(r.error, 'bad'); return; }
     var a = r.article;
     $.editId = id;
-    document.getElementById('ed-title').value   = a.title   || '';
-    document.getElementById('ed-body').innerHTML = a.content || '';
-    document.getElementById('ed-slug').value    = a.slug    || '';
-    document.getElementById('ed-tag').value     = a.tag     || '';
-    document.getElementById('ed-rt').value      = a.readTime|| '5';
-    document.getElementById('ed-rate').value    = a.rating  || '0';
-    document.getElementById('ed-cover').value   = a.coverImage || '';
-    document.getElementById('ed-excerpt').value = a.excerpt || '';
-    document.getElementById('ed-cat').value     = a.category|| 'review';
+    document.getElementById('ed-title').value   = a.title    || '';
+    document.getElementById('ed-body').innerHTML = a.content  || '';
+    document.getElementById('ed-slug').value    = a.slug      || '';
+    document.getElementById('ed-tag').value     = a.tag       || '';
+    document.getElementById('ed-rt').value      = a.readTime  || '5';
+    document.getElementById('ed-rate').value    = a.rating    || '0';
+    document.getElementById('ed-cover').value   = a.coverImage|| '';
+    document.getElementById('ed-excerpt').value = a.excerpt   || '';
+    document.getElementById('ed-cat').value     = a.category  || 'review';
     ratDisp(); upCover(); setPill(a.status); setSv('Loaded');
     go('editor');
     document.getElementById('tb-title').textContent = 'Editing: ' + (a.title || 'Untitled');
   });
 }
-
 function saveArt(status) {
   var title = document.getElementById('ed-title').value.trim();
   if (!title) { toast('Please add a title first.', 'bad'); return; }
   setSv('Saving…');
   var art = {
-    id:         $.editId || undefined,
+    id: $.editId || undefined,
     title:      title,
     slug:       document.getElementById('ed-slug').value,
     category:   document.getElementById('ed-cat').value,
@@ -1085,12 +1101,9 @@ function saveArt(status) {
     if (r.ok) {
       if (!$.editId) $.editId = r.id;
       setSv('Saved ✓'); toast('Draft saved.', 'ok'); loadArts();
-    } else {
-      setSv('Failed'); toast(r.error, 'bad');
-    }
+    } else { setSv('Failed'); toast(r.error, 'bad'); }
   });
 }
-
 function submitReview() {
   saveArt('draft');
   setTimeout(function() {
@@ -1101,7 +1114,6 @@ function submitReview() {
     });
   }, 800);
 }
-
 function adminPub() {
   saveArt('draft');
   setTimeout(function() {
@@ -1112,28 +1124,24 @@ function adminPub() {
     });
   }, 800);
 }
-
-// Auto-save every 60s
 setInterval(function() {
   if (!document.getElementById('p-editor').classList.contains('on')) return;
   if (!document.getElementById('ed-title').value.trim()) return;
   saveArt('draft');
 }, 60000);
-
-// Ctrl+S
 document.addEventListener('keydown', function(e) {
   if ((e.ctrlKey||e.metaKey) && e.key==='s' && document.getElementById('p-editor').classList.contains('on')) {
     e.preventDefault(); saveArt('draft');
   }
 });
 
-// ── Editor helpers ───────────────────────────────────────────────
+// ── Editor helpers ────────────────────────────────────────────────────────────
 function onTitleInput() {
   document.getElementById('ed-slug').value = slugify(document.getElementById('ed-title').value);
 }
 function onBodyInput() {
   var txt = document.getElementById('ed-body').innerText || '';
-  var w = txt.trim().split(/\s+/).filter(Boolean).length;
+  var w   = txt.trim().split(/\s+/).filter(Boolean).length;
   document.getElementById('ed-wc').textContent = w + ' words';
   document.getElementById('ed-rt').value = Math.max(1, Math.ceil(w/200));
 }
@@ -1154,19 +1162,18 @@ function setCover() {
 }
 function setPill(s) {
   var el = document.getElementById('ed-pill');
-  el.textContent = s;
-  el.className = 'pill p-' + s;
+  el.textContent = s; el.className = 'pill p-' + s;
 }
 function setSv(m) {
   var el = document.getElementById('ed-sv');
   el.textContent = m;
-  el.style.color = m.includes('✓') ? 'var(--green)' : m.includes('fail')||m.includes('Failed') ? 'var(--red)' : 'var(--muted)';
+  el.style.color = m.includes('✓') ? 'var(--green)' : (m.includes('fail')||m.includes('Failed')) ? 'var(--red)' : 'var(--muted)';
 }
 function edKey(e) {
   if (e.key === 'Tab') { e.preventDefault(); fmt('insertHTML','&nbsp;&nbsp;&nbsp;&nbsp;'); }
 }
 
-// ── Toolbar ──────────────────────────────────────────────────────
+// ── Toolbar ───────────────────────────────────────────────────────────────────
 function fmt(cmd, val) {
   document.getElementById('ed-body').focus();
   document.execCommand(cmd, false, val || null);
@@ -1179,18 +1186,18 @@ function togHTML() {
   var btn  = document.getElementById('tb-html');
   if (_htmlMode) {
     src.value = body.innerHTML;
-    body.style.display = 'none'; src.style.display = 'block'; btn.classList.add('on');
+    body.style.display='none'; src.style.display='block'; btn.classList.add('on');
   } else {
     body.innerHTML = src.value;
-    src.style.display = 'none'; body.style.display = 'block'; btn.classList.remove('on');
+    src.style.display='none'; body.style.display='block'; btn.classList.remove('on');
   }
 }
 
-// ── Insert helpers ───────────────────────────────────────────────
+// ── Insert helpers ────────────────────────────────────────────────────────────
 function insLink() {
   $.sel = saveSel();
-  document.getElementById('lk-url').value = '';
-  document.getElementById('lk-txt').value = '';
+  document.getElementById('lk-url').value='';
+  document.getElementById('lk-txt').value='';
   openM('m-link');
   setTimeout(function(){ document.getElementById('lk-url').focus(); }, 100);
 }
@@ -1200,11 +1207,8 @@ function doInsLink() {
   var txt = document.getElementById('lk-txt').value.trim();
   var nt  = document.getElementById('lk-tab').checked;
   restSel($.sel); document.getElementById('ed-body').focus();
-  if (txt) {
-    fmt('insertHTML','<a href="'+url+'"'+(nt?' target="_blank" rel="noopener"':'')+'>'+txt+'</a>');
-  } else {
-    fmt('createLink', url);
-  }
+  if (txt) fmt('insertHTML','<a href="'+url+'"'+(nt?' target="_blank" rel="noopener"':'')+'>'+txt+'</a>');
+  else fmt('createLink', url);
   closeM('m-link');
 }
 function insImg() {
@@ -1263,7 +1267,7 @@ function insAff() {
   ['aff-n','aff-p','aff-i','aff-l'].forEach(function(id){ document.getElementById(id).value=''; });
 }
 
-// ── Selection ────────────────────────────────────────────────────
+// ── Selection ─────────────────────────────────────────────────────────────────
 function saveSel() {
   var s = window.getSelection();
   return s.rangeCount ? s.getRangeAt(0).cloneRange() : null;
@@ -1273,7 +1277,191 @@ function restSel(r) {
   var s = window.getSelection(); s.removeAllRanges(); s.addRange(r);
 }
 
-// ── Change password ──────────────────────────────────────────────
+// ═════════════════════════════════════════════════════════════════════════════
+// ── IMAGE UPLOAD ─────────────────────────────────────────────────────────────
+// ═════════════════════════════════════════════════════════════════════════════
+
+// Open modal — 'target' is 'body' (insert into article) or 'cover' (set as cover)
+function openUpload(target) {
+  $.uplTarget = target || 'body';
+  $.uplFile   = null;
+  $.sel = saveSel(); // save cursor position before modal opens
+  uplReset();
+  var btn = document.getElementById('upl-submit-btn');
+  btn.textContent = $.uplTarget === 'cover' ? 'Upload & Set as Cover' : 'Upload & Insert';
+  openM('m-upload');
+}
+
+function openCoverUpload() { openUpload('cover'); }
+
+function uplReset() {
+  $.uplFile = null;
+  document.getElementById('upl-file').value = '';
+  document.getElementById('upl-dropzone').style.display = 'block';
+  document.getElementById('upl-preview').style.display  = 'none';
+  document.getElementById('upl-info').style.display     = 'none';
+  document.getElementById('upl-fields').style.display   = 'none';
+  document.getElementById('upl-prog').style.display     = 'none';
+  document.getElementById('upl-prog-fill').style.width  = '0%';
+  document.getElementById('upl-result').style.display   = 'none';
+  document.getElementById('upl-result').textContent     = '';
+  document.getElementById('upl-alt').value = '';
+  document.getElementById('upl-cap').value = '';
+  document.getElementById('upl-submit-btn').disabled = true;
+  document.getElementById('upl-act').style.display = 'flex';
+}
+
+function uplCancel() {
+  uplReset();
+  closeM('m-upload');
+}
+
+// File chosen via input or drop
+function uplFileChosen(file) {
+  if (!file) return;
+
+  // Validate type
+  var allowed = ['image/jpeg','image/png','image/webp','image/gif'];
+  if (allowed.indexOf(file.type) === -1) {
+    toast('Only JPEG, PNG, WEBP, or GIF files allowed.', 'bad'); return;
+  }
+  // Validate size (8 MB)
+  if (file.size > 8 * 1024 * 1024) {
+    toast('File too large — max 8 MB.', 'bad'); return;
+  }
+
+  $.uplFile = file;
+
+  // Show preview
+  var reader = new FileReader();
+  reader.onload = function(e) {
+    document.getElementById('upl-prev-img').src = e.target.result;
+    document.getElementById('upl-preview').style.display = 'block';
+    document.getElementById('upl-dropzone').style.display = 'none';
+  };
+  reader.readAsDataURL(file);
+
+  // Show file info
+  var info = document.getElementById('upl-info');
+  info.textContent = file.name + ' · ' + (file.size / 1024).toFixed(0) + ' KB · ' + file.type.split('/')[1].toUpperCase();
+  info.style.display = 'block';
+
+  // Show alt/caption fields
+  document.getElementById('upl-fields').style.display = 'flex';
+
+  // Enable submit
+  document.getElementById('upl-submit-btn').disabled = false;
+}
+
+function uplClear() {
+  uplReset();
+  // Show drop zone again
+  document.getElementById('upl-dropzone').style.display = 'block';
+}
+
+// Drag & drop handlers
+function uplDragOver(e) {
+  e.preventDefault();
+  document.getElementById('upl-dropzone').classList.add('drag');
+}
+function uplDragLeave(e) {
+  document.getElementById('upl-dropzone').classList.remove('drag');
+}
+function uplDrop(e) {
+  e.preventDefault();
+  document.getElementById('upl-dropzone').classList.remove('drag');
+  var file = e.dataTransfer.files[0];
+  if (file) uplFileChosen(file);
+}
+
+// Main upload function
+function doUpload() {
+  if (!$.uplFile) { toast('Please select an image first.', 'bad'); return; }
+
+  var btn = document.getElementById('upl-submit-btn');
+  btn.disabled = true;
+  btn.innerHTML = '<span class="spin"></span> Uploading…';
+
+  // Hide action row, show progress
+  document.getElementById('upl-act').style.display = 'none';
+  var prog     = document.getElementById('upl-prog');
+  var progFill = document.getElementById('upl-prog-fill');
+  var progLbl  = document.getElementById('upl-prog-lbl');
+  prog.style.display = 'block';
+
+  // Animate progress bar (fake progress — we don't have XHR progress on fetch)
+  var pct = 0;
+  var fakeProgress = setInterval(function() {
+    pct = Math.min(pct + Math.random() * 15, 85);
+    progFill.style.width = pct + '%';
+    progLbl.textContent = 'Uploading… ' + Math.round(pct) + '%';
+  }, 250);
+
+  // Read file as base64
+  var reader = new FileReader();
+  reader.onload = function(e) {
+    // Strip the data:mime/type;base64, prefix
+    var base64 = e.target.result.split(',')[1];
+
+    call('uploadImage', {
+      token:    $.token,
+      base64:   base64,
+      mimeType: $.uplFile.type,
+      filename: $.uplFile.name
+    }).then(function(r) {
+      clearInterval(fakeProgress);
+
+      if (!r.ok) {
+        progFill.style.width = '100%';
+        progFill.style.background = 'var(--red)';
+        progLbl.textContent = 'Upload failed.';
+        toast(r.error || 'Upload failed.', 'bad');
+        btn.disabled = false;
+        btn.innerHTML = 'Retry Upload';
+        document.getElementById('upl-act').style.display = 'flex';
+        return;
+      }
+
+      // Success
+      progFill.style.width = '100%';
+      progFill.style.background = 'var(--green)';
+      progLbl.textContent = 'Upload complete ✓';
+
+      // Show URL
+      var resultEl = document.getElementById('upl-result');
+      resultEl.textContent = r.url;
+      resultEl.style.display = 'block';
+
+      // Brief pause so user sees 100%, then insert and close
+      setTimeout(function() {
+        var alt = document.getElementById('upl-alt').value.trim() || $.uplFile.name.replace(/\.[^.]+$/,'');
+        var cap = document.getElementById('upl-cap').value.trim();
+
+        if ($.uplTarget === 'cover') {
+          // Set as cover image
+          document.getElementById('ed-cover').value = r.url;
+          upCover();
+          toast('Cover image set! ✓', 'ok');
+        } else {
+          // Insert into article body at saved cursor position
+          restSel($.sel);
+          document.getElementById('ed-body').focus();
+          var html = cap
+            ? '<figure style="margin:1rem 0;"><img src="'+r.url+'" alt="'+esc(alt)+'" style="max-width:100%;border-radius:10px;display:block;"><figcaption style="text-align:center;font-size:12px;color:#888;margin-top:5px;">'+esc(cap)+'</figcaption></figure><p></p>'
+            : '<img src="'+r.url+'" alt="'+esc(alt)+'" style="max-width:100%;border-radius:10px;"><p></p>';
+          fmt('insertHTML', html);
+          toast('Image uploaded & inserted! ✓', 'ok');
+        }
+
+        uplReset();
+        closeM('m-upload');
+      }, 700);
+    });
+  };
+  reader.readAsDataURL($.uplFile);
+}
+
+// ── Change password ───────────────────────────────────────────────────────────
 function doChangePwd() {
   var o  = document.getElementById('cp-old').value;
   var nw = document.getElementById('cp-new').value;
@@ -1289,7 +1477,7 @@ function doChangePwd() {
   });
 }
 
-// ── Team ─────────────────────────────────────────────────────────
+// ── Team ──────────────────────────────────────────────────────────────────────
 function loadTeam() {
   call('listUsers', { token: $.token }).then(function(r) {
     if (!r.ok) { toast(r.error,'bad'); return; }
@@ -1331,14 +1519,14 @@ function doToggle(email) {
   });
 }
 
-// ── Modals ───────────────────────────────────────────────────────
+// ── Modals ────────────────────────────────────────────────────────────────────
 function openM(id)  { document.getElementById(id).classList.add('on'); }
 function closeM(id) { document.getElementById(id).classList.remove('on'); }
 document.querySelectorAll('.ov').forEach(function(el) {
   el.addEventListener('click', function(e) { if (e.target===el) el.classList.remove('on'); });
 });
 
-// ── Toasts ───────────────────────────────────────────────────────
+// ── Toasts ────────────────────────────────────────────────────────────────────
 function toast(msg, type, ms) {
   ms = ms || 3000;
   var c = document.getElementById('toasts');
@@ -1352,14 +1540,12 @@ function toast(msg, type, ms) {
   t.innerHTML = (icons[type]||icons['']) + ' ' + String(msg);
   c.appendChild(t);
   setTimeout(function() {
-    t.style.transition = 'all .3s';
-    t.style.opacity = '0';
-    t.style.transform = 'translateX(12px)';
+    t.style.transition='all .3s'; t.style.opacity='0'; t.style.transform='translateX(12px)';
     setTimeout(function(){ if(t.parentNode) t.parentNode.removeChild(t); }, 300);
   }, ms);
 }
 
-// ── TRASH ─────────────────────────────────────────────────────────
+// ── TRASH ─────────────────────────────────────────────────────────────────────
 function loadTrash() {
   call('listTrash', { token: $.token }).then(function(r) {
     if (!r.ok) {
@@ -1371,17 +1557,13 @@ function loadTrash() {
     var list  = r.trash || [];
     var tbody = document.getElementById('trash-tbody');
     document.getElementById('bdg-trash').textContent = list.length;
-    var emptyBtn = document.getElementById('empty-trash-btn');
-    emptyBtn.style.display = ($.user.role === 'admin' && list.length > 0) ? 'inline-flex' : 'none';
-    if (!list.length) {
-      tbody.innerHTML = '<tr><td colspan="5" class="te">Trash is empty.</td></tr>';
-      return;
-    }
+    document.getElementById('empty-trash-btn').style.display = ($.user.role==='admin' && list.length>0) ? 'inline-flex' : 'none';
+    if (!list.length) { tbody.innerHTML = '<tr><td colspan="5" class="te">Trash is empty.</td></tr>'; return; }
     tbody.innerHTML = list.map(function(a) {
-      var urgent   = a.daysLeft <= 1;
+      var urgent    = a.daysLeft <= 1;
       var daysLabel = a.daysLeft <= 0
         ? '<span style="color:var(--red);font-weight:700;">Expires today</span>'
-        : '<span style="color:' + (urgent ? 'var(--accent)' : 'var(--muted)') + ';">' + a.daysLeft + ' day' + (a.daysLeft !== 1 ? 's' : '') + '</span>';
+        : '<span style="color:' + (urgent?'var(--accent)':'var(--muted)') + ';">' + a.daysLeft + ' day' + (a.daysLeft!==1?'s':'') + '</span>';
       return '<tr>' +
         '<td style="max-width:220px;"><div style="font-weight:600;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;max-width:200px;">' + esc(a.title||'Untitled') + '</div>' +
         '<div style="font-size:11px;color:var(--muted);margin-top:2px;">' + esc(a.authorName||a.authorEmail) + '</div></td>' +
@@ -1424,7 +1606,7 @@ function emptyTrash() {
   });
 }
 
-// ── Utilities ────────────────────────────────────────────────────
+// ── Utilities ─────────────────────────────────────────────────────────────────
 function esc(s) {
   return String(s||'').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');
 }
@@ -1438,13 +1620,13 @@ function slugify(t) {
 }
 function eyeToggle(inputId, btn) {
   var inp = document.getElementById(inputId);
-  inp.type = inp.type === 'password' ? 'text' : 'password';
-  btn.innerHTML = inp.type === 'password'
+  inp.type = inp.type==='password'?'text':'password';
+  btn.innerHTML = inp.type==='password'
     ? '<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/><circle cx="12" cy="12" r="3"/></svg>'
     : '<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M17.94 17.94A10.07 10.07 0 0 1 12 20c-7 0-11-8-11-8a18.45 18.45 0 0 1 5.06-5.94"/><path d="M9.9 4.24A9.12 9.12 0 0 1 12 4c7 0 11 8 11 8a18.5 18.5 0 0 1-2.16 3.19"/><line x1="1" y1="1" x2="23" y2="23"/></svg>';
 }
 
-// ── SIDEBAR (mobile) ─────────────────────────────────────────────
+// ── SIDEBAR (mobile) ──────────────────────────────────────────────────────────
 function toggleSidebar() {
   var sb  = document.getElementById('sb');
   var ov  = document.getElementById('sb-overlay');
@@ -1457,83 +1639,43 @@ function closeSidebar() {
   if (ov) ov.classList.remove('on');
 }
 
-// ── DEVTOOLS BLOCKER ─────────────────────────────────────────────
-// Blocks F12, Ctrl+Shift+I, Ctrl+Shift+J, Ctrl+U, right-click inspect.
-// If devtools are detected open, page content is wiped and a warning shown.
+// ── DEVTOOLS BLOCKER ──────────────────────────────────────────────────────────
 (function() {
-  // 1. Block keyboard shortcuts
   document.addEventListener('keydown', function(e) {
     var key = e.key || e.keyCode;
-    // F12
-    if (key === 'F12' || e.keyCode === 123) { e.preventDefault(); e.stopPropagation(); return false; }
-    // Ctrl+Shift+I / Ctrl+Shift+J / Ctrl+Shift+C
-    if (e.ctrlKey && e.shiftKey && (key === 'I' || key === 'i' || key === 'J' || key === 'j' || key === 'C' || key === 'c')) { e.preventDefault(); e.stopPropagation(); return false; }
-    // Ctrl+U (view source)
-    if (e.ctrlKey && (key === 'U' || key === 'u')) { e.preventDefault(); e.stopPropagation(); return false; }
-    // Cmd equivalents on Mac
-    if (e.metaKey && e.altKey && (key === 'I' || key === 'i' || key === 'J' || key === 'j')) { e.preventDefault(); e.stopPropagation(); return false; }
+    if (key==='F12'||e.keyCode===123){e.preventDefault();e.stopPropagation();return false;}
+    if (e.ctrlKey&&e.shiftKey&&(key==='I'||key==='i'||key==='J'||key==='j'||key==='C'||key==='c')){e.preventDefault();e.stopPropagation();return false;}
+    if (e.ctrlKey&&(key==='U'||key==='u')){e.preventDefault();e.stopPropagation();return false;}
+    if (e.metaKey&&e.altKey&&(key==='I'||key==='i'||key==='J'||key==='j')){e.preventDefault();e.stopPropagation();return false;}
   }, true);
-
-  // 2. Block right-click context menu
-  document.addEventListener('contextmenu', function(e) {
-    e.preventDefault(); return false;
-  }, true);
-
-  // 3. Detect devtools open via window size difference
-  // iOS Safari has unreliable outerWidth/outerHeight — skip on mobile entirely
-  // Only run on desktop where devtools actually dock and change window dimensions
+  document.addEventListener('contextmenu', function(e){e.preventDefault();return false;}, true);
   var _devopen = false;
-  var _isIOS = /iphone|ipad|ipod/i.test(navigator.userAgent);
-  var _isMobile = _isIOS || /android/i.test(navigator.userAgent);
-
-  if (!_isMobile) {
-    // Wait for page to fully settle before starting size checks
-    // (avoids false positives during browser chrome resize on load)
-    setTimeout(function() {
-      function checkDevTools() {
-        var threshold = 200; // raised from 160 — browser chrome on some systems uses up to 180px
-        var widthDiff  = window.outerWidth  - window.innerWidth;
-        var heightDiff = window.outerHeight - window.innerHeight;
-        var open = widthDiff > threshold || heightDiff > threshold;
-        if (open && !_devopen) {
-          _devopen = true;
-          nukeContent();
-        } else if (!open && _devopen) {
-          _devopen = false;
-        }
-      }
-      setInterval(checkDevTools, 1000);
-    }, 3000); // 3 second delay — page fully loaded and stable before first check
-  }
-
-  // 4. Detect via debugger timing trick
-  // iOS Safari JS engine is slow on cold start — skip on iOS to prevent false triggers
-  // On desktop, raise threshold and delay start significantly
+  var _isMobile = /iphone|ipad|ipod|android/i.test(navigator.userAgent);
   if (!_isMobile) {
     setTimeout(function() {
-      var _dbgCheck = setInterval(function() {
+      setInterval(function() {
+        var open = (window.outerWidth-window.innerWidth)>200||(window.outerHeight-window.innerHeight)>200;
+        if (open&&!_devopen){_devopen=true;nukeContent();}
+        else if (!open&&_devopen){_devopen=false;}
+      }, 1000);
+    }, 3000);
+    setTimeout(function() {
+      var c = setInterval(function() {
         var t = Date.now();
-        // eslint-disable-next-line no-debugger
         (function(){}).constructor('debugger')();
-        if (Date.now() - t > 200) { // raised from 100ms — more headroom for slower machines
-          clearInterval(_dbgCheck);
-          nukeContent();
-        }
+        if (Date.now()-t>200){clearInterval(c);nukeContent();}
       }, 2000);
-    }, 4000); // 4 second delay before first debugger check
+    }, 4000);
   }
-
-  // 5. Wipe and warn
   function nukeContent() {
-    // Clear session so they can't just close devtools and continue
-    try { localStorage.removeItem('dekho_token'); } catch(e) {}
-    document.body.innerHTML =
-      '<div style="position:fixed;inset:0;background:#0D0D0D;display:flex;flex-direction:column;align-items:center;justify-content:center;font-family:\'DM Mono\',monospace;color:#fff;text-align:center;padding:2rem;">' +
-      '<div style="font-family:\'Bebas Neue\',sans-serif;font-size:5rem;color:#E8380D;letter-spacing:.1em;line-height:1;">DEKHO</div>' +
-      '<div style="font-size:11px;letter-spacing:.3em;color:#444;margin-bottom:2rem;">CMS · ELV8 DGTL</div>' +
-      '<div style="font-size:1.1rem;font-weight:700;color:#E8380D;margin-bottom:.75rem;">⛔ Access Denied</div>' +
-      '<div style="font-size:13px;color:#888;max-width:360px;line-height:1.7;">Developer tools detected.<br>For security, your session has been terminated.<br><br>Close DevTools and reload to continue.</div>' +
-      '<button onclick="location.reload()" style="margin-top:2rem;padding:11px 28px;background:#E8380D;color:#fff;border:none;border-radius:9px;font-size:14px;font-weight:700;cursor:pointer;font-family:inherit;">Reload Page</button>' +
+    try{localStorage.removeItem('dekho_token');}catch(e){}
+    document.body.innerHTML=
+      '<div style="position:fixed;inset:0;background:#0D0D0D;display:flex;flex-direction:column;align-items:center;justify-content:center;font-family:\'DM Mono\',monospace;color:#fff;text-align:center;padding:2rem;">'+
+      '<div style="font-family:\'Bebas Neue\',sans-serif;font-size:5rem;color:#E8380D;letter-spacing:.1em;line-height:1;">DEKHO</div>'+
+      '<div style="font-size:11px;letter-spacing:.3em;color:#444;margin-bottom:2rem;">CMS · ELV8 DGTL</div>'+
+      '<div style="font-size:1.1rem;font-weight:700;color:#E8380D;margin-bottom:.75rem;">⛔ Access Denied</div>'+
+      '<div style="font-size:13px;color:#888;max-width:360px;line-height:1.7;">Developer tools detected.<br>For security, your session has been terminated.<br><br>Close DevTools and reload to continue.</div>'+
+      '<button onclick="location.reload()" style="margin-top:2rem;padding:11px 28px;background:#E8380D;color:#fff;border:none;border-radius:9px;font-size:14px;font-weight:700;cursor:pointer;font-family:inherit;">Reload Page</button>'+
       '</div>';
   }
 })();
