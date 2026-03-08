@@ -3,836 +3,698 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>DEKHO CMS — Writer Portal</title>
-<meta name="robots" content="noindex, nofollow">
-<link rel="preconnect" href="https://fonts.googleapis.com">
-<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Instrument+Sans:wght@400;500;600;700&family=DM+Mono:wght@400;500&display=swap" rel="stylesheet">
-<script src="https://unpkg.com/lucide@latest"></script>
+<title>DEKHO — Writer Dashboard</title>
+<meta name="robots" content="noindex,nofollow">
+<link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Instrument+Sans:ital,wght@0,400;0,500;0,600;0,700;1,400&family=DM+Mono:wght@400;500&display=swap" rel="stylesheet">
+
 <style>
-/* ── Reset & base ──────────────────────────────────────────── */
+/* ─── RESET & BASE ────────────────────────────────────────────── */
 *,*::before,*::after{box-sizing:border-box;margin:0;padding:0;}
 :root{
-  --ink:#0D0D0D; --paper:#FAFAF8; --surface:#F2F1EE;
-  --border:#E2E0DA; --muted:#8A8880; --accent:#E8380D;
-  --accent2:#1A6BFF; --lime:#CCF381; --green:#16A34A;
-  --yellow:#D97706; --red:#DC2626;
-  --sidebar:248px;
+  --ink:#0D0D0D;--paper:#FAFAF8;--surface:#F4F3F0;--border:#E2E0DA;
+  --muted:#8A8880;--accent:#E8380D;--blue:#1A6BFF;--green:#16A34A;
+  --yellow:#CA8A04;--red:#DC2626;--lime:#CCF381;--sw:230px;
 }
-html{font-size:15px;}
-body{font-family:'Instrument Sans',sans-serif;background:var(--surface);color:var(--ink);overflow-x:hidden;}
-.display{font-family:'Bebas Neue',sans-serif;letter-spacing:.02em;line-height:.95;}
-.mono{font-family:'DM Mono',monospace;}
+html,body{height:100%;font-size:15px;overflow:hidden;}
+body{font-family:'Instrument Sans',sans-serif;background:var(--surface);color:var(--ink);}
+button,input,select,textarea{font-family:inherit;font-size:inherit;}
+a{text-decoration:none;color:inherit;}
 ::-webkit-scrollbar{width:5px;height:5px;}
-::-webkit-scrollbar-track{background:transparent;}
 ::-webkit-scrollbar-thumb{background:var(--border);border-radius:4px;}
+.bb{font-family:'Bebas Neue',sans-serif;letter-spacing:.03em;}
+.mm{font-family:'DM Mono',monospace;}
 
-/* ── Screens ───────────────────────────────────────────────── */
-.screen{display:none;min-height:100vh;}
-.screen.active{display:flex;}
+/* ─── PAGE VISIBILITY ─────────────────────────────────────────── */
+#pg-login,#pg-app{
+  display:none;
+  position:fixed;inset:0;
+  overflow-y:auto;
+}
+#pg-login.on{display:flex;z-index:200;}   /* always above everything */
+#pg-app.on{display:flex;z-index:1;}
 
-/* ══════════════════════════════════════════════════════════
-   PAGE LOADER
-══════════════════════════════════════════════════════════ */
-#page-loader{
-  position:fixed;inset:0;background:var(--ink);z-index:9999;
-  display:flex;align-items:center;justify-content:center;flex-direction:column;gap:1rem;
-  transition:opacity .4s ease;
+/* ─── LOGIN ───────────────────────────────────────────────────── */
+#pg-login{
+  min-height:100vh;align-items:center;justify-content:center;
+  background:#0D0D0D;
+  background-image:radial-gradient(ellipse at 15% 65%,rgba(232,56,13,.2) 0%,transparent 55%),
+                   radial-gradient(ellipse at 85% 20%,rgba(204,243,129,.07) 0%,transparent 50%);
 }
-#page-loader.hide{opacity:0;pointer-events:none;}
-.loader-logo .display{font-size:3.5rem;color:#fff;letter-spacing:.1em;}
-.loader-logo .display span{color:var(--accent);}
-.loader-sub{font-family:'DM Mono',monospace;font-size:11px;color:#444;letter-spacing:.2em;}
-.loader-bar{width:160px;height:2px;background:#222;border-radius:2px;overflow:hidden;margin-top:.5rem;}
-.loader-bar-inner{height:100%;background:var(--accent);border-radius:2px;animation:barLoad 1.8s ease-in-out infinite;}
-@keyframes barLoad{0%{width:0%;margin-left:0;}50%{width:60%;margin-left:20%;}100%{width:0%;margin-left:100%;};}
+.lbox{width:min(400px,94vw);background:#181818;border:1.5px solid #2a2a2a;border-radius:20px;padding:2.25rem;}
+.llogo{text-align:center;margin-bottom:2rem;}
+.llogo h1{font-family:'Bebas Neue',sans-serif;font-size:2.8rem;color:#fff;letter-spacing:.1em;line-height:1;}
+.llogo h1 span{color:var(--accent);}
+.llogo p{font-family:'DM Mono',monospace;font-size:10px;color:#444;letter-spacing:.25em;margin-top:4px;}
+.ll{display:block;font-family:'DM Mono',monospace;font-size:10px;color:#666;letter-spacing:.15em;text-transform:uppercase;margin-bottom:5px;}
+.li{width:100%;background:#111;border:1.5px solid #2a2a2a;border-radius:9px;padding:11px 14px;font-size:14px;color:#fff;outline:none;transition:border-color .2s;}
+.li:focus{border-color:var(--accent);}
+.li::placeholder{color:#444;}
+.pwrap{position:relative;}
+.pwrap .li{padding-right:44px;}
+.peye{position:absolute;right:12px;top:50%;transform:translateY(-50%);background:none;border:none;cursor:pointer;color:#555;padding:4px;display:flex;align-items:center;}
+.lbtn{width:100%;margin-top:1.25rem;padding:13px;background:var(--accent);color:#fff;border:none;border-radius:9px;font-size:14px;font-weight:700;cursor:pointer;transition:opacity .2s;}
+.lbtn:hover{opacity:.87;}
+.lbtn:disabled{opacity:.45;cursor:not-allowed;}
+.lerr{display:none;margin-top:.75rem;padding:9px 13px;background:#2a0f0f;border:1px solid #5a1f1f;border-radius:7px;font-size:12px;color:#ff9a9a;line-height:1.5;}
 
-/* ══════════════════════════════════════════════════════════
-   VIEW-LEVEL LOADING OVERLAY
-══════════════════════════════════════════════════════════ */
-.view-loading{
-  position:absolute;inset:0;background:rgba(250,250,248,.85);
-  backdrop-filter:blur(3px);z-index:10;display:none;
-  align-items:center;justify-content:center;flex-direction:column;gap:.75rem;
-  border-radius:14px;
-}
-.view-loading.show{display:flex;}
-.spin-ring{
-  width:36px;height:36px;border:3px solid var(--border);
-  border-top-color:var(--accent);border-radius:50%;
-  animation:spin .7s linear infinite;
-}
-@keyframes spin{to{transform:rotate(360deg);}}
-.view-loading p{font-family:'DM Mono',monospace;font-size:11px;color:var(--muted);letter-spacing:.15em;}
+/* ─── APP SHELL ───────────────────────────────────────────────── */
+#pg-app{flex-direction:row;min-height:100vh;}
 
-/* Skeleton shimmer */
-.skeleton{background:linear-gradient(90deg,var(--surface) 25%,#E8E7E3 50%,var(--surface) 75%);background-size:200%;animation:shimmer 1.5s infinite;}
-@keyframes shimmer{0%{background-position:200%;}100%{background-position:-200%;}}
-.skel-row{height:14px;border-radius:6px;margin-bottom:10px;}
-.skel-row.wide{width:80%;}
-.skel-row.mid{width:55%;}
-.skel-row.short{width:30%;}
-
-/* ══════════════════════════════════════════════════════════
-   LOGIN SCREEN
-══════════════════════════════════════════════════════════ */
-#login-screen{
-  align-items:center;justify-content:center;
-  background:var(--ink);position:relative;overflow:hidden;
-}
-.login-bg{
-  position:absolute;inset:0;
-  background:radial-gradient(ellipse at 20% 50%,rgba(232,56,13,.18) 0%,transparent 60%),
-             radial-gradient(ellipse at 80% 20%,rgba(204,243,129,.07) 0%,transparent 50%);
-}
-.login-card{
-  position:relative;z-index:1;width:min(420px,92vw);
-  background:#161616;border:1.5px solid #2a2a2a;border-radius:24px;padding:2.5rem;
-}
-.login-logo{text-align:center;margin-bottom:2rem;}
-.login-logo .display{font-size:3rem;color:#fff;letter-spacing:.1em;}
-.login-logo .display span{color:var(--accent);}
-.login-logo p{font-size:11px;color:#555;margin-top:4px;font-family:'DM Mono',monospace;letter-spacing:.2em;}
-.login-label{display:block;font-size:11px;color:#888;font-family:'DM Mono',monospace;letter-spacing:.12em;text-transform:uppercase;margin-bottom:6px;}
-.login-input{
-  width:100%;background:#1f1f1f;border:1.5px solid #2a2a2a;border-radius:10px;
-  padding:12px 16px;font-family:'Instrument Sans',sans-serif;font-size:14px;
-  color:#fff;outline:none;transition:border-color .2s;
-}
-.login-input:focus{border-color:var(--accent);}
-.login-input::placeholder{color:#444;}
-.login-btn{
-  width:100%;background:var(--accent);color:#fff;border:none;border-radius:10px;
-  padding:14px;font-size:14px;font-weight:700;cursor:pointer;
-  transition:opacity .2s;margin-top:1.5rem;
-  font-family:'Instrument Sans',sans-serif;display:flex;align-items:center;justify-content:center;gap:8px;
-}
-.login-btn:hover{opacity:.88;}
-.login-btn:disabled{opacity:.5;cursor:not-allowed;}
-.login-error{
-  background:#2a1010;border:1px solid #5a1f1f;border-radius:8px;
-  padding:10px 14px;font-size:12px;color:#ff8080;margin-top:1rem;display:none;
-}
-.spinner{width:18px;height:18px;border:2.5px solid rgba(255,255,255,.3);border-top-color:#fff;border-radius:50%;animation:spin .7s linear infinite;display:inline-block;flex-shrink:0;}
-
-/* ══════════════════════════════════════════════════════════
-   APP SCREEN
-══════════════════════════════════════════════════════════ */
-#app-screen{flex-direction:row;}
-
-/* ── Sidebar ─────────────────────────────────────────────── */
-#sidebar-overlay{
-  display:none;position:fixed;inset:0;background:rgba(0,0,0,.5);z-index:39;
-  backdrop-filter:blur(2px);
-}
-#sidebar-overlay.show{display:block;}
-
-#sidebar{
-  width:var(--sidebar);flex-shrink:0;
+/* Sidebar */
+#sb{
+  width:var(--sw);flex-shrink:0;
   background:#fff;border-right:1.5px solid var(--border);
   display:flex;flex-direction:column;
-  min-height:100vh;position:sticky;top:0;height:100vh;overflow-y:auto;
-  transition:transform .3s cubic-bezier(.4,0,.2,1);
+  position:sticky;top:0;height:100vh;overflow-y:auto;
 }
-.sidebar-logo{padding:1.25rem 1.25rem .9rem;border-bottom:1.5px solid var(--border);}
-.sidebar-logo .display{font-size:1.75rem;color:var(--ink);letter-spacing:.1em;}
-.sidebar-logo span.mono{display:block;font-size:9px;color:var(--muted);letter-spacing:.2em;margin-top:2px;}
-.sidebar-writer{
-  padding:.9rem 1.25rem;border-bottom:1.5px solid var(--border);
-  display:flex;align-items:center;gap:10px;
+.sb-logo{padding:1.1rem 1.2rem .8rem;border-bottom:1.5px solid var(--border);}
+.sb-logo h2{font-family:'Bebas Neue',sans-serif;font-size:1.55rem;letter-spacing:.1em;line-height:1;}
+.sb-logo h2 span{color:var(--accent);}
+.sb-logo small{font-family:'DM Mono',monospace;font-size:9px;color:var(--muted);letter-spacing:.18em;}
+.sb-who{padding:.8rem 1.2rem;border-bottom:1.5px solid var(--border);display:flex;align-items:center;gap:9px;}
+.sb-av{width:32px;height:32px;border-radius:50%;background:var(--ink);flex-shrink:0;display:flex;align-items:center;justify-content:center;font-family:'Bebas Neue',sans-serif;font-size:15px;color:var(--lime);}
+.sb-nm{font-size:13px;font-weight:700;line-height:1.2;}
+.sb-rl{font-size:10px;color:var(--muted);font-family:'DM Mono',monospace;text-transform:uppercase;}
+.sb-nav{padding:.5rem 0;flex:1;}
+.sb-grp{padding:0 .9rem;margin-bottom:.1rem;}
+.sb-glbl{font-size:9px;color:var(--muted);font-family:'DM Mono',monospace;letter-spacing:.2em;text-transform:uppercase;padding:.6rem 0 .25rem;}
+.ni{
+  display:flex;align-items:center;gap:9px;width:100%;padding:8px 10px;
+  border-radius:7px;font-size:13px;font-weight:500;color:var(--muted);
+  background:none;border:none;cursor:pointer;transition:all .15s;text-align:left;
 }
-.writer-avatar{
-  width:34px;height:34px;border-radius:50%;background:var(--ink);
-  display:flex;align-items:center;justify-content:center;
-  color:var(--lime);font-family:'Bebas Neue',sans-serif;font-size:16px;flex-shrink:0;
-}
-.writer-info{min-width:0;}
-.writer-name{font-size:13px;font-weight:700;color:var(--ink);white-space:nowrap;overflow:hidden;text-overflow:ellipsis;}
-.writer-role{font-size:10px;color:var(--muted);font-family:'DM Mono',monospace;text-transform:uppercase;letter-spacing:.1em;}
-.sidebar-nav{padding:.75rem 0;flex:1;}
-.nav-section{padding:0 1rem;margin-bottom:.25rem;}
-.nav-label{font-size:9px;color:var(--muted);font-family:'DM Mono',monospace;letter-spacing:.2em;text-transform:uppercase;padding:.6rem 0 .4rem;}
-.nav-item{
-  display:flex;align-items:center;gap:10px;padding:9px 10px;
-  border-radius:8px;font-size:13px;font-weight:500;color:var(--muted);
-  cursor:pointer;transition:all .15s;margin-bottom:2px;
-  background:none;border:none;width:100%;text-align:left;
-}
-.nav-item:hover{background:var(--surface);color:var(--ink);}
-.nav-item.active{background:var(--surface);color:var(--ink);font-weight:700;}
-.nav-item.active svg{color:var(--accent);}
-.nav-item svg{width:15px;height:15px;flex-shrink:0;}
-.nav-count{
-  margin-left:auto;background:var(--surface);color:var(--muted);
-  font-size:10px;font-family:'DM Mono',monospace;padding:1px 7px;border-radius:999px;
-}
-.nav-item.active .nav-count{background:var(--accent);color:#fff;}
-.sidebar-bottom{padding:1rem;border-top:1.5px solid var(--border);}
-.sidebar-link{
-  width:100%;display:flex;align-items:center;gap:8px;padding:8px 10px;
-  border-radius:8px;font-size:12px;color:var(--muted);text-decoration:none;
-  transition:all .15s;margin-bottom:4px;
-}
-.sidebar-link:hover{background:var(--surface);color:var(--ink);}
-.logout-btn{
-  width:100%;display:flex;align-items:center;gap:8px;padding:9px 10px;
-  border:1.5px solid var(--border);border-radius:8px;
-  font-size:13px;color:var(--muted);background:none;cursor:pointer;
-  transition:all .2s;font-family:'Instrument Sans',sans-serif;
-}
-.logout-btn:hover{border-color:var(--red);color:var(--red);}
+.ni:hover{background:var(--surface);color:var(--ink);}
+.ni.on{background:var(--surface);color:var(--ink);font-weight:700;}
+.ni.on svg{color:var(--accent);}
+.ni svg{width:15px;height:15px;flex-shrink:0;}
+.nbdg{margin-left:auto;padding:1px 7px;border-radius:999px;font-size:10px;font-family:'DM Mono',monospace;background:var(--surface);color:var(--muted);}
+.ni.on .nbdg{background:var(--accent);color:#fff;}
+.nbdg.w{background:#FEF3C7;color:var(--yellow);}
+.sb-foot{padding:.9rem 1.2rem;border-top:1.5px solid var(--border);}
+.sb-live{display:flex;align-items:center;gap:7px;padding:7px 10px;border-radius:7px;font-size:12px;color:var(--muted);transition:all .15s;margin-bottom:.35rem;width:100%;background:none;border:none;cursor:pointer;}
+.sb-live:hover{background:var(--surface);color:var(--ink);}
+.sb-out{width:100%;display:flex;align-items:center;gap:7px;padding:8px 10px;border:1.5px solid var(--border);border-radius:7px;font-size:13px;color:var(--muted);background:none;cursor:pointer;transition:all .2s;}
+.sb-out:hover{border-color:var(--red);color:var(--red);}
 
-/* ── Main area ─────────────────────────────────────────────── */
-#main-area{flex:1;min-width:0;display:flex;flex-direction:column;min-height:100vh;}
+/* Main */
+#main-area{flex:1;min-width:0;display:flex;flex-direction:column;}
 
-.topbar{
-  background:#fff;border-bottom:1.5px solid var(--border);
-  padding:0 1.5rem;height:58px;display:flex;align-items:center;justify-content:space-between;
-  position:sticky;top:0;z-index:20;gap:1rem;
-}
-.topbar-left{display:flex;align-items:center;gap:.75rem;min-width:0;}
-.topbar-title{font-size:15px;font-weight:700;color:var(--ink);white-space:nowrap;overflow:hidden;text-overflow:ellipsis;}
-.topbar-actions{display:flex;align-items:center;gap:8px;flex-shrink:0;}
-#mobile-menu-btn{display:none;background:none;border:none;cursor:pointer;padding:6px;border-radius:8px;transition:background .15s;}
-#mobile-menu-btn:hover{background:var(--surface);}
+/* Topbar */
+.topbar{background:#fff;border-bottom:1.5px solid var(--border);padding:0 1.75rem;height:56px;display:flex;align-items:center;justify-content:space-between;position:sticky;top:0;z-index:20;gap:1rem;}
+.topbar-t{font-size:15px;font-weight:700;}
+.topbar-r{display:flex;align-items:center;gap:.6rem;}
+#mbtn{display:none;background:none;border:none;cursor:pointer;padding:4px;}
 
-/* ── Views ─────────────────────────────────────────────────── */
-.view{display:none;flex:1;padding:1.5rem;position:relative;}
-.view.active{display:block;}
+/* Panels */
+.panel{display:none;padding:1.75rem;flex:1;}
+.panel.on{display:block;}
 
-/* ── Stat cards ────────────────────────────────────────────── */
-.stats-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(160px,1fr));gap:1rem;margin-bottom:1.5rem;}
-.stat-card{background:#fff;border:1.5px solid var(--border);border-radius:14px;padding:1.25rem;}
-.stat-label{font-size:10px;color:var(--muted);font-family:'DM Mono',monospace;letter-spacing:.15em;text-transform:uppercase;margin-bottom:.4rem;}
-.stat-num{font-family:'Bebas Neue',sans-serif;font-size:2.75rem;color:var(--ink);line-height:1;}
-.stat-sub{font-size:11px;color:var(--muted);margin-top:4px;}
+/* ─── COMPONENTS ──────────────────────────────────────────────── */
+/* Buttons */
+.btn{display:inline-flex;align-items:center;gap:6px;padding:7px 16px;border-radius:7px;font-size:13px;font-weight:600;cursor:pointer;border:1.5px solid transparent;transition:all .15s;}
+.btn-p{background:var(--ink);color:#fff;border-color:var(--ink);}
+.btn-p:hover{background:var(--accent);border-color:var(--accent);}
+.btn-s{background:#fff;color:var(--ink);border-color:var(--border);}
+.btn-s:hover{border-color:var(--ink);}
+.btn-d{background:#fff;color:var(--red);border-color:var(--border);}
+.btn-d:hover{background:var(--red);color:#fff;border-color:var(--red);}
+.btn-g{background:var(--green);color:#fff;border-color:var(--green);}
+.btn-g:hover{opacity:.85;}
+.btn-sm{padding:5px 11px;font-size:12px;}
+.btn:disabled{opacity:.45;cursor:not-allowed;}
 
-/* ── Article table ─────────────────────────────────────────── */
-.articles-header{display:flex;align-items:center;justify-content:space-between;margin-bottom:1.25rem;flex-wrap:wrap;gap:.75rem;}
-.filter-row{display:flex;gap:.5rem;align-items:center;flex-wrap:wrap;}
-.search-input{
-  background:#fff;border:1.5px solid var(--border);border-radius:8px;
-  padding:8px 14px;font-family:'Instrument Sans',sans-serif;font-size:13px;
-  color:var(--ink);outline:none;width:200px;transition:border-color .2s;
-}
-.search-input:focus{border-color:var(--accent);}
-.table-wrap{background:#fff;border:1.5px solid var(--border);border-radius:14px;overflow:hidden;overflow-x:auto;}
-.data-table{width:100%;border-collapse:collapse;min-width:600px;}
-.data-table th{
-  background:var(--surface);font-size:10px;font-family:'DM Mono',monospace;
-  text-transform:uppercase;letter-spacing:.12em;color:var(--muted);
-  padding:10px 14px;text-align:left;border-bottom:1.5px solid var(--border);white-space:nowrap;
-}
-.data-table td{padding:11px 14px;font-size:13px;border-bottom:1px solid var(--border);vertical-align:middle;}
-.data-table tr:last-child td{border-bottom:none;}
-.data-table tr:hover td{background:var(--surface);}
-.status-pill{
-  display:inline-block;padding:2px 9px;border-radius:4px;font-size:10px;
-  font-family:'DM Mono',monospace;font-weight:500;letter-spacing:.06em;white-space:nowrap;
-}
-.status-draft{background:#F5F0FF;color:#6B3FD4;border:1px solid #CDB8FF;}
-.status-published{background:#F0FDE8;color:#2E7D10;border:1px solid #B6EDAA;}
-.status-review{background:#FFF8EC;color:#D97706;border:1px solid #FCD57A;}
-.action-btn{
-  padding:5px 11px;border-radius:6px;font-size:11px;font-weight:600;
-  cursor:pointer;border:1.5px solid var(--border);background:#fff;
-  color:var(--muted);transition:all .15s;font-family:'Instrument Sans',sans-serif;
-  display:inline-flex;align-items:center;gap:4px;white-space:nowrap;
-}
-.action-btn:hover{border-color:var(--ink);color:var(--ink);}
-.action-btn.danger:hover{border-color:var(--red);color:var(--red);}
-.action-btn.primary{background:var(--ink);color:#fff;border-color:var(--ink);}
-.action-btn.primary:hover{background:var(--accent);border-color:var(--accent);}
-.action-btn:disabled{opacity:.5;cursor:not-allowed;}
-.btn-actions{display:flex;gap:4px;flex-wrap:wrap;}
+/* Card */
+.card{background:#fff;border:1.5px solid var(--border);border-radius:13px;}
 
-/* ── Editor ────────────────────────────────────────────────── */
-.editor-layout{display:grid;grid-template-columns:1fr 280px;gap:1.25rem;align-items:start;}
-.editor-main{min-width:0;display:flex;flex-direction:column;gap:1rem;}
-.editor-aside{display:flex;flex-direction:column;gap:1rem;}
+/* Pills */
+.pill{display:inline-block;padding:2px 9px;border-radius:4px;font-size:10px;font-family:'DM Mono',monospace;font-weight:500;letter-spacing:.06em;}
+.p-draft    {background:#F5F0FF;color:#6B3FD4;border:1px solid #CDB8FF;}
+.p-review   {background:#FEF3C7;color:var(--yellow);border:1px solid #FCD57A;}
+.p-published{background:#F0FDE8;color:var(--green);border:1px solid #B6EDAA;}
+.p-rejected {background:#FFF0ED;color:var(--accent);border:1px solid #FCCABB;}
+.p-trash    {background:#F8F8F8;color:var(--muted);border:1px solid var(--border);}
 
-.field-group{background:#fff;border:1.5px solid var(--border);border-radius:14px;padding:1.25rem;display:flex;flex-direction:column;gap:.75rem;}
-.field-label{font-size:10px;color:var(--muted);font-family:'DM Mono',monospace;letter-spacing:.15em;text-transform:uppercase;display:block;margin-bottom:4px;}
-.field-input,.field-select,.field-textarea{
-  width:100%;background:var(--surface);border:1.5px solid var(--border);border-radius:8px;
-  padding:9px 12px;font-family:'Instrument Sans',sans-serif;font-size:13px;
-  color:var(--ink);outline:none;transition:border-color .2s;
-}
-.field-input:focus,.field-select:focus,.field-textarea:focus{border-color:var(--accent);background:#fff;}
-.field-textarea{resize:vertical;min-height:80px;line-height:1.6;}
-.field-select{cursor:pointer;}
-.rating-val{font-family:'Bebas Neue',sans-serif;font-size:1.5rem;color:var(--accent);}
-.cover-preview{width:100%;aspect-ratio:16/7;background:var(--surface);border:1.5px dashed var(--border);border-radius:10px;overflow:hidden;position:relative;cursor:pointer;}
-.cover-preview img{width:100%;height:100%;object-fit:cover;display:none;}
-.cover-placeholder{position:absolute;inset:0;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:.5rem;color:var(--muted);}
+/* Stats */
+.stats{display:grid;grid-template-columns:repeat(auto-fit,minmax(150px,1fr));gap:1rem;margin-bottom:1.5rem;}
+.stat{padding:1rem 1.2rem;}
+.stat-l{font-size:10px;font-family:'DM Mono',monospace;color:var(--muted);letter-spacing:.15em;text-transform:uppercase;margin-bottom:.3rem;}
+.stat-v{font-family:'Bebas Neue',sans-serif;font-size:2.4rem;line-height:1;}
+.stat-s{font-size:11px;color:var(--muted);margin-top:3px;}
 
-/* ── Rich text editor ──────────────────────────────────────── */
-.editor-wrap{background:#fff;border:1.5px solid var(--border);border-radius:14px;overflow:hidden;}
-.editor-toolbar{
-  display:flex;flex-wrap:wrap;gap:2px;padding:8px 10px;
-  border-bottom:1.5px solid var(--border);background:var(--surface);align-items:center;
-}
-.tb-btn{
-  width:30px;height:30px;display:flex;align-items:center;justify-content:center;
-  border:none;background:transparent;cursor:pointer;border-radius:6px;
-  color:var(--muted);transition:all .15s;flex-shrink:0;
-}
-.tb-btn:hover{background:var(--border);color:var(--ink);}
-.tb-btn.active{background:var(--ink);color:#fff;}
-.tb-sep{width:1px;height:20px;background:var(--border);margin:0 3px;flex-shrink:0;}
-.tb-select{
-  background:var(--border);border:none;border-radius:6px;padding:3px 8px;
-  font-family:'DM Mono',monospace;font-size:11px;color:var(--ink);cursor:pointer;
-  outline:none;height:30px;
-}
-.editor-content{
-  min-height:460px;padding:1.5rem 1.75rem;outline:none;
-  font-family:'Instrument Sans',sans-serif;font-size:15px;line-height:1.85;color:#333;
-}
-.editor-content:empty:before{content:attr(data-placeholder);color:var(--muted);pointer-events:none;}
-.editor-content h2{font-family:'Bebas Neue',sans-serif;font-size:2rem;color:var(--ink);margin:1.5rem 0 .75rem;line-height:1.1;}
-.editor-content h3{font-size:1.1rem;font-weight:700;color:var(--accent);margin:1.25rem 0 .5rem;}
-.editor-content p{margin-bottom:1rem;}
-.editor-content ul,.editor-content ol{padding-left:1.5rem;margin-bottom:1rem;}
-.editor-content li{margin-bottom:.35rem;}
-.editor-content blockquote{border-left:3px solid var(--accent);padding:.5rem 0 .5rem 1.25rem;margin:1.25rem 0;background:#FFF0ED;border-radius:0 8px 8px 0;}
-.editor-content a{color:var(--accent2);text-decoration:underline;}
-.editor-content table{width:100%;border-collapse:collapse;margin:1rem 0;}
-.editor-content table td,.editor-content table th{border:1px solid var(--border);padding:8px 12px;font-size:13px;}
-.editor-content table th{background:var(--surface);font-weight:700;}
-.editor-content img{max-width:100%;border-radius:10px;margin:1rem 0;display:block;}
-.editor-content code{background:var(--surface);padding:2px 6px;border-radius:4px;font-family:'DM Mono',monospace;font-size:.88em;}
-.editor-content pre{background:#111;color:#e8e8e8;padding:1.25rem;border-radius:10px;margin:1rem 0;overflow-x:auto;}
-.editor-content hr{border:none;border-top:1.5px solid var(--border);margin:1.5rem 0;}
-.editor-footer{padding:8px 1.5rem;border-top:1.5px solid var(--border);display:flex;justify-content:space-between;align-items:center;background:var(--surface);}
-.word-count{font-size:11px;color:var(--muted);font-family:'DM Mono',monospace;}
+/* Table */
+.tw{overflow-x:auto;}
+table.t{width:100%;border-collapse:collapse;}
+table.t th{background:var(--surface);font-size:10px;font-family:'DM Mono',monospace;text-transform:uppercase;letter-spacing:.12em;color:var(--muted);padding:9px 14px;text-align:left;border-bottom:1.5px solid var(--border);white-space:nowrap;}
+table.t td{padding:10px 14px;font-size:13px;border-bottom:1px solid var(--border);vertical-align:middle;}
+table.t tr:last-child td{border-bottom:none;}
+table.t tr:hover td{background:var(--paper);}
+.te{text-align:center;padding:2.5rem;color:var(--muted);font-size:13px;}
 
-/* ── Toast ─────────────────────────────────────────────────── */
-#toast-container{position:fixed;bottom:1.5rem;right:1.5rem;z-index:9998;display:flex;flex-direction:column;gap:.5rem;pointer-events:none;}
-.toast{
-  display:flex;align-items:center;gap:.6rem;
-  background:#fff;border:1.5px solid var(--border);border-radius:10px;
-  padding:.65rem 1.1rem;font-size:13px;color:var(--ink);
-  box-shadow:0 4px 20px rgba(0,0,0,.12);
-  animation:slideIn .3s ease;min-width:240px;max-width:340px;pointer-events:all;
-}
-.toast.success{border-color:#B6EDAA;background:#F0FDE8;color:#2E7D10;}
-.toast.error{border-color:#FCCABB;background:#FFF0ED;color:var(--accent);}
-@keyframes slideIn{from{transform:translateX(110%);opacity:0;}to{transform:translateX(0);opacity:1;}}
+/* Form */
+.fld{display:flex;flex-direction:column;gap:5px;}
+.fld label{font-size:10px;font-family:'DM Mono',monospace;color:var(--muted);letter-spacing:.15em;text-transform:uppercase;}
+.inp,.sel,.txa{background:var(--surface);border:1.5px solid var(--border);border-radius:8px;padding:9px 12px;font-size:13px;color:var(--ink);outline:none;transition:border-color .2s,background .2s;width:100%;}
+.inp:focus,.sel:focus,.txa:focus{border-color:var(--accent);background:#fff;}
+.inp::placeholder,.txa::placeholder{color:var(--muted);}
+.txa{resize:vertical;min-height:80px;line-height:1.65;}
+.sel{cursor:pointer;}
 
-/* ── Modal ─────────────────────────────────────────────────── */
-.modal-overlay{position:fixed;inset:0;background:rgba(0,0,0,.5);z-index:100;display:none;align-items:center;justify-content:center;backdrop-filter:blur(4px);padding:1rem;}
-.modal-overlay.open{display:flex;}
-.modal{background:#fff;border-radius:18px;padding:1.75rem;width:min(500px,100%);border:1.5px solid var(--border);max-height:90vh;overflow-y:auto;}
-.modal h3{font-size:1.1rem;font-weight:700;margin-bottom:.4rem;}
-.modal p.modal-desc{font-size:13px;color:var(--muted);margin-bottom:1.25rem;line-height:1.6;}
-.modal-actions{display:flex;gap:.75rem;justify-content:flex-end;margin-top:1.25rem;}
-.modal-body{display:flex;flex-direction:column;gap:.75rem;}
+/* ─── EDITOR ──────────────────────────────────────────────────── */
+#p-editor{padding:0;}
+.ed-shell{display:flex;height:calc(100vh - 56px);overflow:hidden;}
+.ed-main{flex:1;min-width:0;display:flex;flex-direction:column;overflow-y:auto;}
+.ed-side{width:265px;flex-shrink:0;border-left:1.5px solid var(--border);background:#fff;overflow-y:auto;}
 
-/* ── Writers view ──────────────────────────────────────────── */
-.writers-header{display:flex;justify-content:space-between;align-items:center;margin-bottom:1.25rem;flex-wrap:wrap;gap:.75rem;}
-.writer-card{display:flex;align-items:center;gap:12px;padding:12px 14px;border-bottom:1px solid var(--border);}
-.writer-card:last-child{border-bottom:none;}
+.ed-titlebar{padding:1rem 1.5rem;border-bottom:1.5px solid var(--border);background:#fff;}
+.ed-title{width:100%;border:none;outline:none;font-size:1.45rem;font-weight:800;color:var(--ink);background:transparent;line-height:1.3;}
+.ed-title::placeholder{color:var(--border);}
 
-/* ── Password change panel ─────────────────────────────────── */
-#view-settings .field-group{max-width:480px;}
-.pwd-strength{height:3px;border-radius:2px;margin-top:4px;transition:all .3s;}
+/* Toolbar */
+.tbar{display:flex;flex-wrap:wrap;align-items:center;gap:2px;padding:7px 10px;border-bottom:1.5px solid var(--border);background:var(--surface);position:sticky;top:0;z-index:5;}
+.tb{width:27px;height:27px;display:flex;align-items:center;justify-content:center;border:none;background:none;cursor:pointer;border-radius:5px;color:var(--muted);transition:all .15s;flex-shrink:0;}
+.tb:hover{background:var(--border);color:var(--ink);}
+.tb.on{background:var(--ink);color:#fff;}
+.tb svg{width:13px;height:13px;}
+.tsep{width:1px;height:18px;background:var(--border);margin:0 3px;flex-shrink:0;}
+.tsel{background:var(--border);border:none;border-radius:5px;padding:3px 7px;font-family:'DM Mono',monospace;font-size:11px;color:var(--ink);cursor:pointer;outline:none;height:27px;}
+.taff{display:flex;align-items:center;gap:4px;padding:0 9px;height:27px;background:var(--surface);border:1.5px solid var(--border);border-radius:5px;font-size:11px;font-family:'DM Mono',monospace;color:var(--accent);cursor:pointer;transition:all .15s;margin-left:auto;}
+.taff:hover{background:var(--accent);color:#fff;border-color:var(--accent);}
+.taff svg{width:12px;height:12px;}
 
-/* ── Affiliate block ───────────────────────────────────────── */
-.aff-block{background:#fff;border:1.5px solid var(--border);border-radius:14px;padding:1.25rem;}
-.aff-block h4{font-size:11px;font-family:'DM Mono',monospace;color:var(--muted);letter-spacing:.15em;text-transform:uppercase;margin-bottom:.75rem;}
+/* Rich content */
+.ed-body{flex:1;padding:1.5rem 2rem;outline:none;font-size:15px;line-height:1.9;color:#2a2a2a;min-height:400px;}
+.ed-body:empty::before{content:attr(placeholder);color:var(--border);pointer-events:none;}
+.ed-body h2{font-family:'Bebas Neue',sans-serif;font-size:2rem;color:var(--ink);margin:2rem 0 .75rem;line-height:1.1;}
+.ed-body h3{font-size:1.1rem;font-weight:700;color:var(--accent);margin:1.5rem 0 .5rem;}
+.ed-body p{margin-bottom:1rem;}
+.ed-body ul,.ed-body ol{padding-left:1.5rem;margin-bottom:1rem;}
+.ed-body li{margin-bottom:.3rem;}
+.ed-body blockquote{border-left:3px solid var(--accent);background:#FFF0ED;padding:.75rem 1.25rem;margin:1.25rem 0;border-radius:0 8px 8px 0;}
+.ed-body blockquote p{color:var(--accent);font-style:italic;margin:0;}
+.ed-body a{color:var(--blue);text-decoration:underline;}
+.ed-body hr{border:none;border-top:1.5px solid var(--border);margin:1.5rem 0;}
+.ed-body img{max-width:100%;border-radius:10px;margin:.75rem 0;display:block;}
+.ed-body table{width:100%;border-collapse:collapse;margin:1rem 0;}
+.ed-body table td,.ed-body table th{border:1px solid var(--border);padding:8px 12px;font-size:13px;}
+.ed-body table th{background:var(--surface);font-weight:700;}
+.ed-body code{background:var(--surface);padding:2px 6px;border-radius:4px;font-family:'DM Mono',monospace;font-size:.87em;}
+.ed-body pre{background:#0D0D0D;color:#e8e8e8;padding:1.25rem;border-radius:10px;margin:1rem 0;overflow-x:auto;}
+.ed-body pre code{background:none;padding:0;}
+.ed-html{display:none;width:100%;min-height:400px;padding:1.5rem 2rem;background:#0D0D0D;color:#e8e8e8;font-family:'DM Mono',monospace;font-size:12px;border:none;outline:none;resize:none;line-height:1.75;}
+.ed-foot{padding:7px 1.5rem;border-top:1.5px solid var(--border);background:var(--surface);display:flex;justify-content:space-between;align-items:center;}
+.ed-foot span{font-size:11px;color:var(--muted);font-family:'DM Mono',monospace;}
 
-/* ══════════════════════════════════════════════════════════
-   RESPONSIVE — TABLET & MOBILE
-══════════════════════════════════════════════════════════ */
-@media(max-width:900px){
-  .editor-layout{grid-template-columns:1fr;}
-  .editor-aside{display:grid;grid-template-columns:repeat(auto-fit,minmax(260px,1fr));}
+/* Editor meta sidebar */
+.ms{padding:.9rem;border-bottom:1.5px solid var(--border);}
+.ms:last-child{border-bottom:none;}
+.mst{font-size:10px;font-family:'DM Mono',monospace;color:var(--muted);letter-spacing:.15em;text-transform:uppercase;margin-bottom:.7rem;}
+.pubrow{display:flex;flex-direction:column;gap:.45rem;}
+.cover-box{width:100%;aspect-ratio:16/7;background:var(--surface);border:1.5px dashed var(--border);border-radius:9px;overflow:hidden;position:relative;cursor:pointer;transition:border-color .2s;}
+.cover-box:hover{border-color:var(--accent);}
+.cover-box img{width:100%;height:100%;object-fit:cover;display:none;}
+.cover-ph{position:absolute;inset:0;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:.4rem;color:var(--muted);}
+.cover-ph span{font-size:11px;}
+.rating-row{display:flex;align-items:center;gap:.6rem;}
+.rating-row input[type=range]{flex:1;accent-color:var(--accent);}
+.rval{font-family:'Bebas Neue',sans-serif;font-size:1.3rem;color:var(--accent);min-width:30px;}
+
+/* ─── MODALS ──────────────────────────────────────────────────── */
+.ov{position:fixed;inset:0;background:rgba(0,0,0,.45);z-index:100;display:none;align-items:center;justify-content:center;backdrop-filter:blur(4px);}
+.ov.on{display:flex;}
+.modal{background:#fff;border-radius:16px;padding:1.75rem;width:min(460px,90vw);border:1.5px solid var(--border);max-height:90vh;overflow-y:auto;}
+.modal h3{font-size:1.1rem;font-weight:800;margin-bottom:.4rem;}
+.modal p{font-size:13px;color:var(--muted);line-height:1.6;margin-bottom:1.25rem;}
+.modal-form{display:flex;flex-direction:column;gap:.75rem;}
+.mact{display:flex;gap:.6rem;justify-content:flex-end;margin-top:1.25rem;}
+
+/* ─── TOASTS ──────────────────────────────────────────────────── */
+#toasts{position:fixed;bottom:1.25rem;right:1.25rem;z-index:999;display:flex;flex-direction:column;gap:.4rem;pointer-events:none;}
+.toast{display:flex;align-items:center;gap:.6rem;padding:.6rem 1.1rem;border-radius:9px;font-size:13px;min-width:220px;background:#fff;border:1.5px solid var(--border);box-shadow:0 4px 14px rgba(0,0,0,.1);animation:tin .3s ease;}
+.toast.ok{background:#F0FDE8;border-color:#B6EDAA;color:var(--green);}
+.toast.bad{background:#FFF0ED;border-color:#FCCABB;color:var(--accent);}
+@keyframes tin{from{transform:translateY(8px);opacity:0;}to{transform:translateY(0);opacity:1;}}
+
+/* Spinner */
+.spin{width:15px;height:15px;border:2px solid rgba(255,255,255,.3);border-top-color:#fff;border-radius:50%;animation:rot .7s linear infinite;display:inline-block;vertical-align:middle;}
+@keyframes rot{to{transform:rotate(360deg);}}
+
+/* ─── RESPONSIVE ──────────────────────────────────────────────── */
+
+/* Tablet (768–1024px) */
+@media(max-width:1024px){
+  :root{--sw:200px;}
+  .stats{grid-template-columns:repeat(2,1fr);}
+  .ed-side{width:230px;}
 }
 
+/* Mobile + small tablet (≤768px) */
 @media(max-width:768px){
-  :root{--sidebar:260px;}
-  #sidebar{
-    position:fixed;left:0;top:0;z-index:40;height:100vh;
-    transform:translateX(-100%);
+  :root{--sw:260px;}
+
+  /* Sidebar slides in as drawer */
+  #sb{
+    position:fixed;left:0;top:0;bottom:0;z-index:150;
+    transform:translateX(-110%);transition:transform .28s cubic-bezier(.4,0,.2,1);
+    box-shadow:4px 0 24px rgba(0,0,0,.18);
+    height:100%;
   }
-  #sidebar.open{transform:translateX(0);}
-  #mobile-menu-btn{display:flex;}
+  #sb.on{transform:translateX(0);}
+
+  /* Overlay behind open sidebar */
+  #sb-overlay{
+    display:none;position:fixed;inset:0;background:rgba(0,0,0,.4);
+    z-index:140;
+  }
+  #sb-overlay.on{display:block;}
+
+  /* Show hamburger */
+  #mbtn{display:flex !important;}
+
+  /* Main area full width */
+  #main-area{width:100%;}
+
+  /* Panels less padding */
+  .panel{padding:1rem;}
+
+  /* Stats 2-col on tablet, 1-col on small phone */
+  .stats{grid-template-columns:repeat(2,1fr);gap:.75rem;margin-bottom:1rem;}
+
+  /* Tables scroll horizontally */
+  .tw{overflow-x:auto;-webkit-overflow-scrolling:touch;}
+  table.t th,table.t td{white-space:nowrap;}
+
+  /* Topbar */
   .topbar{padding:0 1rem;}
-  .view{padding:1rem;}
-  .stats-grid{grid-template-columns:1fr 1fr;}
-  .search-input{width:100%;}
-  .filter-row{width:100%;}
-  .articles-header{flex-direction:column;align-items:stretch;}
-  .data-table td:nth-child(4),.data-table th:nth-child(4){display:none;}
-  .editor-aside{display:flex;flex-direction:column;}
-  .topbar-actions .action-btn span{display:none;}
+  .topbar-t{font-size:14px;}
+
+  /* Editor: stack vertically */
+  .ed-shell{flex-direction:column;height:auto;overflow:visible;}
+  .ed-main{overflow-y:visible;}
+  .ed-side{
+    width:100%;border-left:none;
+    border-top:1.5px solid var(--border);
+  }
+  .ed-body{min-height:280px;padding:1rem;}
+  .ed-titlebar{padding:.75rem 1rem;}
+  .ed-title{font-size:1.1rem;}
+
+  /* Toolbar wraps tightly */
+  .tbar{padding:6px 8px;gap:1px;}
+  .tb{width:30px;height:30px;}
+  .taff{font-size:10px;padding:0 7px;}
+
+  /* Cards */
+  .card{border-radius:10px;}
+
+  /* Buttons smaller on mobile */
+  .btn{padding:6px 12px;font-size:12px;}
+  .btn-sm{padding:4px 9px;font-size:11px;}
+
+  /* Modals full-width on small screens */
+  .modal{width:calc(100vw - 2rem);border-radius:12px;padding:1.25rem;}
+
+  /* Login box */
+  .lbox{padding:1.75rem 1.25rem;}
 }
 
-@media(max-width:480px){
-  .stats-grid{grid-template-columns:1fr;}
-  .login-card{padding:1.75rem 1.25rem;}
-  .modal{padding:1.25rem;}
-  .data-table td:nth-child(3),.data-table th:nth-child(3){display:none;}
+/* Very small phones (≤380px) */
+@media(max-width:380px){
+  .stats{grid-template-columns:1fr;}
+  .llogo h1{font-size:2.2rem;}
 }
 </style>
 </head>
+
 <body>
 
-<!-- ── Page Loader ──────────────────────────────────────────── -->
-<div id="page-loader">
-  <div class="loader-logo">
-    <div class="display">DEK<span>HO</span></div>
-  </div>
-  <div class="loader-sub">LOADING CMS...</div>
-  <div class="loader-bar"><div class="loader-bar-inner"></div></div>
-</div>
-
-<!-- ══════════════════════════════════════════════════════════
-     LOGIN SCREEN
-══════════════════════════════════════════════════════════ -->
-<div class="screen" id="login-screen">
-  <div class="login-bg"></div>
-  <div class="login-card">
-    <div class="login-logo">
-      <div class="display">DEK<span>HO</span></div>
-      <p>WRITER PORTAL · BY ELV8 DGTL</p>
+<!-- ═══════════════════════════════════ LOGIN ══════════════════ -->
+<div id="pg-login">
+  <div class="lbox">
+    <div class="llogo">
+      <h1>DEK<span>HO</span></h1>
+      <p>WRITER PORTAL · ELV8 DGTL</p>
     </div>
-    <div style="display:flex;flex-direction:column;gap:1rem;">
+    <div style="display:flex;flex-direction:column;gap:.85rem;">
       <div>
-        <label class="login-label" for="login-email">Email Address</label>
-        <input type="email" id="login-email" class="login-input" placeholder="you@email.com" autocomplete="email">
+        <label class="ll" for="l-email">Email Address</label>
+        <input class="li" id="l-email" type="email" placeholder="you@example.com" autocomplete="email">
       </div>
       <div>
-        <label class="login-label" for="login-password">Password</label>
-        <div style="position:relative;">
-          <input type="password" id="login-password" class="login-input" placeholder="Your password" autocomplete="current-password" style="padding-right:42px;">
-          <button onclick="togglePwd('login-password','pwd-eye')" style="position:absolute;right:12px;top:50%;transform:translateY(-50%);background:none;border:none;cursor:pointer;color:#555;padding:4px;" id="pwd-eye">
-            <i data-lucide="eye" style="width:16px;height:16px;"></i>
+        <label class="ll" for="l-pass">Password</label>
+        <div class="pwrap">
+          <input class="li" id="l-pass" type="password" placeholder="Your password" autocomplete="current-password">
+          <button class="peye" type="button" onclick="eyeToggle('l-pass',this)" tabindex="-1">
+            <!-- eye icon inline -->
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/><circle cx="12" cy="12" r="3"/></svg>
           </button>
         </div>
       </div>
-      <div id="login-error" class="login-error"></div>
-      <button class="login-btn" id="login-btn" onclick="handleLogin()">
-        Sign In to DEKHO
-      </button>
+      <div id="l-err" class="lerr"></div>
+      <button class="lbtn" id="l-btn" onclick="doLogin()">Sign In</button>
     </div>
-    <p style="text-align:center;font-size:11px;color:#444;margin-top:1.5rem;font-family:'DM Mono',monospace;">
-      Access restricted to authorised writers only.<br>Contact Madhur for credentials.
+    <p style="text-align:center;font-size:11px;color:#3a3a3a;margin-top:1.25rem;font-family:'DM Mono',monospace;line-height:1.7;">
+      Access is invite-only.<br>Contact admin for credentials.
     </p>
   </div>
 </div>
 
-<!-- ══════════════════════════════════════════════════════════
-     APP SCREEN
-══════════════════════════════════════════════════════════ -->
-<div class="screen" id="app-screen">
+<!-- ═══════════════════════════════════ APP ════════════════════ -->
+<div id="pg-app">
 
-  <!-- Mobile overlay -->
-  <div id="sidebar-overlay" onclick="closeSidebar()"></div>
+  <!-- Mobile sidebar overlay -->
+  <div id="sb-overlay" onclick="closeSidebar()"></div>
 
   <!-- Sidebar -->
-  <aside id="sidebar">
-    <div class="sidebar-logo">
-      <div class="display">DEK<span style="color:var(--accent);">HO</span></div>
-      <span class="mono">CMS · ELV8 DGTL</span>
+  <aside id="sb">
+    <div class="sb-logo">
+      <h2>DEK<span>HO</span></h2>
+      <small>CMS · ELV8 DGTL</small>
     </div>
-    <div class="sidebar-writer">
-      <div class="writer-avatar" id="sidebar-avatar">M</div>
-      <div class="writer-info">
-        <div class="writer-name" id="sidebar-name">Writer</div>
-        <div class="writer-role" id="sidebar-role">writer</div>
+    <div class="sb-who">
+      <div class="sb-av" id="sb-av">M</div>
+      <div>
+        <div class="sb-nm" id="sb-nm">Writer</div>
+        <div class="sb-rl" id="sb-rl">writer</div>
       </div>
     </div>
-    <nav class="sidebar-nav">
-      <div class="nav-section">
-        <div class="nav-label">Main</div>
-        <button class="nav-item active" onclick="navigate('dashboard')" data-view="dashboard">
-          <i data-lucide="layout-dashboard"></i> Dashboard
+    <nav class="sb-nav">
+      <div class="sb-grp">
+        <div class="sb-glbl">Content</div>
+        <button class="ni on" data-p="dashboard" onclick="go('dashboard')">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="7" height="7"/><rect x="14" y="3" width="7" height="7"/><rect x="14" y="14" width="7" height="7"/><rect x="3" y="14" width="7" height="7"/></svg>
+          Dashboard
         </button>
-        <button class="nav-item" onclick="navigate('articles')" data-view="articles">
-          <i data-lucide="file-text"></i> All Articles
-          <span class="nav-count" id="nav-article-count">0</span>
+        <button class="ni" data-p="articles" onclick="go('articles')">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/></svg>
+          My Articles
+          <span class="nbdg" id="bdg-a">0</span>
         </button>
-        <button class="nav-item" onclick="navigate('editor');newArticle()" data-view="editor">
-          <i data-lucide="plus-circle"></i> New Article
+        <button class="ni" data-p="editor" onclick="newArt()">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="16"/><line x1="8" y1="12" x2="16" y2="12"/></svg>
+          New Article
+        </button>
+        <button class="ni" data-p="trash" onclick="go('trash')">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="3 6 5 6 21 6"/><path d="M19 6l-1 14a2 2 0 0 1-2 2H8a2 2 0 0 1-2-2L5 6"/><path d="M10 11v6"/><path d="M14 11v6"/><path d="M9 6V4a1 1 0 0 1 1-1h4a1 1 0 0 1 1 1v2"/></svg>
+          Trash
+          <span class="nbdg" id="bdg-trash">0</span>
         </button>
       </div>
-      <div class="nav-section admin-only" style="display:none;">
-        <div class="nav-label">Admin</div>
-        <button class="nav-item" onclick="navigate('writers')" data-view="writers">
-          <i data-lucide="users"></i> Writers
+      <div class="sb-grp admin-grp" style="display:none;">
+        <div class="sb-glbl">Admin</div>
+        <button class="ni" data-p="review" onclick="go('review')">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>
+          Pending Review
+          <span class="nbdg w" id="bdg-r">0</span>
+        </button>
+        <button class="ni" data-p="team" onclick="go('team')">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></svg>
+          Team
         </button>
       </div>
-      <div class="nav-section">
-        <div class="nav-label">Account</div>
-        <button class="nav-item" onclick="navigate('settings')" data-view="settings">
-          <i data-lucide="key-round"></i> Change Password
+      <div class="sb-grp">
+        <div class="sb-glbl">Account</div>
+        <button class="ni" data-p="password" onclick="go('password')">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="11" width="18" height="11" rx="2" ry="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></svg>
+          Change Password
         </button>
       </div>
     </nav>
-    <div class="sidebar-bottom">
-      <a href="dekho.html" target="_blank" class="sidebar-link">
-        <i data-lucide="external-link" style="width:14px;height:14px;flex-shrink:0;"></i> View Live Blog
-      </a>
-      <button class="logout-btn" onclick="handleLogout()">
-        <i data-lucide="log-out" style="width:14px;height:14px;"></i> Sign Out
+    <div class="sb-foot">
+      <button class="sb-live" onclick="window.open('dekho.html','_blank')">
+        <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"/><polyline points="15 3 21 3 21 9"/><line x1="10" y1="14" x2="21" y2="3"/></svg>
+        View Live Blog
+      </button>
+      <button class="sb-out" onclick="doLogout()">
+        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"/><polyline points="16 17 21 12 16 7"/><line x1="21" y1="12" x2="9" y2="12"/></svg>
+        Sign Out
       </button>
     </div>
   </aside>
 
   <!-- Main -->
   <div id="main-area">
-
-    <!-- Topbar -->
     <div class="topbar">
-      <div class="topbar-left">
-        <button id="mobile-menu-btn" onclick="openSidebar()" aria-label="Menu">
-          <i data-lucide="menu" style="width:20px;height:20px;color:var(--ink);"></i>
+      <div style="display:flex;align-items:center;gap:.75rem;">
+        <button id="mbtn" onclick="toggleSidebar()">
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="3" y1="6" x2="21" y2="6"/><line x1="3" y1="12" x2="21" y2="12"/><line x1="3" y1="18" x2="21" y2="18"/></svg>
         </button>
-        <span class="topbar-title" id="topbar-title">Dashboard</span>
+        <span class="topbar-t" id="tb-title">Dashboard</span>
       </div>
-      <div class="topbar-actions" id="topbar-actions"></div>
+      <div class="topbar-r" id="tb-right"></div>
     </div>
 
-    <!-- ══════════════════════════════════════════════════════
-         DASHBOARD VIEW
-    ══════════════════════════════════════════════════════ -->
-    <div class="view active" id="view-dashboard">
-      <div class="stats-grid">
-        <div class="stat-card">
-          <div class="stat-label">Total Articles</div>
-          <div class="stat-num" id="stat-total">—</div>
-          <div class="stat-sub">All time</div>
-        </div>
-        <div class="stat-card">
-          <div class="stat-label">Published</div>
-          <div class="stat-num" id="stat-published" style="color:var(--green)">—</div>
-          <div class="stat-sub">Live on DEKHO</div>
-        </div>
-        <div class="stat-card">
-          <div class="stat-label">Drafts</div>
-          <div class="stat-num" id="stat-drafts" style="color:var(--yellow)">—</div>
-          <div class="stat-sub">In progress</div>
-        </div>
-        <div class="stat-card">
-          <div class="stat-label">Categories</div>
-          <div class="stat-num">4</div>
-          <div class="stat-sub">Review · Compare · Top · Guide</div>
-        </div>
+    <!-- DASHBOARD -->
+    <div class="panel on" id="p-dashboard">
+      <div class="stats" id="dash-stats">
+        <div class="card stat"><div class="stat-l">Total</div><div class="stat-v" id="s-total">—</div><div class="stat-s">Articles</div></div>
+        <div class="card stat"><div class="stat-l">Published</div><div class="stat-v" id="s-pub" style="color:var(--green)">—</div><div class="stat-s">Live</div></div>
+        <div class="card stat"><div class="stat-l">Drafts</div><div class="stat-v" id="s-dft" style="color:var(--yellow)">—</div><div class="stat-s">In progress</div></div>
+        <div class="card stat"><div class="stat-l">In Review</div><div class="stat-v" id="s-rev" style="color:var(--blue)">—</div><div class="stat-s">Awaiting approval</div></div>
       </div>
-
-      <div style="background:#fff;border:1.5px solid var(--border);border-radius:14px;overflow:hidden;position:relative;">
-        <div style="padding:1rem 1.25rem;border-bottom:1.5px solid var(--border);display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:.5rem;">
+      <div class="card">
+        <div style="padding:.85rem 1.2rem;border-bottom:1.5px solid var(--border);display:flex;align-items:center;justify-content:space-between;">
           <span style="font-weight:700;font-size:14px;">Recent Articles</span>
-          <button class="action-btn primary" onclick="navigate('editor');newArticle()"><i data-lucide="plus" style="width:13px;height:13px;"></i> New Article</button>
+          <button class="btn btn-p btn-sm" onclick="newArt()">+ New</button>
         </div>
-        <!-- loading skeleton for dashboard -->
-        <div id="dashboard-skeleton" style="padding:1.25rem;display:flex;flex-direction:column;gap:.75rem;">
-          <div class="skel-row skeleton wide"></div>
-          <div class="skel-row skeleton mid"></div>
-          <div class="skel-row skeleton wide"></div>
-          <div class="skel-row skeleton short"></div>
-          <div class="skel-row skeleton mid"></div>
-        </div>
-        <div id="dashboard-recent" style="display:none;"></div>
+        <div id="dash-list"><div class="te">Loading…</div></div>
       </div>
     </div>
 
-    <!-- ══════════════════════════════════════════════════════
-         ARTICLES VIEW
-    ══════════════════════════════════════════════════════ -->
-    <div class="view" id="view-articles">
-      <div class="articles-header">
-        <div class="filter-row">
-          <input type="text" class="search-input" id="articles-search" placeholder="🔍  Search articles..." oninput="filterArticles()">
-          <select class="field-select" id="filter-status" onchange="filterArticles()" style="width:auto;padding:8px 10px;font-size:12px;">
+    <!-- ALL ARTICLES -->
+    <div class="panel" id="p-articles">
+      <div style="display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:.75rem;margin-bottom:1.2rem;">
+        <div style="display:flex;gap:.5rem;flex-wrap:wrap;align-items:center;">
+          <input class="inp" id="asearch" placeholder="Search…" oninput="renderArts()" style="width:190px;">
+          <select class="sel" id="afilter" onchange="renderArts()" style="width:auto;padding:8px 10px;">
             <option value="">All Status</option>
-            <option value="draft">Drafts</option>
+            <option value="draft">Draft</option>
+            <option value="review">In Review</option>
             <option value="published">Published</option>
-          </select>
-          <select class="field-select" id="filter-cat" onchange="filterArticles()" style="width:auto;padding:8px 10px;font-size:12px;">
-            <option value="">All Categories</option>
-            <option value="review">Review</option>
-            <option value="comparison">Comparison</option>
-            <option value="top">Top List</option>
-            <option value="guide">Guide</option>
+            <option value="rejected">Rejected</option>
           </select>
         </div>
-        <button class="action-btn primary" onclick="navigate('editor');newArticle()"><i data-lucide="plus" style="width:13px;height:13px;"></i> New Article</button>
+        <button class="btn btn-p" onclick="newArt()">+ New Article</button>
       </div>
-      <div class="table-wrap" style="position:relative;">
-        <!-- Loading skeleton -->
-        <div id="articles-skeleton" style="padding:1.25rem;display:flex;flex-direction:column;gap:.75rem;">
-          <div class="skel-row skeleton wide"></div>
-          <div class="skel-row skeleton mid"></div>
-          <div class="skel-row skeleton wide"></div>
-          <div class="skel-row skeleton short"></div>
-          <div class="skel-row skeleton mid"></div>
-          <div class="skel-row skeleton wide"></div>
-        </div>
-        <table class="data-table" id="articles-table" style="display:none;">
-          <thead>
-            <tr>
-              <th>Title</th>
-              <th>Category</th>
-              <th>Status</th>
-              <th>Author</th>
-              <th>Updated</th>
-              <th>Actions</th>
-            </tr>
-          </thead>
-          <tbody id="articles-tbody"></tbody>
+      <div class="card tw">
+        <table class="t">
+          <thead><tr><th>Title</th><th>Category</th><th>Status</th><th>Updated</th><th>Actions</th></tr></thead>
+          <tbody id="art-tbody"><tr><td colspan="5" class="te">Loading…</td></tr></tbody>
         </table>
       </div>
     </div>
 
-    <!-- ══════════════════════════════════════════════════════
-         EDITOR VIEW
-    ══════════════════════════════════════════════════════ -->
-    <div class="view" id="view-editor" style="padding:1.25rem;">
-
-      <!-- Editor loading overlay -->
-      <div class="view-loading" id="editor-loading">
-        <div class="spin-ring"></div>
-        <p>LOADING ARTICLE...</p>
+    <!-- REVIEW (admin) -->
+    <div class="panel" id="p-review">
+      <p style="font-size:13px;color:var(--muted);margin-bottom:1.2rem;">Articles submitted by writers, waiting for your approval before going live.</p>
+      <div class="card tw">
+        <table class="t">
+          <thead><tr><th>Title</th><th>Author</th><th>Category</th><th>Updated</th><th>Actions</th></tr></thead>
+          <tbody id="rev-tbody"><tr><td colspan="5" class="te">No pending reviews.</td></tr></tbody>
+        </table>
       </div>
+    </div>
 
-      <div class="editor-layout">
+    <!-- TEAM (admin) -->
+    <div class="panel" id="p-team">
+      <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:1.2rem;">
+        <span style="font-size:14px;font-weight:700;">Team Members</span>
+        <button class="btn btn-p" onclick="openAddUser()">+ Add Writer</button>
+      </div>
+      <div class="card tw">
+        <table class="t">
+          <thead><tr><th>Name</th><th>Email</th><th>Role</th><th>Status</th><th>Actions</th></tr></thead>
+          <tbody id="team-tbody"><tr><td colspan="5" class="te">Loading…</td></tr></tbody>
+        </table>
+      </div>
+    </div>
 
-        <!-- Left: editor -->
-        <div class="editor-main">
-          <!-- Title -->
-          <div style="background:#fff;border:1.5px solid var(--border);border-radius:14px;padding:1.25rem;">
-            <input type="text" id="art-title" class="field-input" placeholder="Article title — make it punchy..." style="font-size:1.1rem;font-weight:700;background:transparent;border-color:transparent;padding-left:0;" oninput="updateAutoSlug()">
+    <!-- CHANGE PASSWORD -->
+    <div class="panel" id="p-password">
+      <div class="card" style="max-width:400px;padding:1.5rem;">
+        <div style="font-size:15px;font-weight:700;margin-bottom:1.2rem;">Change Password</div>
+        <div style="display:flex;flex-direction:column;gap:.85rem;">
+          <div class="fld"><label>Current Password</label><input class="inp" id="cp-old" type="password" placeholder="Current password"></div>
+          <div class="fld"><label>New Password</label><input class="inp" id="cp-new" type="password" placeholder="Min 6 characters"></div>
+          <div class="fld"><label>Confirm New Password</label><input class="inp" id="cp-cf" type="password" placeholder="Repeat new password"></div>
+          <button class="btn btn-p" onclick="doChangePwd()" style="margin-top:.25rem;">Update Password</button>
+        </div>
+      </div>
+    </div>
+
+    <!-- TRASH -->
+    <div class="panel" id="p-trash">
+      <div style="display:flex;align-items:flex-start;justify-content:space-between;flex-wrap:wrap;gap:.75rem;margin-bottom:1.2rem;">
+        <div>
+          <div style="font-size:15px;font-weight:700;">Trash</div>
+          <div style="font-size:12px;color:var(--muted);margin-top:3px;">Deleted articles are restored within 3 days, then permanently removed.</div>
+        </div>
+        <button class="btn btn-d btn-sm" id="empty-trash-btn" onclick="emptyTrash()" style="display:none;">
+          <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="3 6 5 6 21 6"/><path d="M19 6l-1 14a2 2 0 0 1-2 2H8a2 2 0 0 1-2-2L5 6"/></svg>
+          Empty Trash
+        </button>
+      </div>
+      <div class="card tw">
+        <table class="t">
+          <thead><tr>
+            <th>Title</th><th>Category</th><th>Deleted</th><th>Expires In</th><th>Actions</th>
+          </tr></thead>
+          <tbody id="trash-tbody"><tr><td colspan="5" class="te">Loading…</td></tr></tbody>
+        </table>
+      </div>
+    </div>
+
+    <!-- EDITOR -->
+    <div class="panel" id="p-editor">
+      <div class="ed-shell">
+        <div class="ed-main">
+          <div class="ed-titlebar">
+            <input class="ed-title" id="ed-title" placeholder="Article title — make it punchy…" oninput="onTitleInput()">
+          </div>
+          <div class="tbar">
+            <select class="tsel" onchange="fmt('formatBlock',this.value);this.value=''" title="Format">
+              <option value="">Format</option>
+              <option value="<h2>">Heading 2</option>
+              <option value="<h3>">Heading 3</option>
+              <option value="<p>">Paragraph</option>
+              <option value="<pre>">Code Block</option>
+            </select>
+            <select class="tsel" onchange="fmt('fontSize',this.value);this.value=''" title="Size">
+              <option value="">Size</option>
+              <option value="2">Small</option>
+              <option value="3">Normal</option>
+              <option value="4">Large</option>
+              <option value="5">XL</option>
+            </select>
+            <div class="tsep"></div>
+            <!-- Bold -->
+            <button class="tb" onclick="fmt('bold')" title="Bold"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M6 4h8a4 4 0 0 1 4 4 4 4 0 0 1-4 4H6z"/><path d="M6 12h9a4 4 0 0 1 4 4 4 4 0 0 1-4 4H6z"/></svg></button>
+            <!-- Italic -->
+            <button class="tb" onclick="fmt('italic')" title="Italic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><line x1="19" y1="4" x2="10" y2="4"/><line x1="14" y1="20" x2="5" y2="20"/><line x1="15" y1="4" x2="9" y2="20"/></svg></button>
+            <!-- Underline -->
+            <button class="tb" onclick="fmt('underline')" title="Underline"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M6 3v7a6 6 0 0 0 6 6 6 6 0 0 0 6-6V3"/><line x1="4" y1="21" x2="20" y2="21"/></svg></button>
+            <!-- Strike -->
+            <button class="tb" onclick="fmt('strikeThrough')" title="Strike"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="5" y1="12" x2="19" y2="12"/><path d="M16 6C16 6 14.5 4 12 4s-5 1.5-5 4c0 5 9 3.5 9 8 0 2.5-2 4-4 4s-5-1.5-5-4"/></svg></button>
+            <div class="tsep"></div>
+            <!-- Bullet list -->
+            <button class="tb" onclick="fmt('insertUnorderedList')" title="Bullet List"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="9" y1="6" x2="20" y2="6"/><line x1="9" y1="12" x2="20" y2="12"/><line x1="9" y1="18" x2="20" y2="18"/><circle cx="4" cy="6" r="1" fill="currentColor"/><circle cx="4" cy="12" r="1" fill="currentColor"/><circle cx="4" cy="18" r="1" fill="currentColor"/></svg></button>
+            <!-- Ordered list -->
+            <button class="tb" onclick="fmt('insertOrderedList')" title="Numbered List"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="10" y1="6" x2="21" y2="6"/><line x1="10" y1="12" x2="21" y2="12"/><line x1="10" y1="18" x2="21" y2="18"/><path d="M4 6h1v4"/><path d="M4 10h2"/><path d="M6 18H4c0-1 2-2 2-3s-1-1.5-2-1"/></svg></button>
+            <div class="tsep"></div>
+            <!-- Align left -->
+            <button class="tb" onclick="fmt('justifyLeft')" title="Align Left"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="3" y1="6" x2="21" y2="6"/><line x1="3" y1="12" x2="15" y2="12"/><line x1="3" y1="18" x2="18" y2="18"/></svg></button>
+            <!-- Center -->
+            <button class="tb" onclick="fmt('justifyCenter')" title="Center"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="3" y1="6" x2="21" y2="6"/><line x1="6" y1="12" x2="18" y2="12"/><line x1="4" y1="18" x2="20" y2="18"/></svg></button>
+            <div class="tsep"></div>
+            <!-- Link -->
+            <button class="tb" onclick="insLink()" title="Insert Link"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M10 13a5 5 0 0 0 7.54.54l3-3a5 5 0 0 0-7.07-7.07l-1.72 1.71"/><path d="M14 11a5 5 0 0 0-7.54-.54l-3 3a5 5 0 0 0 7.07 7.07l1.71-1.71"/></svg></button>
+            <!-- Image -->
+            <button class="tb" onclick="insImg()" title="Insert Image"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="18" height="18" rx="2"/><circle cx="8.5" cy="8.5" r="1.5"/><polyline points="21 15 16 10 5 21"/></svg></button>
+            <!-- Table -->
+            <button class="tb" onclick="insTable()" title="Insert Table"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="18" height="18" rx="2"/><line x1="3" y1="9" x2="21" y2="9"/><line x1="3" y1="15" x2="21" y2="15"/><line x1="9" y1="3" x2="9" y2="21"/><line x1="15" y1="3" x2="15" y2="21"/></svg></button>
+            <!-- HR -->
+            <button class="tb" onclick="insHR()" title="Divider"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="3" y1="12" x2="21" y2="12"/></svg></button>
+            <!-- Blockquote -->
+            <button class="tb" onclick="insBQ()" title="Blockquote"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 21c3 0 7-1 7-8V5c0-1.25-.756-2.017-2-2H4c-1.25 0-2 .75-2 1.972V11c0 1.25.75 2 2 2 1 0 1 0 1 1v1c0 1-1 2-2 2s-1 .008-1 1.031V20c0 1 0 1 1 1z"/><path d="M15 21c3 0 7-1 7-8V5c0-1.25-.757-2.017-2-2h-4c-1.25 0-2 .75-2 1.972V11c0 1.25.75 2 2 2h.75c0 2.25.25 4-2.75 4v3c0 1 0 1 1 1z"/></svg></button>
+            <div class="tsep"></div>
+            <!-- Undo -->
+            <button class="tb" onclick="fmt('undo')" title="Undo"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="1 4 1 10 7 10"/><path d="M3.51 15a9 9 0 1 0 .49-3"/></svg></button>
+            <!-- Redo -->
+            <button class="tb" onclick="fmt('redo')" title="Redo"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="23 4 23 10 17 10"/><path d="M20.49 15a9 9 0 1 1-.49-3"/></svg></button>
+            <!-- HTML -->
+            <button class="tb" onclick="togHTML()" id="tb-html" title="HTML Source"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="16 18 22 12 16 6"/><polyline points="8 6 2 12 8 18"/></svg></button>
+            <!-- Aff button -->
+            <button class="taff" onclick="insAff()">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="9" cy="21" r="1"/><circle cx="20" cy="21" r="1"/><path d="M1 1h4l2.68 13.39a2 2 0 0 0 2 1.61h9.72a2 2 0 0 0 2-1.61L23 6H6"/></svg>
+              Amazon Card
+            </button>
           </div>
 
-          <!-- Rich text editor -->
-          <div class="editor-wrap">
-            <div class="editor-toolbar" id="editor-toolbar">
-              <select class="tb-select" onchange="execCmd('formatBlock',this.value);this.value=''" title="Format">
-                <option value="">Format</option>
-                <option value="h2">Heading 2</option>
-                <option value="h3">Heading 3</option>
-                <option value="p">Paragraph</option>
-                <option value="pre">Code Block</option>
-              </select>
-              <div class="tb-sep"></div>
-              <button class="tb-btn" onclick="execCmd('bold')" title="Bold"><i data-lucide="bold" style="width:13px;height:13px;"></i></button>
-              <button class="tb-btn" onclick="execCmd('italic')" title="Italic"><i data-lucide="italic" style="width:13px;height:13px;"></i></button>
-              <button class="tb-btn" onclick="execCmd('underline')" title="Underline"><i data-lucide="underline" style="width:13px;height:13px;"></i></button>
-              <button class="tb-btn" onclick="execCmd('strikeThrough')" title="Strike"><i data-lucide="strikethrough" style="width:13px;height:13px;"></i></button>
-              <div class="tb-sep"></div>
-              <button class="tb-btn" onclick="execCmd('insertUnorderedList')" title="Bullet"><i data-lucide="list" style="width:13px;height:13px;"></i></button>
-              <button class="tb-btn" onclick="execCmd('insertOrderedList')" title="Numbered"><i data-lucide="list-ordered" style="width:13px;height:13px;"></i></button>
-              <div class="tb-sep"></div>
-              <button class="tb-btn" onclick="execCmd('justifyLeft')" title="Left"><i data-lucide="align-left" style="width:13px;height:13px;"></i></button>
-              <button class="tb-btn" onclick="execCmd('justifyCenter')" title="Center"><i data-lucide="align-center" style="width:13px;height:13px;"></i></button>
-              <button class="tb-btn" onclick="execCmd('justifyRight')" title="Right"><i data-lucide="align-right" style="width:13px;height:13px;"></i></button>
-              <div class="tb-sep"></div>
-              <button class="tb-btn" onclick="insertLink()" title="Link"><i data-lucide="link" style="width:13px;height:13px;"></i></button>
-              <button class="tb-btn" onclick="insertImage()" title="Image"><i data-lucide="image" style="width:13px;height:13px;"></i></button>
-              <button class="tb-btn" onclick="insertTable()" title="Table"><i data-lucide="table" style="width:13px;height:13px;"></i></button>
-              <button class="tb-btn" onclick="insertHR()" title="Divider"><i data-lucide="minus" style="width:13px;height:13px;"></i></button>
-              <button class="tb-btn" onclick="insertBlockquote()" title="Quote"><i data-lucide="quote" style="width:13px;height:13px;"></i></button>
-              <div class="tb-sep"></div>
-              <button class="tb-btn" onclick="insertAffiliateCard()" title="Affiliate" style="width:auto;padding:0 8px;font-size:10px;font-family:'DM Mono',monospace;color:var(--accent);gap:3px;">
-                <i data-lucide="shopping-cart" style="width:12px;height:12px;"></i><span>Aff</span>
-              </button>
-              <div class="tb-sep"></div>
-              <button class="tb-btn" onclick="execCmd('undo')" title="Undo"><i data-lucide="undo-2" style="width:13px;height:13px;"></i></button>
-              <button class="tb-btn" onclick="execCmd('redo')" title="Redo"><i data-lucide="redo-2" style="width:13px;height:13px;"></i></button>
-              <button class="tb-btn" onclick="toggleHtml()" title="HTML Source" id="html-toggle-btn" style="margin-left:auto;">
-                <i data-lucide="code" style="width:13px;height:13px;"></i>
-              </button>
-            </div>
-            <div class="editor-content" id="editor-content" contenteditable="true"
-                 data-placeholder="Start writing your article here..."
-                 oninput="updateWordCount()"
-                 onkeydown="handleEditorKeydown(event)"></div>
-            <textarea id="html-source" style="display:none;width:100%;min-height:460px;padding:1.5rem;background:#111;color:#e8e8e8;font-family:'DM Mono',monospace;font-size:12px;border:none;outline:none;resize:vertical;line-height:1.7;"></textarea>
-            <div class="editor-footer">
-              <span class="word-count" id="word-count">0 words</span>
-              <span class="word-count" id="save-status" style="color:var(--green);">Ready</span>
-            </div>
+          <div class="ed-body" id="ed-body" contenteditable="true" placeholder="Start writing here…" oninput="onBodyInput()" onkeydown="edKey(event)"></div>
+          <textarea class="ed-html" id="ed-html-src"></textarea>
+
+          <div class="ed-foot">
+            <span id="ed-wc">0 words</span>
+            <span id="ed-sv" style="color:var(--green)">Ready</span>
           </div>
         </div>
 
-        <!-- Right: sidebar settings -->
-        <div class="editor-aside">
-
-          <!-- Publish box -->
-          <div class="field-group" style="border:1.5px solid var(--ink);">
-            <div style="display:flex;justify-content:space-between;align-items:center;">
-              <span style="font-weight:700;font-size:14px;">Publish</span>
-              <span class="status-pill status-draft" id="pub-status-badge">draft</span>
+        <!-- Meta sidebar -->
+        <div class="ed-side">
+          <!-- Publish -->
+          <div class="ms">
+            <div class="mst">Publish</div>
+            <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:.7rem;">
+              <span style="font-size:12px;color:var(--muted);">Status:</span>
+              <span class="pill p-draft" id="ed-pill">draft</span>
             </div>
-            <input type="hidden" id="art-id" value="">
-            <button class="action-btn" onclick="saveArticle('draft')" style="justify-content:center;padding:10px;" id="btn-save-draft">
-              <i data-lucide="save" style="width:14px;height:14px;"></i> Save Draft
-            </button>
-            <button class="action-btn primary" onclick="saveAndPublish()" style="justify-content:center;padding:10px;" id="btn-publish">
-              <i data-lucide="send" style="width:14px;height:14px;"></i> Publish Article
-            </button>
+            <div class="pubrow">
+              <button class="btn btn-s" onclick="saveArt('draft')">
+                <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M19 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11l5 5v11a2 2 0 0 1-2 2z"/><polyline points="17 21 17 13 7 13 7 21"/><polyline points="7 3 7 8 15 8"/></svg>
+                Save Draft
+              </button>
+              <button class="btn btn-p" onclick="submitReview()">
+                <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="22" y1="2" x2="11" y2="13"/><polygon points="22 2 15 22 11 13 2 9 22 2"/></svg>
+                Submit for Review
+              </button>
+              <button class="btn btn-g admin-only" style="display:none;" onclick="adminPub()">
+                <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><line x1="2" y1="12" x2="22" y2="12"/><path d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"/></svg>
+                Publish Now
+              </button>
+            </div>
+            <p style="font-size:10px;color:var(--muted);margin-top:.5rem;font-family:'DM Mono',monospace;line-height:1.5;">Ctrl+S saves draft anytime</p>
           </div>
 
-          <!-- Article meta -->
-          <div class="field-group">
-            <div style="font-weight:700;font-size:13px;">Article Settings</div>
-            <div>
-              <label class="field-label">Category</label>
-              <select id="art-category" class="field-select">
-                <option value="review">Review</option>
-                <option value="comparison">Comparison</option>
-                <option value="top">Top List</option>
-                <option value="guide">Guide</option>
-              </select>
-            </div>
-            <div>
-              <label class="field-label">Tag / Topic</label>
-              <input type="text" id="art-tag" class="field-input" placeholder="e.g. laptops, earphones">
-            </div>
-            <div>
-              <label class="field-label">Read Time (minutes)</label>
-              <input type="number" id="art-readtime" class="field-input" value="5" min="1" max="60">
-            </div>
-            <div>
-              <label class="field-label">Rating (0–10)</label>
-              <div style="display:flex;align-items:center;gap:.75rem;">
-                <input type="range" id="art-rating" min="0" max="10" step="0.1" value="0" oninput="updateRatingDisplay()" style="flex:1;">
-                <span class="rating-val" id="rating-display">—</span>
+          <!-- Settings -->
+          <div class="ms">
+            <div class="mst">Settings</div>
+            <div style="display:flex;flex-direction:column;gap:.6rem;">
+              <div class="fld"><label>Category</label>
+                <select class="sel" id="ed-cat"><option value="review">Review</option><option value="comparison">Comparison</option><option value="top">Top List</option><option value="guide">Guide</option></select>
               </div>
-            </div>
-            <div>
-              <label class="field-label">URL Slug</label>
-              <input type="text" id="art-slug" class="field-input" placeholder="auto-generated-from-title">
+              <div class="fld"><label>Tag</label><input class="inp" id="ed-tag" placeholder="e.g. laptops"></div>
+              <div class="fld"><label>Read Time (min)</label><input class="inp" type="number" id="ed-rt" value="5" min="1"></div>
+              <div class="fld">
+                <label>Rating (0–10)</label>
+                <div class="rating-row">
+                  <input type="range" id="ed-rate" min="0" max="10" step="0.1" value="0" oninput="ratDisp()">
+                  <span class="rval" id="ed-rv">—</span>
+                </div>
+              </div>
+              <div class="fld"><label>Slug</label><input class="inp" id="ed-slug" placeholder="auto from title"></div>
             </div>
           </div>
 
-          <!-- Cover image -->
-          <div class="field-group">
-            <div style="font-weight:700;font-size:13px;">Cover Image</div>
-            <div class="cover-preview" onclick="setCoverImage()" id="cover-preview-box">
-              <img id="cover-preview-img" src="" alt="">
-              <div class="cover-placeholder" id="cover-placeholder">
-                <i data-lucide="image" style="width:26px;height:26px;"></i>
-                <span style="font-size:12px;">Click to set cover image URL</span>
+          <!-- Cover -->
+          <div class="ms">
+            <div class="mst">Cover Image</div>
+            <div class="cover-box" onclick="setCover()" id="cover-box">
+              <img id="cover-img" src="" alt="">
+              <div class="cover-ph" id="cover-ph">
+                <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><rect x="3" y="3" width="18" height="18" rx="2"/><circle cx="8.5" cy="8.5" r="1.5"/><polyline points="21 15 16 10 5 21"/></svg>
+                <span>Click to set URL</span>
               </div>
             </div>
-            <input type="text" id="art-cover" class="field-input" placeholder="https://images.unsplash.com/..." oninput="updateCoverPreview()">
+            <input class="inp" id="ed-cover" placeholder="https://…" oninput="upCover()" style="margin-top:.5rem;">
           </div>
 
           <!-- Excerpt -->
-          <div class="field-group">
-            <label class="field-label">Excerpt / Summary</label>
-            <textarea id="art-excerpt" class="field-textarea" placeholder="2–3 sentence summary shown on the listing page..." rows="3"></textarea>
+          <div class="ms">
+            <div class="mst">Excerpt</div>
+            <textarea class="txa" id="ed-excerpt" placeholder="2–3 sentence summary…" rows="3"></textarea>
           </div>
 
           <!-- Affiliate card builder -->
-          <div class="aff-block">
-            <h4>Amazon Affiliate Card</h4>
-            <div style="display:flex;flex-direction:column;gap:.5rem;">
-              <input type="text" id="aff-name" class="field-input" placeholder="Product name">
-              <input type="text" id="aff-price" class="field-input" placeholder="₹XX,XXX">
-              <input type="text" id="aff-img" class="field-input" placeholder="Product image URL">
-              <input type="text" id="aff-link" class="field-input" placeholder="Amazon affiliate link">
-              <button class="action-btn" onclick="insertAffiliateCard()" style="justify-content:center;gap:6px;">
-                <i data-lucide="plus" style="width:13px;height:13px;"></i> Insert into Article
+          <div class="ms">
+            <div class="mst">Amazon Card</div>
+            <div style="display:flex;flex-direction:column;gap:.45rem;">
+              <input class="inp" id="aff-n" placeholder="Product name">
+              <input class="inp" id="aff-p" placeholder="₹XX,XXX">
+              <input class="inp" id="aff-i" placeholder="Product image URL">
+              <input class="inp" id="aff-l" placeholder="Affiliate link">
+              <button class="btn btn-s" onclick="insAff()">
+                <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>
+                Insert into Article
               </button>
-            </div>
-          </div>
-
-        </div>
-      </div>
-    </div>
-
-    <!-- ══════════════════════════════════════════════════════
-         WRITERS VIEW (Admin only)
-    ══════════════════════════════════════════════════════ -->
-    <div class="view" id="view-writers">
-      <div class="writers-header">
-        <h2 style="font-size:1rem;font-weight:700;">Team Writers</h2>
-        <button class="action-btn primary" onclick="openAddWriterModal()"><i data-lucide="user-plus" style="width:13px;height:13px;"></i> Add Writer</button>
-      </div>
-      <div class="table-wrap" style="position:relative;">
-        <div id="writers-skeleton" style="padding:1.25rem;display:flex;flex-direction:column;gap:.75rem;">
-          <div class="skel-row skeleton wide"></div>
-          <div class="skel-row skeleton mid"></div>
-          <div class="skel-row skeleton short"></div>
-        </div>
-        <table class="data-table" id="writers-table" style="display:none;">
-          <thead>
-            <tr>
-              <th>Name</th>
-              <th>Email</th>
-              <th>Role</th>
-              <th>Added</th>
-              <th>Status</th>
-              <th>Actions</th>
-            </tr>
-          </thead>
-          <tbody id="writers-tbody"></tbody>
-        </table>
-      </div>
-    </div>
-
-    <!-- ══════════════════════════════════════════════════════
-         SETTINGS / CHANGE PASSWORD VIEW
-    ══════════════════════════════════════════════════════ -->
-    <div class="view" id="view-settings">
-      <div style="max-width:480px;">
-        <h2 style="font-size:1.1rem;font-weight:700;margin-bottom:.4rem;">Change Password</h2>
-        <p style="font-size:13px;color:var(--muted);margin-bottom:1.5rem;line-height:1.6;">
-          Update your login password. You'll need to enter your current password to confirm.
-          If this is your first login, enter the temporary password set by Madhur.
-        </p>
-
-        <div class="field-group">
-          <div>
-            <label class="field-label">Current Password</label>
-            <div style="position:relative;">
-              <input type="password" id="cp-current" class="field-input" placeholder="Your current / temporary password" style="padding-right:42px;">
-              <button onclick="togglePwd('cp-current','cp-eye1')" style="position:absolute;right:10px;top:50%;transform:translateY(-50%);background:none;border:none;cursor:pointer;color:var(--muted);padding:4px;" id="cp-eye1">
-                <i data-lucide="eye" style="width:15px;height:15px;"></i>
-              </button>
-            </div>
-          </div>
-          <div>
-            <label class="field-label">New Password</label>
-            <div style="position:relative;">
-              <input type="password" id="cp-new" class="field-input" placeholder="At least 8 characters" oninput="checkPwdStrength()" style="padding-right:42px;">
-              <button onclick="togglePwd('cp-new','cp-eye2')" style="position:absolute;right:10px;top:50%;transform:translateY(-50%);background:none;border:none;cursor:pointer;color:var(--muted);padding:4px;" id="cp-eye2">
-                <i data-lucide="eye" style="width:15px;height:15px;"></i>
-              </button>
-            </div>
-            <div class="pwd-strength" id="pwd-strength-bar" style="background:var(--border);"></div>
-            <p id="pwd-strength-label" style="font-size:11px;color:var(--muted);margin-top:4px;font-family:'DM Mono',monospace;"></p>
-          </div>
-          <div>
-            <label class="field-label">Confirm New Password</label>
-            <div style="position:relative;">
-              <input type="password" id="cp-confirm" class="field-input" placeholder="Repeat new password" style="padding-right:42px;">
-              <button onclick="togglePwd('cp-confirm','cp-eye3')" style="position:absolute;right:10px;top:50%;transform:translateY(-50%);background:none;border:none;cursor:pointer;color:var(--muted);padding:4px;" id="cp-eye3">
-                <i data-lucide="eye" style="width:15px;height:15px;"></i>
-              </button>
-            </div>
-          </div>
-          <div id="cp-error" style="display:none;background:#FFF0ED;border:1px solid #FCCABB;border-radius:8px;padding:10px 14px;font-size:12px;color:var(--accent);"></div>
-          <button class="action-btn primary" onclick="changePassword()" id="cp-btn" style="justify-content:center;padding:12px;">
-            <i data-lucide="key-round" style="width:14px;height:14px;"></i> Update Password
-          </button>
-        </div>
-
-        <div style="margin-top:1.5rem;background:#fff;border:1.5px solid var(--border);border-radius:14px;padding:1.25rem;">
-          <p style="font-size:10px;font-family:'DM Mono',monospace;color:var(--muted);letter-spacing:.15em;text-transform:uppercase;margin-bottom:.75rem;">CURRENT SESSION</p>
-          <div style="display:flex;flex-direction:column;gap:.5rem;">
-            <div style="display:flex;justify-content:space-between;font-size:13px;">
-              <span style="color:var(--muted);">Logged in as</span>
-              <strong id="session-email">—</strong>
-            </div>
-            <div style="display:flex;justify-content:space-between;font-size:13px;">
-              <span style="color:var(--muted);">Role</span>
-              <span id="session-role">—</span>
             </div>
           </div>
         </div>
@@ -840,907 +702,821 @@ body{font-family:'Instrument Sans',sans-serif;background:var(--surface);color:va
     </div>
 
   </div><!-- end main-area -->
-</div><!-- end app-screen -->
+</div><!-- end pg-app -->
 
-<!-- ── Toast container ─────────────────────────────────────── -->
-<div id="toast-container"></div>
-
-<!-- ══════════════════════════════════════════════════════════
-     MODALS
-══════════════════════════════════════════════════════════ -->
-
-<!-- Delete confirm -->
-<div class="modal-overlay" id="delete-modal">
-  <div class="modal">
-    <h3>Delete Article?</h3>
-    <p class="modal-desc">This is permanent and cannot be undone. The article will be removed from the database.</p>
-    <div class="modal-actions">
-      <button class="action-btn" onclick="closeModal('delete-modal')">Cancel</button>
-      <button class="action-btn danger" id="confirm-delete-btn" onclick="confirmDelete()" style="background:var(--red);color:#fff;border-color:var(--red);">
-        <i data-lucide="trash-2" style="width:13px;height:13px;"></i> Delete
-      </button>
-    </div>
+<!-- Modals -->
+<!-- Delete -->
+<div class="ov" id="m-del"><div class="modal">
+  <h3>Move to Trash?</h3>
+  <p>This article will be moved to Trash. You have <strong>3 days</strong> to restore it before it's permanently removed.</p>
+  <div class="mact">
+    <button class="btn btn-s" onclick="closeM('m-del')">Cancel</button>
+    <button class="btn btn-d" onclick="confDel()" style="background:var(--ink);color:#fff;border-color:var(--ink);">Move to Trash</button>
   </div>
-</div>
+</div></div>
 
-<!-- Add Writer -->
-<div class="modal-overlay" id="add-writer-modal">
-  <div class="modal">
-    <h3>Add New Writer</h3>
-    <p class="modal-desc">Set a temporary password — they'll change it after their first login via the Change Password section.</p>
-    <div class="modal-body">
-      <div><label class="field-label">Full Name</label><input type="text" id="new-writer-name" class="field-input" placeholder="Priya Sharma"></div>
-      <div><label class="field-label">Email Address</label><input type="email" id="new-writer-email" class="field-input" placeholder="priya@email.com"></div>
-      <div>
-        <label class="field-label">Temporary Password</label>
-        <div style="position:relative;">
-          <input type="text" id="new-writer-password" class="field-input" placeholder="Set a temporary password" style="padding-right:42px;">
-          <button onclick="generateTempPwd()" style="position:absolute;right:10px;top:50%;transform:translateY(-50%);background:none;border:none;cursor:pointer;color:var(--accent);padding:4px;font-size:10px;font-family:'DM Mono',monospace;" title="Generate random password">Auto</button>
-        </div>
-      </div>
-      <div><label class="field-label">Role</label>
-        <select id="new-writer-role" class="field-select">
-          <option value="writer">Writer</option>
-          <option value="admin">Admin</option>
-        </select>
+<!-- Reject -->
+<div class="ov" id="m-rej"><div class="modal">
+  <h3>Reject Article</h3>
+  <p>Explain what needs fixing. The writer will see this message.</p>
+  <textarea class="txa" id="rej-reason" placeholder="e.g. Please add more detail to section 2…" rows="4"></textarea>
+  <div class="mact">
+    <button class="btn btn-s" onclick="closeM('m-rej')">Cancel</button>
+    <button class="btn btn-d" onclick="confRej()" style="background:var(--red);color:#fff;">Send Rejection</button>
+  </div>
+</div></div>
+
+<!-- Add user -->
+<div class="ov" id="m-user"><div class="modal">
+  <h3>Add Team Member</h3>
+  <p>Share the CMS URL + their email + password via WhatsApp. They can change their password after first login.</p>
+  <div class="modal-form">
+    <div class="fld"><label>Full Name</label><input class="inp" id="au-name" placeholder="Priya Sharma"></div>
+    <div class="fld"><label>Email</label><input class="inp" id="au-email" type="email" placeholder="priya@gmail.com"></div>
+    <div class="fld"><label>Password</label>
+      <div class="pwrap">
+        <input class="inp" id="au-pass" type="password" placeholder="Min 6 chars" style="padding-right:44px;">
+        <button class="peye" type="button" onclick="eyeToggle('au-pass',this)" tabindex="-1"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/><circle cx="12" cy="12" r="3"/></svg></button>
       </div>
     </div>
-    <div class="modal-actions">
-      <button class="action-btn" onclick="closeModal('add-writer-modal')">Cancel</button>
-      <button class="action-btn primary" onclick="addWriter()"><i data-lucide="user-plus" style="width:13px;height:13px;"></i> Add Writer</button>
+    <div class="fld"><label>Role</label>
+      <select class="sel" id="au-role">
+        <option value="writer">Writer — write & submit for review</option>
+        <option value="admin">Admin — can approve & publish directly</option>
+      </select>
     </div>
   </div>
-</div>
-
-<!-- Insert Link -->
-<div class="modal-overlay" id="link-modal">
-  <div class="modal">
-    <h3>Insert Link</h3>
-    <div class="modal-body" style="margin-bottom:0;">
-      <div><label class="field-label">URL</label><input type="url" id="link-url" class="field-input" placeholder="https://..."></div>
-      <div><label class="field-label">Link Text (optional)</label><input type="text" id="link-text" class="field-input" placeholder="Leave blank to wrap selected text"></div>
-      <label style="display:flex;align-items:center;gap:8px;font-size:13px;cursor:pointer;">
-        <input type="checkbox" id="link-newtab" checked> Open in new tab
-      </label>
-    </div>
-    <div class="modal-actions">
-      <button class="action-btn" onclick="closeModal('link-modal')">Cancel</button>
-      <button class="action-btn primary" onclick="confirmInsertLink()">Insert</button>
-    </div>
+  <div class="mact">
+    <button class="btn btn-s" onclick="closeM('m-user')">Cancel</button>
+    <button class="btn btn-p" onclick="doAddUser()">Add Member</button>
   </div>
-</div>
+</div></div>
 
-<!-- Insert Image -->
-<div class="modal-overlay" id="image-modal">
-  <div class="modal">
-    <h3>Insert Image</h3>
-    <div class="modal-body" style="margin-bottom:0;">
-      <div><label class="field-label">Image URL</label><input type="url" id="img-url" class="field-input" placeholder="https://images.unsplash.com/..."></div>
-      <div><label class="field-label">Alt Text</label><input type="text" id="img-alt" class="field-input" placeholder="Describe the image"></div>
-      <div><label class="field-label">Caption (optional)</label><input type="text" id="img-caption" class="field-input" placeholder="Image caption"></div>
-    </div>
-    <div class="modal-actions">
-      <button class="action-btn" onclick="closeModal('image-modal')">Cancel</button>
-      <button class="action-btn primary" onclick="confirmInsertImage()">Insert</button>
-    </div>
+<!-- Insert link -->
+<div class="ov" id="m-link"><div class="modal">
+  <h3>Insert Link</h3>
+  <div class="modal-form">
+    <div class="fld"><label>URL</label><input class="inp" id="lk-url" type="url" placeholder="https://…"></div>
+    <div class="fld"><label>Text (leave blank to use selection)</label><input class="inp" id="lk-txt" placeholder="Click here"></div>
+    <label style="display:flex;align-items:center;gap:8px;font-size:13px;cursor:pointer;"><input type="checkbox" id="lk-tab" checked> Open in new tab</label>
   </div>
-</div>
+  <div class="mact">
+    <button class="btn btn-s" onclick="closeM('m-link')">Cancel</button>
+    <button class="btn btn-p" onclick="doInsLink()">Insert</button>
+  </div>
+</div></div>
 
+<!-- Insert image -->
+<div class="ov" id="m-img"><div class="modal">
+  <h3>Insert Image</h3>
+  <div class="modal-form">
+    <div class="fld"><label>Image URL</label><input class="inp" id="im-url" type="url" placeholder="https://images.unsplash.com/…"></div>
+    <div class="fld"><label>Alt Text</label><input class="inp" id="im-alt" placeholder="Describe the image"></div>
+    <div class="fld"><label>Caption (optional)</label><input class="inp" id="im-cap" placeholder="Caption below image"></div>
+  </div>
+  <div class="mact">
+    <button class="btn btn-s" onclick="closeM('m-img')">Cancel</button>
+    <button class="btn btn-p" onclick="doInsImg()">Insert</button>
+  </div>
+</div></div>
+
+<div id="toasts"></div>
+
+<!-- ════════════════════════ SCRIPT ════════════════════════════ -->
 <script>
-// ══════════════════════════════════════════════════════════════
-// CONFIG — Your Apps Script Web App URL
-// ══════════════════════════════════════════════════════════════
-const API_URL = 'https://script.google.com/macros/s/AKfycbxgACFFdcSB6pxDqyqEo83sN8ErTn1TuT33Qdst6nql7gXlO8CXtIpgYHdGbl-eYq3e/exec';
+// ── CONFIG ─────────────────────────────────────────────────────
+var API = 'https://script.google.com/macros/s/AKfycbyFtGvUQnioGE21cOmZhV5HS4wvRXEFydMVgnsVM-vjeHdVh4aPUKb9g5AZHUbIuFAV/exec';
 
-// ══════════════════════════════════════════════════════════════
-// STATE
-// ══════════════════════════════════════════════════════════════
-let SESSION         = { token: null, writer: null };
-let ALL_ARTICLES    = [];
-let CURRENT_ART_ID  = null;
-let DELETE_TARGET   = null;
-let SAVED_SEL       = null;
-let htmlMode        = false;
+// ── STATE ───────────────────────────────────────────────────────
+var $ = {
+  token: null, user: null, arts: [],
+  editId: null, delId: null, rejId: null, sel: null
+};
 
-// ══════════════════════════════════════════════════════════════
-// BOOT
-// ══════════════════════════════════════════════════════════════
-window.addEventListener('DOMContentLoaded', async () => {
-  lucide.createIcons();
+// ── BOOT — runs after DOM is fully parsed ───────────────────────
+(function boot() {
+  // Try to restore session
+  var t = '';
+  try { t = localStorage.getItem('dekho_token') || ''; } catch(e){}
 
-  // Enter key on login
-  ['login-email','login-password'].forEach(id => {
-    document.getElementById(id)?.addEventListener('keydown', e => {
-      if (e.key === 'Enter') handleLogin();
+  if (!t) { showLogin(); return; }
+
+  call('getMe', { token: t }).then(function(r) {
+    if (r.ok) {
+      $.token = t; $.user = r.user;
+      bootApp();
+    } else {
+      try { localStorage.removeItem('dekho_token'); } catch(e){}
+      showLogin();
+    }
+  }).catch(function() { showLogin(); });
+})();
+
+function showLogin() {
+  document.getElementById('pg-app').classList.remove('on');
+  document.getElementById('pg-login').classList.add('on');
+}
+
+function bootApp() {
+  var u = $.user;
+  document.getElementById('sb-av').textContent  = u.name[0].toUpperCase();
+  document.getElementById('sb-nm').textContent  = u.name;
+  document.getElementById('sb-rl').textContent  = u.role;
+  if (u.role === 'admin') {
+    document.querySelectorAll('.admin-grp').forEach(function(el){ el.style.display = 'block'; });
+    document.querySelectorAll('.admin-only').forEach(function(el){ el.style.display = 'flex'; });
+  }
+  document.getElementById('pg-login').classList.remove('on'); // ← critical: hide login first
+  document.getElementById('pg-app').classList.add('on');
+  go('dashboard');
+  loadArts();
+}
+
+// ── API ─────────────────────────────────────────────────────────
+function call(action, body) {
+  return fetch(API, {
+    method: 'POST',
+    headers: { 'Content-Type': 'text/plain' }, // avoids CORS preflight
+    body: JSON.stringify(Object.assign({ action: action }, body || {}))
+  })
+  .then(function(r) { return r.json(); })
+  .catch(function(e) { return { ok: false, error: 'Network error — is the API URL set correctly?' }; });
+}
+
+// ── LOGIN ───────────────────────────────────────────────────────
+function doLogin() {
+  var email = document.getElementById('l-email').value.trim();
+  var pass  = document.getElementById('l-pass').value;
+  var btn   = document.getElementById('l-btn');
+  var err   = document.getElementById('l-err');
+  err.style.display = 'none';
+
+  if (!email || !pass) { showLErr('Please enter both email and password.'); return; }
+
+  btn.disabled = true;
+  btn.innerHTML = '<span class="spin"></span> Signing in…';
+
+  call('login', { email: email, password: pass }).then(function(r) {
+    btn.disabled = false;
+    btn.textContent = 'Sign In';
+    if (r.ok) {
+      $.token = r.token; $.user = r.user;
+      try { localStorage.setItem('dekho_token', r.token); } catch(e){}
+      bootApp();
+    } else {
+      showLErr(r.error || 'Login failed.');
+    }
+  });
+}
+
+function showLErr(m) {
+  var e = document.getElementById('l-err');
+  e.textContent = m; e.style.display = 'block';
+}
+
+document.addEventListener('keydown', function(e) {
+  if (e.key === 'Enter' && document.getElementById('pg-login').classList.contains('on')) doLogin();
+});
+
+// ── LOGOUT ──────────────────────────────────────────────────────
+function doLogout() {
+  call('logout', { token: $.token });
+  $.token = null; $.user = null; $.arts = [];
+  try { localStorage.removeItem('dekho_token'); } catch(e) {}
+  document.getElementById('l-email').value = '';
+  document.getElementById('l-pass').value = '';
+  document.getElementById('l-err').style.display = 'none';
+  showLogin();
+}
+
+// ── NAVIGATION ──────────────────────────────────────────────────
+function go(p) {
+  document.querySelectorAll('.panel').forEach(function(el){ el.classList.remove('on'); });
+  document.querySelectorAll('.ni').forEach(function(el){ el.classList.remove('on'); });
+  var panel = document.getElementById('p-' + p);
+  if (panel) panel.classList.add('on');
+  var ni = document.querySelector('[data-p="' + p + '"]');
+  if (ni) ni.classList.add('on');
+  var titles = { dashboard:'Dashboard', articles:'My Articles', review:'Pending Review', team:'Team', password:'Change Password', editor:'Editor', trash:'Trash' };
+  document.getElementById('tb-title').textContent = titles[p] || p;
+  document.getElementById('tb-right').innerHTML = '';
+  if (p === 'articles') renderArts();
+  if (p === 'review')   renderRev();
+  if (p === 'team')     loadTeam();
+  if (p === 'trash')    loadTrash();
+  closeSidebar();
+}
+
+// ── LOAD ARTICLES ───────────────────────────────────────────────
+function loadArts() {
+  call('listArticles', { token: $.token }).then(function(r) {
+    if (!r.ok) { toast(r.error || 'Failed to load articles', 'bad'); return; }
+    $.arts = r.articles || [];
+    document.getElementById('bdg-a').textContent = $.arts.length;
+    var pending = $.arts.filter(function(a){ return a.status === 'review'; }).length;
+    document.getElementById('bdg-r').textContent = pending;
+    renderDash();
+    renderArts();
+    renderRev();
+    // Refresh trash badge silently
+    call('listTrash', { token: $.token }).then(function(tr) {
+      if (tr.ok) document.getElementById('bdg-trash').textContent = tr.trash.length;
     });
   });
+}
 
-  const token = localStorage.getItem('dekho_token');
-  if (token) {
-    const res = await api('verify', { token });
-    if (res.ok) {
-      SESSION = { token, writer: res.writer };
-      await initApp();
+// ── DASHBOARD ───────────────────────────────────────────────────
+function renderDash() {
+  var a = $.arts;
+  document.getElementById('s-total').textContent = a.length;
+  document.getElementById('s-pub').textContent   = a.filter(function(x){ return x.status==='published'; }).length;
+  document.getElementById('s-dft').textContent   = a.filter(function(x){ return x.status==='draft'; }).length;
+  document.getElementById('s-rev').textContent   = a.filter(function(x){ return x.status==='review'; }).length;
+
+  var recent = a.slice(0, 6);
+  var dl = document.getElementById('dash-list');
+  if (!recent.length) {
+    dl.innerHTML = '<div class="te">No articles yet. <a href="#" onclick="newArt()" style="color:var(--accent)">Write your first one →</a></div>';
+    return;
+  }
+  var rows = recent.map(function(a) {
+    return '<tr>' +
+      '<td><strong style="display:block;max-width:240px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;">' + esc(a.title||'Untitled') + '</strong></td>' +
+      '<td><span class="pill p-' + a.status + '">' + a.status + '</span></td>' +
+      '<td style="color:var(--muted);font-size:12px;">' + fmtD(a.updatedAt) + '</td>' +
+      '<td><button class="btn btn-s btn-sm" onclick="openEdit(\'' + a.id + '\')">Edit</button></td>' +
+      '</tr>';
+  }).join('');
+  dl.innerHTML = '<table class="t"><thead><tr><th>Title</th><th>Status</th><th>Updated</th><th></th></tr></thead><tbody>' + rows + '</tbody></table>';
+}
+
+// ── ARTICLES TABLE ───────────────────────────────────────────────
+function renderArts() {
+  var q  = (document.getElementById('asearch')  ? document.getElementById('asearch').value  : '').toLowerCase();
+  var st = document.getElementById('afilter') ? document.getElementById('afilter').value : '';
+  var list = $.arts.filter(function(a) {
+    return (!q || (a.title||'').toLowerCase().indexOf(q) > -1) && (!st || a.status === st);
+  });
+  var tbody = document.getElementById('art-tbody');
+  if (!list.length) { tbody.innerHTML = '<tr><td colspan="5" class="te">No articles found.</td></tr>'; return; }
+  tbody.innerHTML = list.map(function(a) {
+    var acts = '<button class="btn btn-p btn-sm" onclick="openEdit(\'' + a.id + '\')">Edit</button> ';
+    if (a.status === 'draft' || a.status === 'rejected') {
+      acts += '<button class="btn btn-s btn-sm" onclick="quickSubmit(\'' + a.id + '\')">Submit</button> ';
+    }
+    acts += '<button class="btn btn-d btn-sm" onclick="askDel(\'' + a.id + '\')">Delete</button>';
+    return '<tr>' +
+      '<td style="max-width:230px;"><div style="font-weight:600;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;max-width:210px;">' + esc(a.title||'Untitled') + '</div>' +
+      (a.rejectReason ? '<div style="font-size:11px;color:var(--accent);margin-top:2px;">⚠ ' + esc(a.rejectReason) + '</div>' : '') + '</td>' +
+      '<td><span class="pill" style="background:var(--surface);color:var(--muted);border-color:var(--border);">' + esc(a.category||'—') + '</span></td>' +
+      '<td><span class="pill p-' + a.status + '">' + a.status + '</span></td>' +
+      '<td style="font-size:12px;color:var(--muted);white-space:nowrap;">' + fmtD(a.updatedAt) + '</td>' +
+      '<td><div style="display:flex;gap:3px;flex-wrap:wrap;">' + acts + '</div></td></tr>';
+  }).join('');
+}
+
+// ── REVIEW QUEUE ────────────────────────────────────────────────
+function renderRev() {
+  var list = $.arts.filter(function(a){ return a.status === 'review'; });
+  var tbody = document.getElementById('rev-tbody');
+  if (!list.length) { tbody.innerHTML = '<tr><td colspan="5" class="te">No articles pending review 🎉</td></tr>'; return; }
+  tbody.innerHTML = list.map(function(a) {
+    return '<tr>' +
+      '<td style="font-weight:600;max-width:220px;">' + esc(a.title||'Untitled') + '</td>' +
+      '<td style="font-size:12px;color:var(--muted);">' + esc(a.authorName||a.authorEmail||'—') + '</td>' +
+      '<td><span class="pill" style="background:var(--surface);color:var(--muted);border-color:var(--border);">' + esc(a.category||'—') + '</span></td>' +
+      '<td style="font-size:12px;color:var(--muted);">' + fmtD(a.updatedAt) + '</td>' +
+      '<td><div style="display:flex;gap:3px;">' +
+        '<button class="btn btn-s btn-sm" onclick="openEdit(\'' + a.id + '\')">Preview</button>' +
+        '<button class="btn btn-g btn-sm" onclick="doApprove(\'' + a.id + '\')">Approve</button>' +
+        '<button class="btn btn-d btn-sm" onclick="askRej(\'' + a.id + '\')">Reject</button>' +
+      '</div></td></tr>';
+  }).join('');
+}
+
+// ── APPROVE / REJECT ────────────────────────────────────────────
+function doApprove(id) {
+  call('approveArticle', { token: $.token, id: id }).then(function(r) {
+    if (r.ok) { toast('Published! 🎉', 'ok'); loadArts(); }
+    else toast(r.error, 'bad');
+  });
+}
+function askRej(id) { $.rejId = id; document.getElementById('rej-reason').value = ''; openM('m-rej'); }
+function confRej() {
+  var reason = document.getElementById('rej-reason').value.trim();
+  if (!reason) { toast('Please explain the rejection.', 'bad'); return; }
+  call('rejectArticle', { token: $.token, id: $.rejId, reason: reason }).then(function(r) {
+    closeM('m-rej');
+    if (r.ok) { toast('Returned to writer.', 'ok'); loadArts(); }
+    else toast(r.error, 'bad');
+  });
+}
+
+// ── DELETE ──────────────────────────────────────────────────────
+function askDel(id) { $.delId = id; openM('m-del'); }
+function confDel() {
+  call('deleteArticle', { token: $.token, id: $.delId }).then(function(r) {
+    closeM('m-del');
+    if (r.ok) { toast('Moved to Trash — restore within 3 days.', 'ok'); loadArts(); }
+    else toast(r.error, 'bad');
+  });
+}
+function quickSubmit(id) {
+  call('submitReview', { token: $.token, id: id }).then(function(r) {
+    if (r.ok) { toast(r.message, 'ok'); loadArts(); }
+    else toast(r.error, 'bad');
+  });
+}
+
+// ── EDITOR ──────────────────────────────────────────────────────
+function newArt() {
+  $.editId = null;
+  ['ed-title','ed-slug','ed-tag','ed-cover','ed-excerpt'].forEach(function(id){ document.getElementById(id).value = ''; });
+  document.getElementById('ed-body').innerHTML = '';
+  document.getElementById('ed-html-src').value = '';
+  document.getElementById('ed-cat').value   = 'review';
+  document.getElementById('ed-rt').value    = '5';
+  document.getElementById('ed-rate').value  = '0';
+  ratDisp(); upCover();
+  setPill('draft'); setSv('Ready');
+  go('editor');
+  document.getElementById('tb-title').textContent = 'New Article';
+  setTimeout(function(){ document.getElementById('ed-title').focus(); }, 100);
+}
+
+function openEdit(id) {
+  call('getArticle', { token: $.token, id: id }).then(function(r) {
+    if (!r.ok) { toast(r.error, 'bad'); return; }
+    var a = r.article;
+    $.editId = id;
+    document.getElementById('ed-title').value   = a.title   || '';
+    document.getElementById('ed-body').innerHTML = a.content || '';
+    document.getElementById('ed-slug').value    = a.slug    || '';
+    document.getElementById('ed-tag').value     = a.tag     || '';
+    document.getElementById('ed-rt').value      = a.readTime|| '5';
+    document.getElementById('ed-rate').value    = a.rating  || '0';
+    document.getElementById('ed-cover').value   = a.coverImage || '';
+    document.getElementById('ed-excerpt').value = a.excerpt || '';
+    document.getElementById('ed-cat').value     = a.category|| 'review';
+    ratDisp(); upCover(); setPill(a.status); setSv('Loaded');
+    go('editor');
+    document.getElementById('tb-title').textContent = 'Editing: ' + (a.title || 'Untitled');
+  });
+}
+
+function saveArt(status) {
+  var title = document.getElementById('ed-title').value.trim();
+  if (!title) { toast('Please add a title first.', 'bad'); return; }
+  setSv('Saving…');
+  var art = {
+    id:         $.editId || undefined,
+    title:      title,
+    slug:       document.getElementById('ed-slug').value,
+    category:   document.getElementById('ed-cat').value,
+    tag:        document.getElementById('ed-tag').value,
+    status:     status || 'draft',
+    coverImage: document.getElementById('ed-cover').value,
+    excerpt:    document.getElementById('ed-excerpt').value,
+    content:    document.getElementById('ed-body').innerHTML,
+    readTime:   document.getElementById('ed-rt').value,
+    rating:     document.getElementById('ed-rate').value
+  };
+  call('saveArticle', { token: $.token, article: art }).then(function(r) {
+    if (r.ok) {
+      if (!$.editId) $.editId = r.id;
+      setSv('Saved ✓'); toast('Draft saved.', 'ok'); loadArts();
+    } else {
+      setSv('Failed'); toast(r.error, 'bad');
+    }
+  });
+}
+
+function submitReview() {
+  saveArt('draft');
+  setTimeout(function() {
+    if (!$.editId) return;
+    call('submitReview', { token: $.token, id: $.editId }).then(function(r) {
+      if (r.ok) { toast(r.message, 'ok'); setPill('review'); loadArts(); }
+      else toast(r.error, 'bad');
+    });
+  }, 800);
+}
+
+function adminPub() {
+  saveArt('draft');
+  setTimeout(function() {
+    if (!$.editId) return;
+    call('approveArticle', { token: $.token, id: $.editId }).then(function(r) {
+      if (r.ok) { toast('Published! 🎉', 'ok'); setPill('published'); loadArts(); }
+      else toast(r.error, 'bad');
+    });
+  }, 800);
+}
+
+// Auto-save every 60s
+setInterval(function() {
+  if (!document.getElementById('p-editor').classList.contains('on')) return;
+  if (!document.getElementById('ed-title').value.trim()) return;
+  saveArt('draft');
+}, 60000);
+
+// Ctrl+S
+document.addEventListener('keydown', function(e) {
+  if ((e.ctrlKey||e.metaKey) && e.key==='s' && document.getElementById('p-editor').classList.contains('on')) {
+    e.preventDefault(); saveArt('draft');
+  }
+});
+
+// ── Editor helpers ───────────────────────────────────────────────
+function onTitleInput() {
+  document.getElementById('ed-slug').value = slugify(document.getElementById('ed-title').value);
+}
+function onBodyInput() {
+  var txt = document.getElementById('ed-body').innerText || '';
+  var w = txt.trim().split(/\s+/).filter(Boolean).length;
+  document.getElementById('ed-wc').textContent = w + ' words';
+  document.getElementById('ed-rt').value = Math.max(1, Math.ceil(w/200));
+}
+function ratDisp() {
+  var v = parseFloat(document.getElementById('ed-rate').value);
+  document.getElementById('ed-rv').textContent = v > 0 ? v.toFixed(1) : '—';
+}
+function upCover() {
+  var url = document.getElementById('ed-cover').value;
+  document.getElementById('cover-img').src = url;
+  document.getElementById('cover-img').style.display = url ? 'block' : 'none';
+  document.getElementById('cover-ph').style.display  = url ? 'none'  : 'flex';
+}
+function setCover() {
+  var cur = document.getElementById('ed-cover').value;
+  var url = prompt('Enter image URL:', cur);
+  if (url !== null) { document.getElementById('ed-cover').value = url; upCover(); }
+}
+function setPill(s) {
+  var el = document.getElementById('ed-pill');
+  el.textContent = s;
+  el.className = 'pill p-' + s;
+}
+function setSv(m) {
+  var el = document.getElementById('ed-sv');
+  el.textContent = m;
+  el.style.color = m.includes('✓') ? 'var(--green)' : m.includes('fail')||m.includes('Failed') ? 'var(--red)' : 'var(--muted)';
+}
+function edKey(e) {
+  if (e.key === 'Tab') { e.preventDefault(); fmt('insertHTML','&nbsp;&nbsp;&nbsp;&nbsp;'); }
+}
+
+// ── Toolbar ──────────────────────────────────────────────────────
+function fmt(cmd, val) {
+  document.getElementById('ed-body').focus();
+  document.execCommand(cmd, false, val || null);
+}
+var _htmlMode = false;
+function togHTML() {
+  _htmlMode = !_htmlMode;
+  var body = document.getElementById('ed-body');
+  var src  = document.getElementById('ed-html-src');
+  var btn  = document.getElementById('tb-html');
+  if (_htmlMode) {
+    src.value = body.innerHTML;
+    body.style.display = 'none'; src.style.display = 'block'; btn.classList.add('on');
+  } else {
+    body.innerHTML = src.value;
+    src.style.display = 'none'; body.style.display = 'block'; btn.classList.remove('on');
+  }
+}
+
+// ── Insert helpers ───────────────────────────────────────────────
+function insLink() {
+  $.sel = saveSel();
+  document.getElementById('lk-url').value = '';
+  document.getElementById('lk-txt').value = '';
+  openM('m-link');
+  setTimeout(function(){ document.getElementById('lk-url').focus(); }, 100);
+}
+function doInsLink() {
+  var url = document.getElementById('lk-url').value.trim();
+  if (!url) return;
+  var txt = document.getElementById('lk-txt').value.trim();
+  var nt  = document.getElementById('lk-tab').checked;
+  restSel($.sel); document.getElementById('ed-body').focus();
+  if (txt) {
+    fmt('insertHTML','<a href="'+url+'"'+(nt?' target="_blank" rel="noopener"':'')+'>'+txt+'</a>');
+  } else {
+    fmt('createLink', url);
+  }
+  closeM('m-link');
+}
+function insImg() {
+  $.sel = saveSel();
+  document.getElementById('im-url').value='';
+  document.getElementById('im-alt').value='';
+  document.getElementById('im-cap').value='';
+  openM('m-img');
+  setTimeout(function(){ document.getElementById('im-url').focus(); }, 100);
+}
+function doInsImg() {
+  var url = document.getElementById('im-url').value.trim();
+  if (!url) return;
+  var alt = document.getElementById('im-alt').value;
+  var cap = document.getElementById('im-cap').value;
+  restSel($.sel); document.getElementById('ed-body').focus();
+  var html = cap
+    ? '<figure style="margin:1rem 0;"><img src="'+url+'" alt="'+esc(alt)+'" style="max-width:100%;border-radius:10px;display:block;"><figcaption style="text-align:center;font-size:12px;color:#888;margin-top:5px;">'+esc(cap)+'</figcaption></figure><p></p>'
+    : '<img src="'+url+'" alt="'+esc(alt)+'" style="max-width:100%;border-radius:10px;"><p></p>';
+  fmt('insertHTML', html);
+  closeM('m-img');
+}
+function insTable() {
+  var rows = parseInt(prompt('Rows:','3')||'3');
+  var cols = parseInt(prompt('Cols:','3')||'3');
+  if (!rows||!cols) return;
+  var h = '<table style="width:100%;border-collapse:collapse;margin:1rem 0;">';
+  for (var r=0;r<rows;r++) {
+    h+='<tr>';
+    for (var c=0;c<cols;c++) {
+      var tg = r===0?'th':'td';
+      h+='<'+tg+' style="border:1px solid #E2E0DA;padding:8px 12px;">'+(r===0?'Col '+(c+1):'')+'</'+tg+'>';
+    }
+    h+='</tr>';
+  }
+  h+='</table><p></p>';
+  fmt('insertHTML', h);
+}
+function insHR() { fmt('insertHTML','<hr style="border:none;border-top:1.5px solid #E2E0DA;margin:1.5rem 0;"><p></p>'); }
+function insBQ() { fmt('insertHTML','<blockquote style="border-left:3px solid #E8380D;background:#FFF0ED;padding:.75rem 1.25rem;margin:1.25rem 0;border-radius:0 8px 8px 0;"><p style="color:#E8380D;font-style:italic;margin:0;">Quote here…</p></blockquote><p></p>'); }
+function insAff() {
+  var n = document.getElementById('aff-n').value || 'Product Name';
+  var p = document.getElementById('aff-p').value || '₹X,XXX';
+  var i = document.getElementById('aff-i').value || '';
+  var l = document.getElementById('aff-l').value || '#';
+  var h = '<div style="display:flex;gap:1.25rem;align-items:flex-start;background:#fff;border:1.5px solid #E2E0DA;border-radius:14px;padding:1.25rem;margin:1.5rem 0;">' +
+    (i?'<img src="'+i+'" alt="'+esc(n)+'" style="width:80px;height:80px;object-fit:contain;border-radius:8px;background:#F4F3F0;border:1px solid #E2E0DA;flex-shrink:0;">':'') +
+    '<div style="flex:1;"><div style="font-size:14px;font-weight:700;margin-bottom:4px;">'+esc(n)+'</div>' +
+    '<div style="font-family:\'Bebas Neue\',sans-serif;font-size:1.5rem;color:#E8380D;margin-bottom:4px;">'+esc(p)+'</div>' +
+    '<div style="font-size:12px;color:#8A8880;margin-bottom:8px;">In stock on Amazon India</div>' +
+    '<a href="'+l+'" target="_blank" rel="noopener sponsored" style="display:inline-flex;align-items:center;gap:6px;background:#E8380D;color:#fff;font-weight:700;font-size:12px;padding:8px 18px;border-radius:999px;text-decoration:none;">🛒 Buy on Amazon</a>' +
+    '<p style="font-size:10px;color:#8A8880;margin-top:4px;font-family:monospace;">★ Affiliate link</p></div></div><p></p>';
+  document.getElementById('ed-body').focus();
+  fmt('insertHTML', h);
+  toast('Card inserted!', 'ok');
+  ['aff-n','aff-p','aff-i','aff-l'].forEach(function(id){ document.getElementById(id).value=''; });
+}
+
+// ── Selection ────────────────────────────────────────────────────
+function saveSel() {
+  var s = window.getSelection();
+  return s.rangeCount ? s.getRangeAt(0).cloneRange() : null;
+}
+function restSel(r) {
+  if (!r) return;
+  var s = window.getSelection(); s.removeAllRanges(); s.addRange(r);
+}
+
+// ── Change password ──────────────────────────────────────────────
+function doChangePwd() {
+  var o  = document.getElementById('cp-old').value;
+  var nw = document.getElementById('cp-new').value;
+  var cf = document.getElementById('cp-cf').value;
+  if (!o||!nw||!cf) { toast('All fields required.','bad'); return; }
+  if (nw !== cf) { toast('New passwords do not match.','bad'); return; }
+  if (nw.length < 6) { toast('Password must be at least 6 characters.','bad'); return; }
+  call('changePassword', { token: $.token, oldPassword: o, newPassword: nw }).then(function(r) {
+    if (r.ok) {
+      toast(r.message, 'ok');
+      ['cp-old','cp-new','cp-cf'].forEach(function(id){ document.getElementById(id).value=''; });
+    } else toast(r.error, 'bad');
+  });
+}
+
+// ── Team ─────────────────────────────────────────────────────────
+function loadTeam() {
+  call('listUsers', { token: $.token }).then(function(r) {
+    if (!r.ok) { toast(r.error,'bad'); return; }
+    var tbody = document.getElementById('team-tbody');
+    if (!r.users.length) { tbody.innerHTML = '<tr><td colspan="5" class="te">No users yet.</td></tr>'; return; }
+    tbody.innerHTML = r.users.map(function(u) {
+      var me = u.email === $.user.email;
+      return '<tr>' +
+        '<td style="font-weight:600;">' + esc(u.name) + '</td>' +
+        '<td style="font-size:12px;color:var(--muted);">' + esc(u.email) + '</td>' +
+        '<td><span class="pill ' + (u.role==='admin'?'p-published':'p-draft') + '">' + u.role + '</span></td>' +
+        '<td><span class="pill ' + (u.active?'p-published':'p-rejected') + '">' + (u.active?'Active':'Inactive') + '</span></td>' +
+        '<td>' + (me ? '<span style="font-size:11px;color:var(--muted);">You</span>' :
+          '<button class="btn btn-s btn-sm" onclick="doToggle(\'' + u.email + '\')">' + (u.active?'Deactivate':'Activate') + '</button>') + '</td></tr>';
+    }).join('');
+  });
+}
+function openAddUser() {
+  ['au-name','au-email','au-pass'].forEach(function(id){ document.getElementById(id).value=''; });
+  document.getElementById('au-role').value = 'writer';
+  openM('m-user');
+}
+function doAddUser() {
+  var name  = document.getElementById('au-name').value.trim();
+  var email = document.getElementById('au-email').value.trim();
+  var pass  = document.getElementById('au-pass').value;
+  var role  = document.getElementById('au-role').value;
+  if (!name||!email||!pass) { toast('All fields required.','bad'); return; }
+  call('addUser', { token: $.token, name: name, email: email, password: pass, role: role }).then(function(r) {
+    closeM('m-user');
+    if (r.ok) { toast(r.message,'ok'); loadTeam(); }
+    else toast(r.error,'bad');
+  });
+}
+function doToggle(email) {
+  call('toggleUser', { token: $.token, email: email }).then(function(r) {
+    if (r.ok) { toast(r.message,'ok'); loadTeam(); }
+    else toast(r.error,'bad');
+  });
+}
+
+// ── Modals ───────────────────────────────────────────────────────
+function openM(id)  { document.getElementById(id).classList.add('on'); }
+function closeM(id) { document.getElementById(id).classList.remove('on'); }
+document.querySelectorAll('.ov').forEach(function(el) {
+  el.addEventListener('click', function(e) { if (e.target===el) el.classList.remove('on'); });
+});
+
+// ── Toasts ───────────────────────────────────────────────────────
+function toast(msg, type, ms) {
+  ms = ms || 3000;
+  var c = document.getElementById('toasts');
+  var t = document.createElement('div');
+  t.className = 'toast' + (type==='ok'?' ok':type==='bad'?' bad':'');
+  var icons = {
+    ok:  '<svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="20 6 9 17 4 12"/></svg>',
+    bad: '<svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><circle cx="12" cy="12" r="10"/><line x1="15" y1="9" x2="9" y2="15"/><line x1="9" y1="9" x2="15" y2="15"/></svg>',
+    '':  '<svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><circle cx="12" cy="16" r=".5" fill="currentColor"/></svg>'
+  };
+  t.innerHTML = (icons[type]||icons['']) + ' ' + String(msg);
+  c.appendChild(t);
+  setTimeout(function() {
+    t.style.transition = 'all .3s';
+    t.style.opacity = '0';
+    t.style.transform = 'translateX(12px)';
+    setTimeout(function(){ if(t.parentNode) t.parentNode.removeChild(t); }, 300);
+  }, ms);
+}
+
+// ── TRASH ─────────────────────────────────────────────────────────
+function loadTrash() {
+  call('listTrash', { token: $.token }).then(function(r) {
+    if (!r.ok) { toast(r.error, 'bad'); return; }
+    var list  = r.trash || [];
+    var tbody = document.getElementById('trash-tbody');
+    document.getElementById('bdg-trash').textContent = list.length;
+    var emptyBtn = document.getElementById('empty-trash-btn');
+    emptyBtn.style.display = ($.user.role === 'admin' && list.length > 0) ? 'inline-flex' : 'none';
+    if (!list.length) {
+      tbody.innerHTML = '<tr><td colspan="5" class="te">Trash is empty.</td></tr>';
       return;
     }
-    localStorage.removeItem('dekho_token');
-  }
-  showScreen('login');
-});
-
-function hidePL() {
-  const pl = document.getElementById('page-loader');
-  pl.classList.add('hide');
-  setTimeout(() => pl.style.display = 'none', 450);
+    tbody.innerHTML = list.map(function(a) {
+      var urgent   = a.daysLeft <= 1;
+      var daysLabel = a.daysLeft <= 0
+        ? '<span style="color:var(--red);font-weight:700;">Expires today</span>'
+        : '<span style="color:' + (urgent ? 'var(--accent)' : 'var(--muted)') + ';">' + a.daysLeft + ' day' + (a.daysLeft !== 1 ? 's' : '') + '</span>';
+      return '<tr>' +
+        '<td style="max-width:220px;"><div style="font-weight:600;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;max-width:200px;">' + esc(a.title||'Untitled') + '</div>' +
+        '<div style="font-size:11px;color:var(--muted);margin-top:2px;">' + esc(a.authorName||a.authorEmail) + '</div></td>' +
+        '<td><span class="pill" style="background:var(--surface);color:var(--muted);border-color:var(--border);">' + esc(a.category||'—') + '</span></td>' +
+        '<td style="font-size:12px;color:var(--muted);">' + fmtD(a.deletedAt) + '</td>' +
+        '<td>' + daysLabel + '</td>' +
+        '<td><div style="display:flex;gap:4px;">' +
+          '<button class="btn btn-s btn-sm" onclick="doRestore(\'' + a.id + '\')">Restore</button>' +
+          '<button class="btn btn-d btn-sm" onclick="doPurge(\'' + a.id + '\')">Delete Forever</button>' +
+        '</div></td></tr>';
+    }).join('');
+  });
 }
-
-function showScreen(name) {
-  hidePL();
-  document.querySelectorAll('.screen').forEach(s => s.classList.remove('active'));
-  document.getElementById(name + '-screen').classList.add('active');
-  lucide.createIcons();
+function doRestore(id) {
+  call('restoreArticle', { token: $.token, id: id }).then(function(r) {
+    if (r.ok) { toast(r.message, 'ok'); loadTrash(); loadArts(); }
+    else toast(r.error, 'bad');
+  });
 }
-
-async function initApp() {
-  const w = SESSION.writer;
-  document.getElementById('sidebar-name').textContent = w.name;
-  document.getElementById('sidebar-role').textContent = w.role;
-  document.getElementById('sidebar-avatar').textContent = w.name[0].toUpperCase();
-  document.getElementById('session-email').textContent = w.email;
-  document.getElementById('session-role').textContent = w.role;
-  if (w.role === 'admin') {
-    document.querySelectorAll('.admin-only').forEach(el => el.style.display = 'block');
-  }
-  showScreen('app');
-  await loadArticles();
+function doPurge(id) {
+  if (!confirm('Permanently delete this article? It will be gone forever with no recovery.')) return;
+  call('purgeArticle', { token: $.token, id: id }).then(function(r) {
+    if (r.ok) { toast('Permanently deleted.', 'ok'); loadTrash(); }
+    else toast(r.error, 'bad');
+  });
 }
-
-// ══════════════════════════════════════════════════════════════
-// API HELPER — NO Content-Type header (avoids CORS preflight on Apps Script)
-// ══════════════════════════════════════════════════════════════
-async function api(action, body = {}) {
-  try {
-    const res = await fetch(API_URL, {
-      method: 'POST',
-      body: JSON.stringify({ action, ...body })
+function emptyTrash() {
+  if (!confirm('Permanently delete ALL items in trash? This cannot be undone.')) return;
+  call('listTrash', { token: $.token }).then(function(r) {
+    if (!r.ok) return;
+    var ids = (r.trash||[]).map(function(a){ return a.id; });
+    if (!ids.length) return;
+    var done = 0;
+    ids.forEach(function(id) {
+      call('purgeArticle', { token: $.token, id: id }).then(function() {
+        done++;
+        if (done === ids.length) { toast('Trash emptied.', 'ok'); loadTrash(); }
+      });
     });
-    return await res.json();
-  } catch(e) {
-    return { ok: false, error: 'Network error. Check your connection.' };
-  }
-}
-
-// ══════════════════════════════════════════════════════════════
-// AUTH
-// ══════════════════════════════════════════════════════════════
-async function handleLogin() {
-  const email    = document.getElementById('login-email').value.trim();
-  const password = document.getElementById('login-password').value;
-  const btn      = document.getElementById('login-btn');
-  const errEl    = document.getElementById('login-error');
-
-  if (!email || !password) { showLoginError('Please enter email and password.'); return; }
-
-  btn.disabled = true;
-  btn.innerHTML = '<span class="spinner"></span> Signing in...';
-  errEl.style.display = 'none';
-
-  const res = await api('login', { email, password });
-
-  btn.disabled = false;
-  btn.innerHTML = 'Sign In to DEKHO';
-
-  if (res.ok) {
-    SESSION = { token: res.token, writer: res.writer };
-    localStorage.setItem('dekho_token', res.token);
-    await initApp();
-  } else {
-    showLoginError(res.error || 'Login failed. Check your credentials.');
-  }
-}
-
-async function handleLogout() {
-  await api('logout', { token: SESSION.token });
-  SESSION = { token: null, writer: null };
-  ALL_ARTICLES = [];
-  localStorage.removeItem('dekho_token');
-  document.getElementById('login-email').value = '';
-  document.getElementById('login-password').value = '';
-  showScreen('login');
-}
-
-function showLoginError(msg) {
-  const e = document.getElementById('login-error');
-  e.textContent = msg;
-  e.style.display = 'block';
-}
-
-// ══════════════════════════════════════════════════════════════
-// CHANGE PASSWORD
-// ══════════════════════════════════════════════════════════════
-function checkPwdStrength() {
-  const pwd  = document.getElementById('cp-new').value;
-  const bar  = document.getElementById('pwd-strength-bar');
-  const lbl  = document.getElementById('pwd-strength-label');
-  const len  = pwd.length;
-  let score  = 0;
-  if (len >= 8)  score++;
-  if (len >= 12) score++;
-  if (/[A-Z]/.test(pwd)) score++;
-  if (/[0-9]/.test(pwd)) score++;
-  if (/[^A-Za-z0-9]/.test(pwd)) score++;
-  const levels = [
-    { label:'Too short', color:'var(--red)',    w:'20%' },
-    { label:'Weak',      color:'var(--red)',    w:'30%' },
-    { label:'Fair',      color:'var(--yellow)', w:'50%' },
-    { label:'Good',      color:'var(--yellow)', w:'70%' },
-    { label:'Strong',    color:'var(--green)',  w:'90%' },
-    { label:'Very strong',color:'var(--green)', w:'100%'},
-  ];
-  const lvl = levels[Math.min(score, 5)];
-  bar.style.background = lvl.color;
-  bar.style.width = pwd ? lvl.w : '0';
-  lbl.textContent = pwd ? lvl.label : '';
-  lbl.style.color = lvl.color;
-}
-
-async function changePassword() {
-  const current  = document.getElementById('cp-current').value;
-  const newPwd   = document.getElementById('cp-new').value;
-  const confirm  = document.getElementById('cp-confirm').value;
-  const btn      = document.getElementById('cp-btn');
-  const errEl    = document.getElementById('cp-error');
-
-  errEl.style.display = 'none';
-
-  if (!current || !newPwd || !confirm) {
-    errEl.textContent = 'Please fill in all three fields.';
-    errEl.style.display = 'block'; return;
-  }
-  if (newPwd.length < 8) {
-    errEl.textContent = 'New password must be at least 8 characters.';
-    errEl.style.display = 'block'; return;
-  }
-  if (newPwd !== confirm) {
-    errEl.textContent = 'New passwords do not match.';
-    errEl.style.display = 'block'; return;
-  }
-
-  btn.disabled = true;
-  btn.innerHTML = '<span class="spinner" style="border-top-color:var(--ink);border-color:rgba(0,0,0,.15);"></span> Updating...';
-
-  const res = await api('changePassword', {
-    token: SESSION.token,
-    currentPassword: current,
-    newPassword: newPwd
   });
-
-  btn.disabled = false;
-  btn.innerHTML = '<i data-lucide="key-round" style="width:14px;height:14px;"></i> Update Password';
-  lucide.createIcons();
-
-  if (res.ok) {
-    toast('Password updated successfully! 🎉', 'success', 4000);
-    document.getElementById('cp-current').value = '';
-    document.getElementById('cp-new').value = '';
-    document.getElementById('cp-confirm').value = '';
-    document.getElementById('pwd-strength-bar').style.width = '0';
-    document.getElementById('pwd-strength-label').textContent = '';
-  } else {
-    errEl.textContent = res.error || 'Failed to update password.';
-    errEl.style.display = 'block';
-  }
 }
 
-// ══════════════════════════════════════════════════════════════
-// NAVIGATION
-// ══════════════════════════════════════════════════════════════
-function navigate(name) {
-  closeSidebar();
-  document.querySelectorAll('.view').forEach(v => v.classList.remove('active'));
-  document.getElementById('view-' + name).classList.add('active');
-  document.querySelectorAll('.nav-item').forEach(b => {
-    b.classList.toggle('active', b.dataset.view === name);
-  });
-  const titles = { dashboard:'Dashboard', articles:'All Articles', editor: CURRENT_ART_ID ? 'Edit Article' : 'New Article', writers:'Team Writers', settings:'Change Password' };
-  document.getElementById('topbar-title').textContent = titles[name] || name;
-
-  const actions = document.getElementById('topbar-actions');
-  actions.innerHTML = '';
-  if (name === 'editor') {
-    actions.innerHTML = `
-      <button class="action-btn" onclick="saveArticle('draft')" id="topbar-save"><i data-lucide="save" style="width:13px;height:13px;"></i> <span>Save Draft</span></button>
-      <button class="action-btn primary" onclick="saveAndPublish()" id="topbar-publish"><i data-lucide="send" style="width:13px;height:13px;"></i> <span>Publish</span></button>`;
-  }
-  if (name === 'articles' && ALL_ARTICLES.length === 0) loadArticles();
-  if (name === 'writers') loadWriters();
-  lucide.createIcons();
+// ── Utilities ────────────────────────────────────────────────────
+function esc(s) {
+  return String(s||'').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');
 }
-
-// Mobile sidebar
-function openSidebar() {
-  document.getElementById('sidebar').classList.add('open');
-  document.getElementById('sidebar-overlay').classList.add('show');
-  document.body.style.overflow = 'hidden';
-}
-function closeSidebar() {
-  document.getElementById('sidebar').classList.remove('open');
-  document.getElementById('sidebar-overlay').classList.remove('show');
-  document.body.style.overflow = '';
-}
-
-// ══════════════════════════════════════════════════════════════
-// ARTICLES — LOAD & RENDER
-// ══════════════════════════════════════════════════════════════
-async function loadArticles() {
-  // Show skeletons
-  showSkeleton('dashboard-skeleton', 'dashboard-recent', false);
-  showSkeleton('articles-skeleton', 'articles-table', false);
-
-  const res = await api('getArticles', { token: SESSION.token });
-
-  // Hide skeletons
-  showSkeleton('dashboard-skeleton', 'dashboard-recent', true);
-  showSkeleton('articles-skeleton', 'articles-table', true);
-
-  if (!res.ok) { toast(res.error || 'Failed to load articles.', 'error'); return; }
-
-  ALL_ARTICLES = res.articles || [];
-  document.getElementById('nav-article-count').textContent = ALL_ARTICLES.length;
-  renderDashboard(ALL_ARTICLES);
-  renderArticlesTable(ALL_ARTICLES);
-  lucide.createIcons();
-}
-
-function showSkeleton(skelId, contentId, done) {
-  document.getElementById(skelId).style.display  = done ? 'none'  : 'flex';
-  document.getElementById(skelId).style.flexDirection = 'column';
-  document.getElementById(contentId).style.display = done ? '' : 'none';
-}
-
-function renderDashboard(arts) {
-  const pub    = arts.filter(a => a.status === 'published').length;
-  const drafts = arts.filter(a => a.status === 'draft').length;
-  document.getElementById('stat-total').textContent     = arts.length;
-  document.getElementById('stat-published').textContent = pub;
-  document.getElementById('stat-drafts').textContent    = drafts;
-
-  const recent = arts.slice(0, 6);
-  const el = document.getElementById('dashboard-recent');
-  el.style.display = 'block';
-
-  if (!recent.length) {
-    el.innerHTML = '<div style="padding:2.5rem;text-align:center;color:var(--muted);font-size:13px;">No articles yet. <a href="#" onclick="navigate(\'editor\');newArticle()" style="color:var(--accent);">Create your first one →</a></div>';
-    return;
-  }
-  el.innerHTML = `
-    <table class="data-table">
-      <thead><tr><th>Title</th><th>Category</th><th>Status</th><th>Updated</th><th>Action</th></tr></thead>
-      <tbody>
-        ${recent.map(a => `
-        <tr>
-          <td style="max-width:300px;"><div style="font-weight:600;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;max-width:280px;">${esc(a.title||'Untitled')}</div></td>
-          <td><span class="status-pill" style="background:var(--surface);color:var(--muted);border-color:var(--border);">${a.category||'—'}</span></td>
-          <td><span class="status-pill status-${a.status}">${a.status}</span></td>
-          <td style="font-size:12px;color:var(--muted);">${fmtDate(a.updatedAt)}</td>
-          <td><button class="action-btn primary" onclick="editArticle('${a.id}')">Edit</button></td>
-        </tr>`).join('')}
-      </tbody>
-    </table>`;
-  lucide.createIcons();
-}
-
-function renderArticlesTable(arts) {
-  const tbody = document.getElementById('articles-tbody');
-  if (!arts.length) {
-    tbody.innerHTML = '<tr><td colspan="6" style="text-align:center;padding:2.5rem;color:var(--muted);">No articles found.</td></tr>';
-    return;
-  }
-  tbody.innerHTML = arts.map(a => `
-    <tr>
-      <td style="max-width:260px;">
-        <div style="font-weight:600;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;max-width:240px;">${esc(a.title||'Untitled')}</div>
-        <div style="font-size:11px;color:var(--muted);font-family:'DM Mono',monospace;">${a.slug||''}</div>
-      </td>
-      <td><span class="status-pill" style="background:var(--surface);color:var(--muted);border-color:var(--border);">${a.category||'—'}</span></td>
-      <td><span class="status-pill status-${a.status}">${a.status}</span></td>
-      <td style="font-size:12px;color:var(--muted);">${esc(a.authorName||a.authorEmail||'—')}</td>
-      <td style="font-size:12px;color:var(--muted);white-space:nowrap;">${fmtDate(a.updatedAt)}</td>
-      <td>
-        <div class="btn-actions">
-          <button class="action-btn primary" onclick="editArticle('${a.id}')">Edit</button>
-          ${a.status !== 'published' ? `<button class="action-btn" onclick="quickPublish('${a.id}')">Publish</button>` : ''}
-          <button class="action-btn danger" onclick="openDeleteModal('${a.id}')">Delete</button>
-        </div>
-      </td>
-    </tr>`).join('');
-  lucide.createIcons();
-}
-
-function filterArticles() {
-  const q = document.getElementById('articles-search').value.toLowerCase();
-  const s = document.getElementById('filter-status').value;
-  const c = document.getElementById('filter-cat').value;
-  renderArticlesTable(ALL_ARTICLES.filter(a =>
-    (!q || (a.title||'').toLowerCase().includes(q) || (a.authorName||'').toLowerCase().includes(q)) &&
-    (!s || a.status === s) &&
-    (!c || a.category === c)
-  ));
-  lucide.createIcons();
-}
-
-async function quickPublish(id) {
-  const res = await api('publishArticle', { token: SESSION.token, id });
-  if (res.ok) { toast('Article published!', 'success'); loadArticles(); }
-  else toast(res.error || 'Publish failed.', 'error');
-}
-
-function openDeleteModal(id) {
-  DELETE_TARGET = id;
-  document.getElementById('delete-modal').classList.add('open');
-}
-
-async function confirmDelete() {
-  if (!DELETE_TARGET) return;
-  const btn = document.getElementById('confirm-delete-btn');
-  btn.disabled = true;
-  btn.textContent = 'Deleting...';
-  const res = await api('deleteArticle', { token: SESSION.token, id: DELETE_TARGET });
-  closeModal('delete-modal');
-  btn.disabled = false;
-  btn.innerHTML = '<i data-lucide="trash-2" style="width:13px;height:13px;"></i> Delete';
-  lucide.createIcons();
-  if (res.ok) { toast('Article deleted.', 'success'); loadArticles(); }
-  else toast(res.error || 'Delete failed.', 'error');
-}
-
-// ══════════════════════════════════════════════════════════════
-// EDITOR — NEW & EDIT
-// ══════════════════════════════════════════════════════════════
-function newArticle() {
-  CURRENT_ART_ID = null;
-  clearEditor();
-  navigate('editor');
-  document.getElementById('topbar-title').textContent = 'New Article';
-  document.getElementById('art-title').focus();
-}
-
-function clearEditor() {
-  document.getElementById('art-id').value        = '';
-  document.getElementById('art-title').value     = '';
-  document.getElementById('art-slug').value      = '';
-  document.getElementById('art-tag').value       = '';
-  document.getElementById('art-category').value  = 'review';
-  document.getElementById('art-readtime').value  = '5';
-  document.getElementById('art-rating').value    = '0';
-  document.getElementById('art-cover').value     = '';
-  document.getElementById('art-excerpt').value   = '';
-  document.getElementById('editor-content').innerHTML = '';
-  document.getElementById('rating-display').textContent = '—';
-  const badge = document.getElementById('pub-status-badge');
-  badge.textContent = 'draft';
-  badge.className = 'status-pill status-draft';
-  setSaveStatus('Ready');
-  updateCoverPreview();
-  updateWordCount();
-  if (htmlMode) toggleHtml(); // exit html mode if active
-}
-
-async function editArticle(id) {
-  // Switch to editor view first, show loading
-  navigate('editor');
-  document.getElementById('topbar-title').textContent = 'Loading...';
-  CURRENT_ART_ID = id;
-
-  // Show loading overlay on editor
-  const loader = document.getElementById('editor-loading');
-  loader.style.display = 'flex';
-
-  const res = await api('getArticle', { token: SESSION.token, id });
-
-  loader.style.display = 'none';
-
-  if (!res.ok) {
-    toast(res.error || 'Could not load article.', 'error');
-    navigate('articles');
-    return;
-  }
-
-  const a = res.article;
-  document.getElementById('art-id').value          = id;
-  document.getElementById('art-title').value        = a.title       || '';
-  document.getElementById('art-slug').value         = a.slug        || '';
-  document.getElementById('art-tag').value          = a.tag         || '';
-  document.getElementById('art-category').value     = a.category    || 'review';
-  document.getElementById('art-readtime').value     = a.readTime    || '5';
-  document.getElementById('art-rating').value       = a.rating      || '0';
-  document.getElementById('art-cover').value        = a.coverImage  || '';
-  document.getElementById('art-excerpt').value      = a.excerpt     || '';
-  document.getElementById('editor-content').innerHTML = a.content  || '';
-  updateRatingDisplay();
-  updateCoverPreview();
-  updateWordCount();
-
-  const badge = document.getElementById('pub-status-badge');
-  badge.textContent = a.status;
-  badge.className   = 'status-pill status-' + (a.status || 'draft');
-
-  document.getElementById('topbar-title').textContent = 'Edit: ' + (a.title || 'Untitled');
-  setSaveStatus('Loaded');
-  lucide.createIcons();
-}
-
-async function saveArticle(status) {
-  const title = document.getElementById('art-title').value.trim();
-  if (!title) { toast('Please add a title first.', 'error'); return; }
-
-  setSaveStatus('Saving...');
-
-  // If in HTML mode, sync content
-  if (htmlMode) {
-    document.getElementById('editor-content').innerHTML = document.getElementById('html-source').value;
-  }
-
-  const article = {
-    id:         document.getElementById('art-id').value || undefined,
-    title,
-    slug:       document.getElementById('art-slug').value,
-    category:   document.getElementById('art-category').value,
-    tag:        document.getElementById('art-tag').value,
-    status:     status || 'draft',
-    coverImage: document.getElementById('art-cover').value,
-    excerpt:    document.getElementById('art-excerpt').value,
-    content:    document.getElementById('editor-content').innerHTML,
-    readTime:   document.getElementById('art-readtime').value,
-    rating:     document.getElementById('art-rating').value,
-  };
-
-  const res = await api('saveArticle', { token: SESSION.token, article });
-
-  if (res.ok) {
-    if (!article.id && res.id) {
-      document.getElementById('art-id').value = res.id;
-      CURRENT_ART_ID = res.id;
-    }
-    setSaveStatus('Saved ✓');
-    toast('Article saved!', 'success');
-    loadArticles();
-  } else {
-    setSaveStatus('Save failed');
-    toast(res.error || 'Save failed.', 'error');
-  }
-  return res.ok;
-}
-
-async function saveAndPublish() {
-  const saved = await saveArticle('published');
-  if (!saved) return;
-  const id = document.getElementById('art-id').value;
-  if (!id) return;
-  const res = await api('publishArticle', { token: SESSION.token, id });
-  if (res.ok) {
-    toast('Article published! 🎉', 'success', 4000);
-    const badge = document.getElementById('pub-status-badge');
-    badge.textContent = 'published';
-    badge.className = 'status-pill status-published';
-    loadArticles();
-  } else {
-    toast(res.error || 'Publish failed.', 'error');
-  }
-}
-
-function setSaveStatus(msg) {
-  const el = document.getElementById('save-status');
-  el.textContent = msg;
-  el.style.color = msg.includes('✓') ? 'var(--green)' : msg.includes('fail') ? 'var(--red)' : 'var(--muted)';
-}
-
-// Auto-save every 90s while editor is open
-setInterval(() => {
-  const title = document.getElementById('art-title')?.value;
-  if (title && document.getElementById('view-editor')?.classList.contains('active')) {
-    saveArticle('draft');
-  }
-}, 90000);
-
-// ── Editor helpers ────────────────────────────────────────────
-function updateAutoSlug() {
-  const slug = document.getElementById('art-title').value
-    .toLowerCase().replace(/[^a-z0-9\s-]/g,'').replace(/\s+/g,'-').substring(0,80);
-  document.getElementById('art-slug').value = slug;
-}
-
-function updateRatingDisplay() {
-  const v = parseFloat(document.getElementById('art-rating').value);
-  document.getElementById('rating-display').textContent = v > 0 ? v.toFixed(1) : '—';
-}
-
-function updateCoverPreview() {
-  const url = document.getElementById('art-cover').value;
-  const img = document.getElementById('cover-preview-img');
-  const ph  = document.getElementById('cover-placeholder');
-  if (url) { img.src = url; img.style.display = 'block'; ph.style.display = 'none'; }
-  else { img.style.display = 'none'; ph.style.display = 'flex'; }
-}
-
-function setCoverImage() {
-  const cur = document.getElementById('art-cover').value;
-  const url = prompt('Enter image URL (Unsplash, etc.):', cur);
-  if (url !== null) { document.getElementById('art-cover').value = url; updateCoverPreview(); }
-}
-
-function updateWordCount() {
-  const text  = document.getElementById('editor-content').innerText || '';
-  const words = text.trim().split(/\s+/).filter(Boolean).length;
-  document.getElementById('word-count').textContent = words + ' words';
-  const mins = Math.max(1, Math.ceil(words / 200));
-  document.getElementById('art-readtime').value = mins;
-}
-
-// ── Toolbar ─────────────────────────────────────────────────
-function execCmd(cmd, val = null) {
-  document.getElementById('editor-content').focus();
-  document.execCommand(cmd, false, val);
-}
-
-function toggleHtml() {
-  const rich = document.getElementById('editor-content');
-  const src  = document.getElementById('html-source');
-  const btn  = document.getElementById('html-toggle-btn');
-  htmlMode = !htmlMode;
-  if (htmlMode) {
-    src.value = rich.innerHTML;
-    rich.style.display = 'none'; src.style.display = 'block';
-    btn.classList.add('active');
-  } else {
-    rich.innerHTML = src.value;
-    src.style.display = 'none'; rich.style.display = 'block';
-    btn.classList.remove('active');
-  }
-}
-
-function handleEditorKeydown(e) {
-  if (e.key === 'Tab') { e.preventDefault(); execCmd('insertHTML','&nbsp;&nbsp;&nbsp;&nbsp;'); }
-}
-
-// ── Insert modals ────────────────────────────────────────────
-function insertLink() {
-  SAVED_SEL = saveSelection();
-  document.getElementById('link-url').value = '';
-  document.getElementById('link-text').value = '';
-  document.getElementById('link-modal').classList.add('open');
-  setTimeout(() => document.getElementById('link-url').focus(), 100);
-}
-function confirmInsertLink() {
-  const url  = document.getElementById('link-url').value;
-  if (!url) return;
-  const text   = document.getElementById('link-text').value;
-  const newTab = document.getElementById('link-newtab').checked;
-  const target = newTab ? ' target="_blank" rel="noopener"' : '';
-  restoreSelection(SAVED_SEL);
-  document.getElementById('editor-content').focus();
-  execCmd('insertHTML', text
-    ? `<a href="${url}"${target}>${text}</a>`
-    : `<a href="${url}"${target}>${url}</a>`);
-  closeModal('link-modal');
-}
-
-function insertImage() {
-  SAVED_SEL = saveSelection();
-  document.getElementById('img-url').value = '';
-  document.getElementById('img-alt').value = '';
-  document.getElementById('img-caption').value = '';
-  document.getElementById('image-modal').classList.add('open');
-  setTimeout(() => document.getElementById('img-url').focus(), 100);
-}
-function confirmInsertImage() {
-  const url = document.getElementById('img-url').value;
-  if (!url) return;
-  const alt = document.getElementById('img-alt').value;
-  const cap = document.getElementById('img-caption').value;
-  restoreSelection(SAVED_SEL);
-  document.getElementById('editor-content').focus();
-  const html = cap
-    ? `<figure><img src="${url}" alt="${alt}" style="max-width:100%;border-radius:10px;"><figcaption style="text-align:center;font-size:12px;color:#888;margin-top:6px;">${cap}</figcaption></figure><p></p>`
-    : `<img src="${url}" alt="${alt}" style="max-width:100%;border-radius:10px;"><p></p>`;
-  execCmd('insertHTML', html);
-  closeModal('image-modal');
-}
-
-function insertTable() {
-  const rows = parseInt(prompt('Number of rows:','3')||'3');
-  const cols = parseInt(prompt('Number of columns:','3')||'3');
-  if (!rows || !cols) return;
-  let html = '<table style="width:100%;border-collapse:collapse;margin:1rem 0;">';
-  for (let r=0; r<rows; r++) {
-    html += '<tr>';
-    for (let c=0; c<cols; c++) {
-      const tag = r===0 ? 'th' : 'td';
-      html += `<${tag} style="border:1px solid #E2E0DA;padding:8px 12px;">${r===0?`Col ${c+1}`:''}</${tag}>`;
-    }
-    html += '</tr>';
-  }
-  html += '</table><p></p>';
-  execCmd('insertHTML', html);
-}
-
-function insertHR() {
-  execCmd('insertHTML','<hr style="border:none;border-top:1.5px solid #E2E0DA;margin:1.5rem 0;"><p></p>');
-}
-
-function insertBlockquote() {
-  execCmd('insertHTML','<blockquote style="border-left:3px solid #E8380D;padding:.75rem 1.25rem;margin:1.25rem 0;background:#FFF0ED;border-radius:0 8px 8px 0;"><p style="color:#E8380D;font-style:italic;">Quote text here...</p></blockquote><p></p>');
-}
-
-function insertAffiliateCard() {
-  const name  = document.getElementById('aff-name').value  || 'Product Name';
-  const price = document.getElementById('aff-price').value || '₹X,XXX';
-  const img   = document.getElementById('aff-img').value   || '';
-  const link  = document.getElementById('aff-link').value  || '#';
-  const html = `
-<div style="display:flex;gap:1.25rem;align-items:flex-start;background:#fff;border:1.5px solid #E2E0DA;border-radius:16px;padding:1.25rem;margin:1.5rem 0;">
-  ${img ? `<img src="${img}" alt="${name}" style="width:80px;height:80px;object-fit:contain;border-radius:8px;background:#F2F1EE;border:1px solid #E2E0DA;flex-shrink:0;">` : ''}
-  <div style="flex:1;">
-    <div style="font-size:14px;font-weight:700;margin-bottom:4px;">${name}</div>
-    <div style="font-family:'Bebas Neue',sans-serif;font-size:1.5rem;color:#E8380D;margin-bottom:4px;">${price}</div>
-    <div style="font-size:12px;color:#8A8880;margin-bottom:8px;">In stock on Amazon India</div>
-    <a href="${link}" target="_blank" rel="noopener sponsored" style="display:inline-flex;align-items:center;gap:6px;background:#E8380D;color:#fff;font-weight:700;font-size:12px;padding:8px 18px;border-radius:999px;text-decoration:none;">🛒 Buy on Amazon</a>
-    <p style="font-size:10px;color:#8A8880;margin-top:4px;font-family:monospace;">★ Affiliate link — we earn a small commission</p>
-  </div>
-</div><p></p>`;
-  document.getElementById('editor-content').focus();
-  execCmd('insertHTML', html);
-  toast('Affiliate card inserted!', 'success');
-  ['aff-name','aff-price','aff-img','aff-link'].forEach(id => document.getElementById(id).value = '');
-}
-
-// ── Selection helpers ────────────────────────────────────────
-function saveSelection() {
-  const sel = window.getSelection();
-  return sel.rangeCount > 0 ? sel.getRangeAt(0).cloneRange() : null;
-}
-function restoreSelection(range) {
-  if (!range) return;
-  const sel = window.getSelection();
-  sel.removeAllRanges();
-  sel.addRange(range);
-}
-
-// ══════════════════════════════════════════════════════════════
-// WRITERS (Admin)
-// ══════════════════════════════════════════════════════════════
-async function loadWriters() {
-  document.getElementById('writers-skeleton').style.display = 'flex';
-  document.getElementById('writers-skeleton').style.flexDirection = 'column';
-  document.getElementById('writers-table').style.display = 'none';
-
-  const res = await api('getWriters', { token: SESSION.token });
-
-  document.getElementById('writers-skeleton').style.display = 'none';
-  document.getElementById('writers-table').style.display = '';
-
-  if (!res.ok) { toast(res.error || 'Failed to load writers.', 'error'); return; }
-
-  const tbody = document.getElementById('writers-tbody');
-  if (!res.writers.length) {
-    tbody.innerHTML = '<tr><td colspan="6" style="text-align:center;padding:2rem;color:var(--muted);">No writers yet.</td></tr>';
-    return;
-  }
-  tbody.innerHTML = res.writers.map(w => `
-    <tr>
-      <td><div style="display:flex;align-items:center;gap:8px;">
-        <div style="width:28px;height:28px;border-radius:50%;background:var(--ink);display:flex;align-items:center;justify-content:center;color:var(--lime);font-family:'Bebas Neue',sans-serif;font-size:13px;flex-shrink:0;">${(w.name||'?')[0].toUpperCase()}</div>
-        <strong>${esc(w.name)}</strong>
-      </div></td>
-      <td style="font-size:12px;color:var(--muted);">${esc(w.email)}</td>
-      <td><span class="status-pill ${w.role==='admin'?'status-published':'status-draft'}">${w.role}</span></td>
-      <td style="font-size:12px;color:var(--muted);">${fmtDate(w.addedOn)}</td>
-      <td><span class="status-pill ${w.active?'status-published':'status-draft'}">${w.active?'Active':'Inactive'}</span></td>
-      <td>${w.email !== SESSION.writer.email
-        ? `<button class="action-btn danger" onclick="removeWriter('${w.email}')">Remove</button>`
-        : '<span style="font-size:11px;color:var(--muted);">You</span>'}</td>
-    </tr>`).join('');
-  lucide.createIcons();
-}
-
-function openAddWriterModal() {
-  ['new-writer-name','new-writer-email','new-writer-password'].forEach(id => document.getElementById(id).value = '');
-  document.getElementById('new-writer-role').value = 'writer';
-  document.getElementById('add-writer-modal').classList.add('open');
-}
-
-function generateTempPwd() {
-  const chars = 'ABCDEFGHJKLMNPQRSTUVWXYZabcdefghjkmnpqrstuvwxyz23456789!@#';
-  let pwd = '';
-  for (let i = 0; i < 10; i++) pwd += chars[Math.floor(Math.random() * chars.length)];
-  document.getElementById('new-writer-password').value = pwd;
-  toast('Temp password generated — copy it before closing!', 'info', 5000);
-}
-
-async function addWriter() {
-  const name     = document.getElementById('new-writer-name').value.trim();
-  const email    = document.getElementById('new-writer-email').value.trim();
-  const password = document.getElementById('new-writer-password').value;
-  const role     = document.getElementById('new-writer-role').value;
-  if (!email || !password) { toast('Email and password required.', 'error'); return; }
-  const res = await api('addWriter', { token: SESSION.token, email, name, password, role });
-  if (res.ok) {
-    closeModal('add-writer-modal');
-    toast('Writer added! Share their credentials securely.', 'success', 5000);
-    loadWriters();
-  } else {
-    toast(res.error || 'Failed to add writer.', 'error');
-  }
-}
-
-async function removeWriter(email) {
-  if (!confirm(`Remove access for ${email}? They won't be able to log in.`)) return;
-  const res = await api('removeWriter', { token: SESSION.token, email });
-  if (res.ok) { toast('Writer deactivated.', 'success'); loadWriters(); }
-  else toast(res.error || 'Failed.', 'error');
-}
-
-// ══════════════════════════════════════════════════════════════
-// UTILITIES
-// ══════════════════════════════════════════════════════════════
-function toast(msg, type='info', duration=3200) {
-  const c = document.getElementById('toast-container');
-  const t = document.createElement('div');
-  t.className = 'toast ' + type;
-  const icons = { success:'check-circle', error:'x-circle', info:'info' };
-  t.innerHTML = `<i data-lucide="${icons[type]||'info'}" style="width:15px;height:15px;flex-shrink:0;"></i> ${msg}`;
-  c.appendChild(t);
-  lucide.createIcons();
-  setTimeout(() => {
-    t.style.opacity = '0';
-    t.style.transform = 'translateX(110%)';
-    t.style.transition = 'all .3s';
-    setTimeout(() => t.remove(), 300);
-  }, duration);
-}
-
-function fmtDate(iso) {
+function fmtD(iso) {
   if (!iso) return '—';
   try { return new Date(iso).toLocaleDateString('en-IN',{day:'numeric',month:'short',year:'numeric'}); }
-  catch { return '—'; }
+  catch(e){ return '—'; }
 }
-
-function esc(str) {
-  if (!str) return '';
-  return String(str).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');
+function slugify(t) {
+  return t.toLowerCase().replace(/[^a-z0-9\s-]/g,'').replace(/\s+/g,'-').replace(/-+/g,'-').replace(/^-|-$/g,'').substring(0,80);
 }
-
-function togglePwd(inputId, btnId) {
-  const inp = document.getElementById(inputId);
+function eyeToggle(inputId, btn) {
+  var inp = document.getElementById(inputId);
   inp.type = inp.type === 'password' ? 'text' : 'password';
-  // swap icon
-  const btn = document.getElementById(btnId);
-  btn.innerHTML = inp.type === 'text'
-    ? '<i data-lucide="eye-off" style="width:15px;height:15px;"></i>'
-    : '<i data-lucide="eye" style="width:15px;height:15px;"></i>';
-  lucide.createIcons();
+  btn.innerHTML = inp.type === 'password'
+    ? '<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/><circle cx="12" cy="12" r="3"/></svg>'
+    : '<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M17.94 17.94A10.07 10.07 0 0 1 12 20c-7 0-11-8-11-8a18.45 18.45 0 0 1 5.06-5.94"/><path d="M9.9 4.24A9.12 9.12 0 0 1 12 4c7 0 11 8 11 8a18.5 18.5 0 0 1-2.16 3.19"/><line x1="1" y1="1" x2="23" y2="23"/></svg>';
 }
 
-function closeModal(id) {
-  document.getElementById(id).classList.remove('open');
+// ── SIDEBAR (mobile) ─────────────────────────────────────────────
+function toggleSidebar() {
+  var sb  = document.getElementById('sb');
+  var ov  = document.getElementById('sb-overlay');
+  var open = sb.classList.toggle('on');
+  if (ov) ov.classList.toggle('on', open);
+}
+function closeSidebar() {
+  document.getElementById('sb').classList.remove('on');
+  var ov = document.getElementById('sb-overlay');
+  if (ov) ov.classList.remove('on');
 }
 
-// Close modals on overlay click
-document.querySelectorAll('.modal-overlay').forEach(overlay => {
-  overlay.addEventListener('click', e => { if (e.target === overlay) overlay.classList.remove('open'); });
-});
+// ── DEVTOOLS BLOCKER ─────────────────────────────────────────────
+// Blocks F12, Ctrl+Shift+I, Ctrl+Shift+J, Ctrl+U, right-click inspect.
+// If devtools are detected open, page content is wiped and a warning shown.
+(function() {
+  // 1. Block keyboard shortcuts
+  document.addEventListener('keydown', function(e) {
+    var key = e.key || e.keyCode;
+    // F12
+    if (key === 'F12' || e.keyCode === 123) { e.preventDefault(); e.stopPropagation(); return false; }
+    // Ctrl+Shift+I / Ctrl+Shift+J / Ctrl+Shift+C
+    if (e.ctrlKey && e.shiftKey && (key === 'I' || key === 'i' || key === 'J' || key === 'j' || key === 'C' || key === 'c')) { e.preventDefault(); e.stopPropagation(); return false; }
+    // Ctrl+U (view source)
+    if (e.ctrlKey && (key === 'U' || key === 'u')) { e.preventDefault(); e.stopPropagation(); return false; }
+    // Cmd equivalents on Mac
+    if (e.metaKey && e.altKey && (key === 'I' || key === 'i' || key === 'J' || key === 'j')) { e.preventDefault(); e.stopPropagation(); return false; }
+  }, true);
 
-// Keyboard shortcuts
-document.addEventListener('keydown', e => {
-  if ((e.ctrlKey || e.metaKey) && e.key === 's') {
-    e.preventDefault();
-    if (document.getElementById('view-editor')?.classList.contains('active')) saveArticle('draft');
+  // 2. Block right-click context menu
+  document.addEventListener('contextmenu', function(e) {
+    e.preventDefault(); return false;
+  }, true);
+
+  // 3. Detect devtools open via window size difference
+  // When devtools dock to side, window.outerWidth - window.innerWidth > threshold
+  // When docked to bottom, window.outerHeight - window.innerHeight > threshold
+  var _devopen = false;
+  function checkDevTools() {
+    var threshold = 160;
+    var widthDiff  = window.outerWidth  - window.innerWidth;
+    var heightDiff = window.outerHeight - window.innerHeight;
+    var open = widthDiff > threshold || heightDiff > threshold;
+    if (open && !_devopen) {
+      _devopen = true;
+      nukeContent();
+    } else if (!open && _devopen) {
+      _devopen = false;
+    }
   }
-  if (e.key === 'Escape') {
-    document.querySelectorAll('.modal-overlay.open').forEach(m => m.classList.remove('open'));
-    closeSidebar();
+  setInterval(checkDevTools, 1000);
+
+  // 4. Detect via debugger timing trick (most reliable)
+  var _dbgCheck = setInterval(function() {
+    var t = Date.now();
+    // eslint-disable-next-line no-debugger
+    (function(){}).constructor('debugger')();
+    if (Date.now() - t > 100) {
+      clearInterval(_dbgCheck);
+      nukeContent();
+    }
+  }, 2000);
+
+  // 5. Wipe and warn
+  function nukeContent() {
+    // Clear session so they can't just close devtools and continue
+    try { localStorage.removeItem('dekho_token'); } catch(e) {}
+    document.body.innerHTML =
+      '<div style="position:fixed;inset:0;background:#0D0D0D;display:flex;flex-direction:column;align-items:center;justify-content:center;font-family:\'DM Mono\',monospace;color:#fff;text-align:center;padding:2rem;">' +
+      '<div style="font-family:\'Bebas Neue\',sans-serif;font-size:5rem;color:#E8380D;letter-spacing:.1em;line-height:1;">DEKHO</div>' +
+      '<div style="font-size:11px;letter-spacing:.3em;color:#444;margin-bottom:2rem;">CMS · ELV8 DGTL</div>' +
+      '<div style="font-size:1.1rem;font-weight:700;color:#E8380D;margin-bottom:.75rem;">⛔ Access Denied</div>' +
+      '<div style="font-size:13px;color:#888;max-width:360px;line-height:1.7;">Developer tools detected.<br>For security, your session has been terminated.<br><br>Close DevTools and reload to continue.</div>' +
+      '<button onclick="location.reload()" style="margin-top:2rem;padding:11px 28px;background:#E8380D;color:#fff;border:none;border-radius:9px;font-size:14px;font-weight:700;cursor:pointer;font-family:inherit;">Reload Page</button>' +
+      '</div>';
   }
-});
+})();
 </script>
 </body>
 </html>
