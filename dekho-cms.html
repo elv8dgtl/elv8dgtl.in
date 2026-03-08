@@ -1362,7 +1362,12 @@ function toast(msg, type, ms) {
 // ── TRASH ─────────────────────────────────────────────────────────
 function loadTrash() {
   call('listTrash', { token: $.token }).then(function(r) {
-    if (!r.ok) { toast(r.error, 'bad'); return; }
+    if (!r.ok) {
+      toast(r.error, 'bad');
+      document.getElementById('trash-tbody').innerHTML =
+        '<tr><td colspan="5" class="te" style="color:var(--red);">' + (r.error || 'Failed to load trash.') + '</td></tr>';
+      return;
+    }
     var list  = r.trash || [];
     var tbody = document.getElementById('trash-tbody');
     document.getElementById('bdg-trash').textContent = list.length;
