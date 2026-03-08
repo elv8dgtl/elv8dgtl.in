@@ -5,21 +5,19 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>DEKHO CMS — Writer Portal</title>
 <meta name="robots" content="noindex, nofollow">
-
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Instrument+Sans:wght@400;500;600;700&family=DM+Mono:wght@400;500&display=swap" rel="stylesheet">
 <script src="https://unpkg.com/lucide@latest"></script>
-
 <style>
-/* ── Reset & base ────────────────────────────────────────── */
+/* ── Reset & base ──────────────────────────────────────────── */
 *,*::before,*::after{box-sizing:border-box;margin:0;padding:0;}
 :root{
   --ink:#0D0D0D; --paper:#FAFAF8; --surface:#F2F1EE;
   --border:#E2E0DA; --muted:#8A8880; --accent:#E8380D;
   --accent2:#1A6BFF; --lime:#CCF381; --green:#16A34A;
   --yellow:#D97706; --red:#DC2626;
-  --sidebar:240px;
+  --sidebar:248px;
 }
 html{font-size:15px;}
 body{font-family:'Instrument Sans',sans-serif;background:var(--surface);color:var(--ink);overflow-x:hidden;}
@@ -29,30 +27,67 @@ body{font-family:'Instrument Sans',sans-serif;background:var(--surface);color:va
 ::-webkit-scrollbar-track{background:transparent;}
 ::-webkit-scrollbar-thumb{background:var(--border);border-radius:4px;}
 
-/* ── Screens ─────────────────────────────────────────────── */
+/* ── Screens ───────────────────────────────────────────────── */
 .screen{display:none;min-height:100vh;}
 .screen.active{display:flex;}
+
+/* ══════════════════════════════════════════════════════════
+   PAGE LOADER
+══════════════════════════════════════════════════════════ */
+#page-loader{
+  position:fixed;inset:0;background:var(--ink);z-index:9999;
+  display:flex;align-items:center;justify-content:center;flex-direction:column;gap:1rem;
+  transition:opacity .4s ease;
+}
+#page-loader.hide{opacity:0;pointer-events:none;}
+.loader-logo .display{font-size:3.5rem;color:#fff;letter-spacing:.1em;}
+.loader-logo .display span{color:var(--accent);}
+.loader-sub{font-family:'DM Mono',monospace;font-size:11px;color:#444;letter-spacing:.2em;}
+.loader-bar{width:160px;height:2px;background:#222;border-radius:2px;overflow:hidden;margin-top:.5rem;}
+.loader-bar-inner{height:100%;background:var(--accent);border-radius:2px;animation:barLoad 1.8s ease-in-out infinite;}
+@keyframes barLoad{0%{width:0%;margin-left:0;}50%{width:60%;margin-left:20%;}100%{width:0%;margin-left:100%;};}
+
+/* ══════════════════════════════════════════════════════════
+   VIEW-LEVEL LOADING OVERLAY
+══════════════════════════════════════════════════════════ */
+.view-loading{
+  position:absolute;inset:0;background:rgba(250,250,248,.85);
+  backdrop-filter:blur(3px);z-index:10;display:none;
+  align-items:center;justify-content:center;flex-direction:column;gap:.75rem;
+  border-radius:14px;
+}
+.view-loading.show{display:flex;}
+.spin-ring{
+  width:36px;height:36px;border:3px solid var(--border);
+  border-top-color:var(--accent);border-radius:50%;
+  animation:spin .7s linear infinite;
+}
+@keyframes spin{to{transform:rotate(360deg);}}
+.view-loading p{font-family:'DM Mono',monospace;font-size:11px;color:var(--muted);letter-spacing:.15em;}
+
+/* Skeleton shimmer */
+.skeleton{background:linear-gradient(90deg,var(--surface) 25%,#E8E7E3 50%,var(--surface) 75%);background-size:200%;animation:shimmer 1.5s infinite;}
+@keyframes shimmer{0%{background-position:200%;}100%{background-position:-200%;}}
+.skel-row{height:14px;border-radius:6px;margin-bottom:10px;}
+.skel-row.wide{width:80%;}
+.skel-row.mid{width:55%;}
+.skel-row.short{width:30%;}
 
 /* ══════════════════════════════════════════════════════════
    LOGIN SCREEN
 ══════════════════════════════════════════════════════════ */
 #login-screen{
   align-items:center;justify-content:center;
-  background:var(--ink);
-  position:relative;overflow:hidden;
+  background:var(--ink);position:relative;overflow:hidden;
 }
 .login-bg{
   position:absolute;inset:0;
-  background:radial-gradient(ellipse at 20% 50%,rgba(232,56,13,.15) 0%,transparent 60%),
-             radial-gradient(ellipse at 80% 20%,rgba(204,243,129,.08) 0%,transparent 50%);
+  background:radial-gradient(ellipse at 20% 50%,rgba(232,56,13,.18) 0%,transparent 60%),
+             radial-gradient(ellipse at 80% 20%,rgba(204,243,129,.07) 0%,transparent 50%);
 }
 .login-card{
-  position:relative;z-index:1;
-  width:min(420px,92vw);
-  background:#161616;
-  border:1.5px solid #2a2a2a;
-  border-radius:24px;
-  padding:2.5rem;
+  position:relative;z-index:1;width:min(420px,92vw);
+  background:#161616;border:1.5px solid #2a2a2a;border-radius:24px;padding:2.5rem;
 }
 .login-logo{text-align:center;margin-bottom:2rem;}
 .login-logo .display{font-size:3rem;color:#fff;letter-spacing:.1em;}
@@ -70,33 +105,40 @@ body{font-family:'Instrument Sans',sans-serif;background:var(--surface);color:va
   width:100%;background:var(--accent);color:#fff;border:none;border-radius:10px;
   padding:14px;font-size:14px;font-weight:700;cursor:pointer;
   transition:opacity .2s;margin-top:1.5rem;
-  font-family:'Instrument Sans',sans-serif;
+  font-family:'Instrument Sans',sans-serif;display:flex;align-items:center;justify-content:center;gap:8px;
 }
 .login-btn:hover{opacity:.88;}
 .login-btn:disabled{opacity:.5;cursor:not-allowed;}
 .login-error{
   background:#2a1010;border:1px solid #5a1f1f;border-radius:8px;
-  padding:10px 14px;font-size:12px;color:#ff8080;margin-top:1rem;
-  display:none;
+  padding:10px 14px;font-size:12px;color:#ff8080;margin-top:1rem;display:none;
 }
+.spinner{width:18px;height:18px;border:2.5px solid rgba(255,255,255,.3);border-top-color:#fff;border-radius:50%;animation:spin .7s linear infinite;display:inline-block;flex-shrink:0;}
 
 /* ══════════════════════════════════════════════════════════
-   APP SCREEN (Dashboard + Editor)
+   APP SCREEN
 ══════════════════════════════════════════════════════════ */
 #app-screen{flex-direction:row;}
 
 /* ── Sidebar ─────────────────────────────────────────────── */
+#sidebar-overlay{
+  display:none;position:fixed;inset:0;background:rgba(0,0,0,.5);z-index:39;
+  backdrop-filter:blur(2px);
+}
+#sidebar-overlay.show{display:block;}
+
 #sidebar{
   width:var(--sidebar);flex-shrink:0;
   background:#fff;border-right:1.5px solid var(--border);
   display:flex;flex-direction:column;
   min-height:100vh;position:sticky;top:0;height:100vh;overflow-y:auto;
+  transition:transform .3s cubic-bezier(.4,0,.2,1);
 }
-.sidebar-logo{padding:1.5rem 1.25rem 1rem;border-bottom:1.5px solid var(--border);}
+.sidebar-logo{padding:1.25rem 1.25rem .9rem;border-bottom:1.5px solid var(--border);}
 .sidebar-logo .display{font-size:1.75rem;color:var(--ink);letter-spacing:.1em;}
 .sidebar-logo span.mono{display:block;font-size:9px;color:var(--muted);letter-spacing:.2em;margin-top:2px;}
 .sidebar-writer{
-  padding:1rem 1.25rem;border-bottom:1.5px solid var(--border);
+  padding:.9rem 1.25rem;border-bottom:1.5px solid var(--border);
   display:flex;align-items:center;gap:10px;
 }
 .writer-avatar{
@@ -107,11 +149,11 @@ body{font-family:'Instrument Sans',sans-serif;background:var(--surface);color:va
 .writer-info{min-width:0;}
 .writer-name{font-size:13px;font-weight:700;color:var(--ink);white-space:nowrap;overflow:hidden;text-overflow:ellipsis;}
 .writer-role{font-size:10px;color:var(--muted);font-family:'DM Mono',monospace;text-transform:uppercase;letter-spacing:.1em;}
-.sidebar-nav{padding:1rem 0;flex:1;}
-.nav-section{padding:0 1.25rem;margin-bottom:.25rem;}
-.nav-label{font-size:9px;color:var(--muted);font-family:'DM Mono',monospace;letter-spacing:.2em;text-transform:uppercase;padding:.75rem 0 .5rem;}
+.sidebar-nav{padding:.75rem 0;flex:1;}
+.nav-section{padding:0 1rem;margin-bottom:.25rem;}
+.nav-label{font-size:9px;color:var(--muted);font-family:'DM Mono',monospace;letter-spacing:.2em;text-transform:uppercase;padding:.6rem 0 .4rem;}
 .nav-item{
-  display:flex;align-items:center;gap:10px;padding:9px 12px;
+  display:flex;align-items:center;gap:10px;padding:9px 10px;
   border-radius:8px;font-size:13px;font-weight:500;color:var(--muted);
   cursor:pointer;transition:all .15s;margin-bottom:2px;
   background:none;border:none;width:100%;text-align:left;
@@ -119,65 +161,74 @@ body{font-family:'Instrument Sans',sans-serif;background:var(--surface);color:va
 .nav-item:hover{background:var(--surface);color:var(--ink);}
 .nav-item.active{background:var(--surface);color:var(--ink);font-weight:700;}
 .nav-item.active svg{color:var(--accent);}
-.nav-item svg{width:16px;height:16px;flex-shrink:0;}
+.nav-item svg{width:15px;height:15px;flex-shrink:0;}
 .nav-count{
   margin-left:auto;background:var(--surface);color:var(--muted);
   font-size:10px;font-family:'DM Mono',monospace;padding:1px 7px;border-radius:999px;
 }
 .nav-item.active .nav-count{background:var(--accent);color:#fff;}
-.sidebar-bottom{padding:1.25rem;border-top:1.5px solid var(--border);}
+.sidebar-bottom{padding:1rem;border-top:1.5px solid var(--border);}
+.sidebar-link{
+  width:100%;display:flex;align-items:center;gap:8px;padding:8px 10px;
+  border-radius:8px;font-size:12px;color:var(--muted);text-decoration:none;
+  transition:all .15s;margin-bottom:4px;
+}
+.sidebar-link:hover{background:var(--surface);color:var(--ink);}
 .logout-btn{
-  width:100%;display:flex;align-items:center;gap:8px;padding:9px 12px;
+  width:100%;display:flex;align-items:center;gap:8px;padding:9px 10px;
   border:1.5px solid var(--border);border-radius:8px;
   font-size:13px;color:var(--muted);background:none;cursor:pointer;
   transition:all .2s;font-family:'Instrument Sans',sans-serif;
 }
 .logout-btn:hover{border-color:var(--red);color:var(--red);}
 
-/* ── Main area ───────────────────────────────────────────── */
+/* ── Main area ─────────────────────────────────────────────── */
 #main-area{flex:1;min-width:0;display:flex;flex-direction:column;min-height:100vh;}
 
-/* Top bar */
 .topbar{
   background:#fff;border-bottom:1.5px solid var(--border);
-  padding:0 2rem;height:60px;display:flex;align-items:center;justify-content:space-between;
-  position:sticky;top:0;z-index:20;
+  padding:0 1.5rem;height:58px;display:flex;align-items:center;justify-content:space-between;
+  position:sticky;top:0;z-index:20;gap:1rem;
 }
-.topbar-title{font-size:15px;font-weight:700;color:var(--ink);}
-.topbar-actions{display:flex;align-items:center;gap:10px;}
+.topbar-left{display:flex;align-items:center;gap:.75rem;min-width:0;}
+.topbar-title{font-size:15px;font-weight:700;color:var(--ink);white-space:nowrap;overflow:hidden;text-overflow:ellipsis;}
+.topbar-actions{display:flex;align-items:center;gap:8px;flex-shrink:0;}
+#mobile-menu-btn{display:none;background:none;border:none;cursor:pointer;padding:6px;border-radius:8px;transition:background .15s;}
+#mobile-menu-btn:hover{background:var(--surface);}
 
-/* ── View panels ─────────────────────────────────────────── */
-.view{display:none;flex:1;padding:2rem;}
+/* ── Views ─────────────────────────────────────────────────── */
+.view{display:none;flex:1;padding:1.5rem;position:relative;}
 .view.active{display:block;}
 
-/* ── Dashboard cards ─────────────────────────────────────── */
-.stats-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(180px,1fr));gap:1rem;margin-bottom:2rem;}
+/* ── Stat cards ────────────────────────────────────────────── */
+.stats-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(160px,1fr));gap:1rem;margin-bottom:1.5rem;}
 .stat-card{background:#fff;border:1.5px solid var(--border);border-radius:14px;padding:1.25rem;}
-.stat-label{font-size:10px;color:var(--muted);font-family:'DM Mono',monospace;letter-spacing:.15em;text-transform:uppercase;margin-bottom:.5rem;}
-.stat-num{font-family:'Bebas Neue',sans-serif;font-size:2.5rem;color:var(--ink);line-height:1;}
+.stat-label{font-size:10px;color:var(--muted);font-family:'DM Mono',monospace;letter-spacing:.15em;text-transform:uppercase;margin-bottom:.4rem;}
+.stat-num{font-family:'Bebas Neue',sans-serif;font-size:2.75rem;color:var(--ink);line-height:1;}
 .stat-sub{font-size:11px;color:var(--muted);margin-top:4px;}
 
-/* ── Article table ───────────────────────────────────────── */
+/* ── Article table ─────────────────────────────────────────── */
 .articles-header{display:flex;align-items:center;justify-content:space-between;margin-bottom:1.25rem;flex-wrap:wrap;gap:.75rem;}
+.filter-row{display:flex;gap:.5rem;align-items:center;flex-wrap:wrap;}
 .search-input{
   background:#fff;border:1.5px solid var(--border);border-radius:8px;
   padding:8px 14px;font-family:'Instrument Sans',sans-serif;font-size:13px;
-  color:var(--ink);outline:none;width:240px;transition:border-color .2s;
+  color:var(--ink);outline:none;width:200px;transition:border-color .2s;
 }
 .search-input:focus{border-color:var(--accent);}
-.article-table-wrap{background:#fff;border:1.5px solid var(--border);border-radius:14px;overflow:hidden;}
-.article-table{width:100%;border-collapse:collapse;}
-.article-table th{
+.table-wrap{background:#fff;border:1.5px solid var(--border);border-radius:14px;overflow:hidden;overflow-x:auto;}
+.data-table{width:100%;border-collapse:collapse;min-width:600px;}
+.data-table th{
   background:var(--surface);font-size:10px;font-family:'DM Mono',monospace;
   text-transform:uppercase;letter-spacing:.12em;color:var(--muted);
-  padding:10px 16px;text-align:left;border-bottom:1.5px solid var(--border);
+  padding:10px 14px;text-align:left;border-bottom:1.5px solid var(--border);white-space:nowrap;
 }
-.article-table td{padding:12px 16px;font-size:13px;border-bottom:1px solid var(--border);vertical-align:middle;}
-.article-table tr:last-child td{border-bottom:none;}
-.article-table tr:hover td{background:var(--surface);}
+.data-table td{padding:11px 14px;font-size:13px;border-bottom:1px solid var(--border);vertical-align:middle;}
+.data-table tr:last-child td{border-bottom:none;}
+.data-table tr:hover td{background:var(--surface);}
 .status-pill{
-  display:inline-block;padding:2px 10px;border-radius:4px;font-size:10px;
-  font-family:'DM Mono',monospace;font-weight:500;letter-spacing:.08em;
+  display:inline-block;padding:2px 9px;border-radius:4px;font-size:10px;
+  font-family:'DM Mono',monospace;font-weight:500;letter-spacing:.06em;white-space:nowrap;
 }
 .status-draft{background:#F5F0FF;color:#6B3FD4;border:1px solid #CDB8FF;}
 .status-published{background:#F0FDE8;color:#2E7D10;border:1px solid #B6EDAA;}
@@ -186,44 +237,40 @@ body{font-family:'Instrument Sans',sans-serif;background:var(--surface);color:va
   padding:5px 11px;border-radius:6px;font-size:11px;font-weight:600;
   cursor:pointer;border:1.5px solid var(--border);background:#fff;
   color:var(--muted);transition:all .15s;font-family:'Instrument Sans',sans-serif;
+  display:inline-flex;align-items:center;gap:4px;white-space:nowrap;
 }
 .action-btn:hover{border-color:var(--ink);color:var(--ink);}
 .action-btn.danger:hover{border-color:var(--red);color:var(--red);}
 .action-btn.primary{background:var(--ink);color:#fff;border-color:var(--ink);}
 .action-btn.primary:hover{background:var(--accent);border-color:var(--accent);}
+.action-btn:disabled{opacity:.5;cursor:not-allowed;}
+.btn-actions{display:flex;gap:4px;flex-wrap:wrap;}
 
-/* ── New Article / Editor ────────────────────────────────── */
-.editor-layout{display:flex;gap:1.5rem;align-items:flex-start;}
-.editor-main{flex:1;min-width:0;display:flex;flex-direction:column;gap:1rem;}
-.editor-sidebar{width:280px;flex-shrink:0;display:flex;flex-direction:column;gap:1rem;}
+/* ── Editor ────────────────────────────────────────────────── */
+.editor-layout{display:grid;grid-template-columns:1fr 280px;gap:1.25rem;align-items:start;}
+.editor-main{min-width:0;display:flex;flex-direction:column;gap:1rem;}
+.editor-aside{display:flex;flex-direction:column;gap:1rem;}
 
-/* Form elements */
 .field-group{background:#fff;border:1.5px solid var(--border);border-radius:14px;padding:1.25rem;display:flex;flex-direction:column;gap:.75rem;}
 .field-label{font-size:10px;color:var(--muted);font-family:'DM Mono',monospace;letter-spacing:.15em;text-transform:uppercase;display:block;margin-bottom:4px;}
 .field-input,.field-select,.field-textarea{
   width:100%;background:var(--surface);border:1.5px solid var(--border);border-radius:8px;
-  padding:9px 13px;font-family:'Instrument Sans',sans-serif;font-size:13px;
+  padding:9px 12px;font-family:'Instrument Sans',sans-serif;font-size:13px;
   color:var(--ink);outline:none;transition:border-color .2s;
 }
 .field-input:focus,.field-select:focus,.field-textarea:focus{border-color:var(--accent);background:#fff;}
 .field-textarea{resize:vertical;min-height:80px;line-height:1.6;}
 .field-select{cursor:pointer;}
-
-/* Rating display */
-.rating-stars{display:flex;gap:4px;align-items:center;}
 .rating-val{font-family:'Bebas Neue',sans-serif;font-size:1.5rem;color:var(--accent);}
-
-/* Cover image preview */
 .cover-preview{width:100%;aspect-ratio:16/7;background:var(--surface);border:1.5px dashed var(--border);border-radius:10px;overflow:hidden;position:relative;cursor:pointer;}
 .cover-preview img{width:100%;height:100%;object-fit:cover;display:none;}
 .cover-placeholder{position:absolute;inset:0;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:.5rem;color:var(--muted);}
 
-/* ── Rich Text Editor ────────────────────────────────────── */
+/* ── Rich text editor ──────────────────────────────────────── */
 .editor-wrap{background:#fff;border:1.5px solid var(--border);border-radius:14px;overflow:hidden;}
 .editor-toolbar{
-  display:flex;flex-wrap:wrap;gap:2px;padding:10px 12px;
-  border-bottom:1.5px solid var(--border);background:var(--surface);
-  align-items:center;
+  display:flex;flex-wrap:wrap;gap:2px;padding:8px 10px;
+  border-bottom:1.5px solid var(--border);background:var(--surface);align-items:center;
 }
 .tb-btn{
   width:30px;height:30px;display:flex;align-items:center;justify-content:center;
@@ -232,22 +279,21 @@ body{font-family:'Instrument Sans',sans-serif;background:var(--surface);color:va
 }
 .tb-btn:hover{background:var(--border);color:var(--ink);}
 .tb-btn.active{background:var(--ink);color:#fff;}
-.tb-separator{width:1px;height:20px;background:var(--border);margin:0 4px;flex-shrink:0;}
+.tb-sep{width:1px;height:20px;background:var(--border);margin:0 3px;flex-shrink:0;}
 .tb-select{
   background:var(--border);border:none;border-radius:6px;padding:3px 8px;
   font-family:'DM Mono',monospace;font-size:11px;color:var(--ink);cursor:pointer;
   outline:none;height:30px;
 }
 .editor-content{
-  min-height:520px;padding:1.5rem 2rem;outline:none;
-  font-family:'Instrument Sans',sans-serif;font-size:15px;line-height:1.85;
-  color:#333;
+  min-height:460px;padding:1.5rem 1.75rem;outline:none;
+  font-family:'Instrument Sans',sans-serif;font-size:15px;line-height:1.85;color:#333;
 }
+.editor-content:empty:before{content:attr(data-placeholder);color:var(--muted);pointer-events:none;}
 .editor-content h2{font-family:'Bebas Neue',sans-serif;font-size:2rem;color:var(--ink);margin:1.5rem 0 .75rem;line-height:1.1;}
-.editor-content h3{font-size:1.15rem;font-weight:700;color:var(--accent);margin:1.25rem 0 .5rem;}
+.editor-content h3{font-size:1.1rem;font-weight:700;color:var(--accent);margin:1.25rem 0 .5rem;}
 .editor-content p{margin-bottom:1rem;}
-.editor-content ul{padding-left:1.5rem;margin-bottom:1rem;}
-.editor-content ol{padding-left:1.5rem;margin-bottom:1rem;}
+.editor-content ul,.editor-content ol{padding-left:1.5rem;margin-bottom:1rem;}
 .editor-content li{margin-bottom:.35rem;}
 .editor-content blockquote{border-left:3px solid var(--accent);padding:.5rem 0 .5rem 1.25rem;margin:1.25rem 0;background:#FFF0ED;border-radius:0 8px 8px 0;}
 .editor-content a{color:var(--accent2);text-decoration:underline;}
@@ -257,67 +303,89 @@ body{font-family:'Instrument Sans',sans-serif;background:var(--surface);color:va
 .editor-content img{max-width:100%;border-radius:10px;margin:1rem 0;display:block;}
 .editor-content code{background:var(--surface);padding:2px 6px;border-radius:4px;font-family:'DM Mono',monospace;font-size:.88em;}
 .editor-content pre{background:#111;color:#e8e8e8;padding:1.25rem;border-radius:10px;margin:1rem 0;overflow-x:auto;}
-.editor-content pre code{background:none;padding:0;color:inherit;}
 .editor-content hr{border:none;border-top:1.5px solid var(--border);margin:1.5rem 0;}
-.editor-footer{padding:10px 1.5rem;border-top:1.5px solid var(--border);display:flex;justify-content:space-between;align-items:center;background:var(--surface);}
+.editor-footer{padding:8px 1.5rem;border-top:1.5px solid var(--border);display:flex;justify-content:space-between;align-items:center;background:var(--surface);}
 .word-count{font-size:11px;color:var(--muted);font-family:'DM Mono',monospace;}
 
-/* ── Amazon affiliate block (in editor sidebar) ──────────── */
-.aff-block{background:#fff;border:1.5px solid var(--border);border-radius:14px;padding:1.25rem;}
-.aff-block h4{font-size:11px;font-family:'DM Mono',monospace;color:var(--muted);letter-spacing:.15em;text-transform:uppercase;margin-bottom:.75rem;}
-
-/* ── Toasts ──────────────────────────────────────────────── */
-#toast-container{position:fixed;bottom:1.5rem;right:1.5rem;z-index:999;display:flex;flex-direction:column;gap:.5rem;}
+/* ── Toast ─────────────────────────────────────────────────── */
+#toast-container{position:fixed;bottom:1.5rem;right:1.5rem;z-index:9998;display:flex;flex-direction:column;gap:.5rem;pointer-events:none;}
 .toast{
-  display:flex;align-items:center;gap:.75rem;
+  display:flex;align-items:center;gap:.6rem;
   background:#fff;border:1.5px solid var(--border);border-radius:10px;
-  padding:.75rem 1.25rem;font-size:13px;color:var(--ink);
-  box-shadow:0 4px 16px rgba(0,0,0,.1);
-  animation:slideIn .3s ease;min-width:260px;
+  padding:.65rem 1.1rem;font-size:13px;color:var(--ink);
+  box-shadow:0 4px 20px rgba(0,0,0,.12);
+  animation:slideIn .3s ease;min-width:240px;max-width:340px;pointer-events:all;
 }
 .toast.success{border-color:#B6EDAA;background:#F0FDE8;color:#2E7D10;}
 .toast.error{border-color:#FCCABB;background:#FFF0ED;color:var(--accent);}
-.toast.info{border-color:var(--border);}
-@keyframes slideIn{from{transform:translateX(100%);opacity:0;}to{transform:translateX(0);opacity:1;}}
+@keyframes slideIn{from{transform:translateX(110%);opacity:0;}to{transform:translateX(0);opacity:1;}}
 
-/* ── Modal ───────────────────────────────────────────────── */
-.modal-overlay{position:fixed;inset:0;background:rgba(0,0,0,.5);z-index:50;display:none;align-items:center;justify-content:center;backdrop-filter:blur(4px);}
+/* ── Modal ─────────────────────────────────────────────────── */
+.modal-overlay{position:fixed;inset:0;background:rgba(0,0,0,.5);z-index:100;display:none;align-items:center;justify-content:center;backdrop-filter:blur(4px);padding:1rem;}
 .modal-overlay.open{display:flex;}
-.modal{background:#fff;border-radius:18px;padding:2rem;width:min(480px,90vw);border:1.5px solid var(--border);}
-.modal h3{font-size:1.25rem;font-weight:700;margin-bottom:.5rem;}
-.modal p{font-size:13px;color:var(--muted);margin-bottom:1.5rem;line-height:1.6;}
-.modal-actions{display:flex;gap:.75rem;justify-content:flex-end;}
+.modal{background:#fff;border-radius:18px;padding:1.75rem;width:min(500px,100%);border:1.5px solid var(--border);max-height:90vh;overflow-y:auto;}
+.modal h3{font-size:1.1rem;font-weight:700;margin-bottom:.4rem;}
+.modal p.modal-desc{font-size:13px;color:var(--muted);margin-bottom:1.25rem;line-height:1.6;}
+.modal-actions{display:flex;gap:.75rem;justify-content:flex-end;margin-top:1.25rem;}
+.modal-body{display:flex;flex-direction:column;gap:.75rem;}
 
-/* ── Loading ─────────────────────────────────────────────── */
-.spinner{width:20px;height:20px;border:2.5px solid rgba(255,255,255,.3);border-top-color:#fff;border-radius:50%;animation:spin .7s linear infinite;display:inline-block;}
-@keyframes spin{to{transform:rotate(360deg);}}
-.page-loader{position:fixed;inset:0;background:var(--ink);z-index:999;display:flex;align-items:center;justify-content:center;flex-direction:column;gap:1rem;}
-.page-loader .display{font-size:3rem;color:#fff;letter-spacing:.1em;}
-.page-loader .display span{color:var(--accent);}
+/* ── Writers view ──────────────────────────────────────────── */
+.writers-header{display:flex;justify-content:space-between;align-items:center;margin-bottom:1.25rem;flex-wrap:wrap;gap:.75rem;}
+.writer-card{display:flex;align-items:center;gap:12px;padding:12px 14px;border-bottom:1px solid var(--border);}
+.writer-card:last-child{border-bottom:none;}
 
-/* ── Writers table (admin) ───────────────────────────────── */
-.writers-table{width:100%;border-collapse:collapse;}
-.writers-table th{background:var(--surface);font-size:10px;font-family:'DM Mono',monospace;text-transform:uppercase;letter-spacing:.12em;color:var(--muted);padding:10px 16px;text-align:left;border-bottom:1.5px solid var(--border);}
-.writers-table td{padding:12px 16px;font-size:13px;border-bottom:1px solid var(--border);}
-.writers-table tr:last-child td{border-bottom:none;}
+/* ── Password change panel ─────────────────────────────────── */
+#view-settings .field-group{max-width:480px;}
+.pwd-strength{height:3px;border-radius:2px;margin-top:4px;transition:all .3s;}
 
-/* ── Responsive ──────────────────────────────────────────── */
+/* ── Affiliate block ───────────────────────────────────────── */
+.aff-block{background:#fff;border:1.5px solid var(--border);border-radius:14px;padding:1.25rem;}
+.aff-block h4{font-size:11px;font-family:'DM Mono',monospace;color:var(--muted);letter-spacing:.15em;text-transform:uppercase;margin-bottom:.75rem;}
+
+/* ══════════════════════════════════════════════════════════
+   RESPONSIVE — TABLET & MOBILE
+══════════════════════════════════════════════════════════ */
+@media(max-width:900px){
+  .editor-layout{grid-template-columns:1fr;}
+  .editor-aside{display:grid;grid-template-columns:repeat(auto-fit,minmax(260px,1fr));}
+}
+
 @media(max-width:768px){
-  :root{--sidebar:0px;}
-  #sidebar{position:fixed;left:0;top:0;z-index:40;width:260px;transform:translateX(-100%);transition:transform .3s;}
+  :root{--sidebar:260px;}
+  #sidebar{
+    position:fixed;left:0;top:0;z-index:40;height:100vh;
+    transform:translateX(-100%);
+  }
   #sidebar.open{transform:translateX(0);}
+  #mobile-menu-btn{display:flex;}
+  .topbar{padding:0 1rem;}
   .view{padding:1rem;}
-  .editor-layout{flex-direction:column;}
-  .editor-sidebar{width:100%;}
+  .stats-grid{grid-template-columns:1fr 1fr;}
+  .search-input{width:100%;}
+  .filter-row{width:100%;}
+  .articles-header{flex-direction:column;align-items:stretch;}
+  .data-table td:nth-child(4),.data-table th:nth-child(4){display:none;}
+  .editor-aside{display:flex;flex-direction:column;}
+  .topbar-actions .action-btn span{display:none;}
+}
+
+@media(max-width:480px){
+  .stats-grid{grid-template-columns:1fr;}
+  .login-card{padding:1.75rem 1.25rem;}
+  .modal{padding:1.25rem;}
+  .data-table td:nth-child(3),.data-table th:nth-child(3){display:none;}
 }
 </style>
 </head>
 <body>
 
-<!-- ── Page loader ─────────────────────────────────────────── -->
-<div class="page-loader" id="page-loader">
-  <div class="display">DEK<span>HO</span></div>
-  <div style="font-family:'DM Mono',monospace;font-size:11px;color:#555;letter-spacing:.2em;">LOADING CMS...</div>
+<!-- ── Page Loader ──────────────────────────────────────────── -->
+<div id="page-loader">
+  <div class="loader-logo">
+    <div class="display">DEK<span>HO</span></div>
+  </div>
+  <div class="loader-sub">LOADING CMS...</div>
+  <div class="loader-bar"><div class="loader-bar-inner"></div></div>
 </div>
 
 <!-- ══════════════════════════════════════════════════════════
@@ -338,8 +406,8 @@ body{font-family:'Instrument Sans',sans-serif;background:var(--surface);color:va
       <div>
         <label class="login-label" for="login-password">Password</label>
         <div style="position:relative;">
-          <input type="password" id="login-password" class="login-input" placeholder="Your password" autocomplete="current-password">
-          <button onclick="togglePwd()" style="position:absolute;right:12px;top:50%;transform:translateY(-50%);background:none;border:none;cursor:pointer;color:#555;padding:4px;" id="pwd-eye">
+          <input type="password" id="login-password" class="login-input" placeholder="Your password" autocomplete="current-password" style="padding-right:42px;">
+          <button onclick="togglePwd('login-password','pwd-eye')" style="position:absolute;right:12px;top:50%;transform:translateY(-50%);background:none;border:none;cursor:pointer;color:#555;padding:4px;" id="pwd-eye">
             <i data-lucide="eye" style="width:16px;height:16px;"></i>
           </button>
         </div>
@@ -360,6 +428,9 @@ body{font-family:'Instrument Sans',sans-serif;background:var(--surface);color:va
 ══════════════════════════════════════════════════════════ -->
 <div class="screen" id="app-screen">
 
+  <!-- Mobile overlay -->
+  <div id="sidebar-overlay" onclick="closeSidebar()"></div>
+
   <!-- Sidebar -->
   <aside id="sidebar">
     <div class="sidebar-logo">
@@ -376,27 +447,33 @@ body{font-family:'Instrument Sans',sans-serif;background:var(--surface);color:va
     <nav class="sidebar-nav">
       <div class="nav-section">
         <div class="nav-label">Main</div>
-        <button class="nav-item active" onclick="showView('dashboard')" data-view="dashboard">
+        <button class="nav-item active" onclick="navigate('dashboard')" data-view="dashboard">
           <i data-lucide="layout-dashboard"></i> Dashboard
         </button>
-        <button class="nav-item" onclick="showView('articles')" data-view="articles">
+        <button class="nav-item" onclick="navigate('articles')" data-view="articles">
           <i data-lucide="file-text"></i> All Articles
-          <span class="nav-count" id="article-count">0</span>
+          <span class="nav-count" id="nav-article-count">0</span>
         </button>
-        <button class="nav-item" onclick="showView('editor');newArticle()" data-view="editor" id="new-article-nav">
+        <button class="nav-item" onclick="navigate('editor');newArticle()" data-view="editor">
           <i data-lucide="plus-circle"></i> New Article
         </button>
       </div>
       <div class="nav-section admin-only" style="display:none;">
         <div class="nav-label">Admin</div>
-        <button class="nav-item" onclick="showView('writers')" data-view="writers">
+        <button class="nav-item" onclick="navigate('writers')" data-view="writers">
           <i data-lucide="users"></i> Writers
+        </button>
+      </div>
+      <div class="nav-section">
+        <div class="nav-label">Account</div>
+        <button class="nav-item" onclick="navigate('settings')" data-view="settings">
+          <i data-lucide="key-round"></i> Change Password
         </button>
       </div>
     </nav>
     <div class="sidebar-bottom">
-      <a href="dekho.html" target="_blank" style="display:flex;align-items:center;gap:8px;padding:9px 12px;border-radius:8px;font-size:12px;color:var(--muted);text-decoration:none;transition:all .15s;margin-bottom:.5rem;" onmouseover="this.style.background='var(--surface)'" onmouseout="this.style.background='transparent'">
-        <i data-lucide="external-link" style="width:14px;height:14px;"></i> View Live Blog
+      <a href="dekho.html" target="_blank" class="sidebar-link">
+        <i data-lucide="external-link" style="width:14px;height:14px;flex-shrink:0;"></i> View Live Blog
       </a>
       <button class="logout-btn" onclick="handleLogout()">
         <i data-lucide="log-out" style="width:14px;height:14px;"></i> Sign Out
@@ -409,20 +486,20 @@ body{font-family:'Instrument Sans',sans-serif;background:var(--surface);color:va
 
     <!-- Topbar -->
     <div class="topbar">
-      <div style="display:flex;align-items:center;gap:.75rem;">
-        <button onclick="document.getElementById('sidebar').classList.toggle('open')" style="display:none;background:none;border:none;cursor:pointer;padding:4px;" id="mobile-menu-btn">
+      <div class="topbar-left">
+        <button id="mobile-menu-btn" onclick="openSidebar()" aria-label="Menu">
           <i data-lucide="menu" style="width:20px;height:20px;color:var(--ink);"></i>
         </button>
         <span class="topbar-title" id="topbar-title">Dashboard</span>
       </div>
-      <div class="topbar-actions" id="topbar-actions">
-        <!-- Actions injected per view -->
-      </div>
+      <div class="topbar-actions" id="topbar-actions"></div>
     </div>
 
-    <!-- ── DASHBOARD VIEW ──────────────────────────────────── -->
+    <!-- ══════════════════════════════════════════════════════
+         DASHBOARD VIEW
+    ══════════════════════════════════════════════════════ -->
     <div class="view active" id="view-dashboard">
-      <div class="stats-grid" id="stats-grid">
+      <div class="stats-grid">
         <div class="stat-card">
           <div class="stat-label">Total Articles</div>
           <div class="stat-num" id="stat-total">—</div>
@@ -440,34 +517,41 @@ body{font-family:'Instrument Sans',sans-serif;background:var(--surface);color:va
         </div>
         <div class="stat-card">
           <div class="stat-label">Categories</div>
-          <div class="stat-num" id="stat-cats">4</div>
-          <div class="stat-sub">Review · Comparison · Top · Guide</div>
+          <div class="stat-num">4</div>
+          <div class="stat-sub">Review · Compare · Top · Guide</div>
         </div>
       </div>
 
-      <!-- Recent articles -->
-      <div style="background:#fff;border:1.5px solid var(--border);border-radius:14px;overflow:hidden;">
-        <div style="padding:1rem 1.25rem;border-bottom:1.5px solid var(--border);display:flex;align-items:center;justify-content:space-between;">
+      <div style="background:#fff;border:1.5px solid var(--border);border-radius:14px;overflow:hidden;position:relative;">
+        <div style="padding:1rem 1.25rem;border-bottom:1.5px solid var(--border);display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:.5rem;">
           <span style="font-weight:700;font-size:14px;">Recent Articles</span>
-          <button class="action-btn primary" onclick="showView('editor');newArticle()">+ New Article</button>
+          <button class="action-btn primary" onclick="navigate('editor');newArticle()"><i data-lucide="plus" style="width:13px;height:13px;"></i> New Article</button>
         </div>
-        <div id="dashboard-recent">
-          <div style="padding:3rem;text-align:center;color:var(--muted);font-size:13px;">Loading...</div>
+        <!-- loading skeleton for dashboard -->
+        <div id="dashboard-skeleton" style="padding:1.25rem;display:flex;flex-direction:column;gap:.75rem;">
+          <div class="skel-row skeleton wide"></div>
+          <div class="skel-row skeleton mid"></div>
+          <div class="skel-row skeleton wide"></div>
+          <div class="skel-row skeleton short"></div>
+          <div class="skel-row skeleton mid"></div>
         </div>
+        <div id="dashboard-recent" style="display:none;"></div>
       </div>
     </div>
 
-    <!-- ── ARTICLES VIEW ───────────────────────────────────── -->
+    <!-- ══════════════════════════════════════════════════════
+         ARTICLES VIEW
+    ══════════════════════════════════════════════════════ -->
     <div class="view" id="view-articles">
       <div class="articles-header">
-        <div style="display:flex;gap:.75rem;align-items:center;flex-wrap:wrap;">
-          <input type="text" class="search-input" id="articles-search" placeholder="Search articles..." oninput="filterArticles()">
-          <select class="field-select" id="filter-status" onchange="filterArticles()" style="width:auto;padding:8px 12px;">
+        <div class="filter-row">
+          <input type="text" class="search-input" id="articles-search" placeholder="🔍  Search articles..." oninput="filterArticles()">
+          <select class="field-select" id="filter-status" onchange="filterArticles()" style="width:auto;padding:8px 10px;font-size:12px;">
             <option value="">All Status</option>
             <option value="draft">Drafts</option>
             <option value="published">Published</option>
           </select>
-          <select class="field-select" id="filter-cat" onchange="filterArticles()" style="width:auto;padding:8px 12px;">
+          <select class="field-select" id="filter-cat" onchange="filterArticles()" style="width:auto;padding:8px 10px;font-size:12px;">
             <option value="">All Categories</option>
             <option value="review">Review</option>
             <option value="comparison">Comparison</option>
@@ -475,10 +559,19 @@ body{font-family:'Instrument Sans',sans-serif;background:var(--surface);color:va
             <option value="guide">Guide</option>
           </select>
         </div>
-        <button class="action-btn primary" onclick="showView('editor');newArticle()">+ New Article</button>
+        <button class="action-btn primary" onclick="navigate('editor');newArticle()"><i data-lucide="plus" style="width:13px;height:13px;"></i> New Article</button>
       </div>
-      <div class="article-table-wrap">
-        <table class="article-table">
+      <div class="table-wrap" style="position:relative;">
+        <!-- Loading skeleton -->
+        <div id="articles-skeleton" style="padding:1.25rem;display:flex;flex-direction:column;gap:.75rem;">
+          <div class="skel-row skeleton wide"></div>
+          <div class="skel-row skeleton mid"></div>
+          <div class="skel-row skeleton wide"></div>
+          <div class="skel-row skeleton short"></div>
+          <div class="skel-row skeleton mid"></div>
+          <div class="skel-row skeleton wide"></div>
+        </div>
+        <table class="data-table" id="articles-table" style="display:none;">
           <thead>
             <tr>
               <th>Title</th>
@@ -489,107 +582,75 @@ body{font-family:'Instrument Sans',sans-serif;background:var(--surface);color:va
               <th>Actions</th>
             </tr>
           </thead>
-          <tbody id="articles-tbody">
-            <tr><td colspan="6" style="text-align:center;padding:3rem;color:var(--muted);">Loading articles...</td></tr>
-          </tbody>
+          <tbody id="articles-tbody"></tbody>
         </table>
       </div>
     </div>
 
-    <!-- ── EDITOR VIEW ─────────────────────────────────────── -->
-    <div class="view" id="view-editor" style="padding:1.5rem;">
+    <!-- ══════════════════════════════════════════════════════
+         EDITOR VIEW
+    ══════════════════════════════════════════════════════ -->
+    <div class="view" id="view-editor" style="padding:1.25rem;">
+
+      <!-- Editor loading overlay -->
+      <div class="view-loading" id="editor-loading">
+        <div class="spin-ring"></div>
+        <p>LOADING ARTICLE...</p>
+      </div>
+
       <div class="editor-layout">
 
         <!-- Left: editor -->
         <div class="editor-main">
-
           <!-- Title -->
           <div style="background:#fff;border:1.5px solid var(--border);border-radius:14px;padding:1.25rem;">
-            <input type="text" id="art-title" class="field-input" placeholder="Article title — make it punchy..." style="font-size:1.2rem;font-weight:700;font-family:'Instrument Sans',sans-serif;" oninput="updateAutoSlug()">
+            <input type="text" id="art-title" class="field-input" placeholder="Article title — make it punchy..." style="font-size:1.1rem;font-weight:700;background:transparent;border-color:transparent;padding-left:0;" oninput="updateAutoSlug()">
           </div>
 
-          <!-- Toolbar + Editor -->
+          <!-- Rich text editor -->
           <div class="editor-wrap">
             <div class="editor-toolbar" id="editor-toolbar">
-              <!-- Format -->
-              <select class="tb-select" onchange="execCmd('formatBlock',this.value);this.value=''" title="Text Format">
+              <select class="tb-select" onchange="execCmd('formatBlock',this.value);this.value=''" title="Format">
                 <option value="">Format</option>
                 <option value="h2">Heading 2</option>
                 <option value="h3">Heading 3</option>
                 <option value="p">Paragraph</option>
                 <option value="pre">Code Block</option>
               </select>
-
-              <div class="tb-separator"></div>
-
-              <!-- Font size -->
-              <select class="tb-select" onchange="execCmd('fontSize',this.value);this.value=''" title="Font Size">
-                <option value="">Size</option>
-                <option value="2">Small</option>
-                <option value="3">Normal</option>
-                <option value="4">Large</option>
-                <option value="5">X-Large</option>
-              </select>
-
-              <div class="tb-separator"></div>
-
-              <!-- Bold, Italic, Underline, Strike -->
-              <button class="tb-btn" onclick="execCmd('bold')" title="Bold"><i data-lucide="bold" style="width:14px;height:14px;"></i></button>
-              <button class="tb-btn" onclick="execCmd('italic')" title="Italic"><i data-lucide="italic" style="width:14px;height:14px;"></i></button>
-              <button class="tb-btn" onclick="execCmd('underline')" title="Underline"><i data-lucide="underline" style="width:14px;height:14px;"></i></button>
-              <button class="tb-btn" onclick="execCmd('strikeThrough')" title="Strikethrough"><i data-lucide="strikethrough" style="width:14px;height:14px;"></i></button>
-
-              <div class="tb-separator"></div>
-
-              <!-- Lists -->
-              <button class="tb-btn" onclick="execCmd('insertUnorderedList')" title="Bullet List"><i data-lucide="list" style="width:14px;height:14px;"></i></button>
-              <button class="tb-btn" onclick="execCmd('insertOrderedList')" title="Numbered List"><i data-lucide="list-ordered" style="width:14px;height:14px;"></i></button>
-
-              <div class="tb-separator"></div>
-
-              <!-- Align -->
-              <button class="tb-btn" onclick="execCmd('justifyLeft')" title="Align Left"><i data-lucide="align-left" style="width:14px;height:14px;"></i></button>
-              <button class="tb-btn" onclick="execCmd('justifyCenter')" title="Center"><i data-lucide="align-center" style="width:14px;height:14px;"></i></button>
-              <button class="tb-btn" onclick="execCmd('justifyRight')" title="Align Right"><i data-lucide="align-right" style="width:14px;height:14px;"></i></button>
-
-              <div class="tb-separator"></div>
-
-              <!-- Insert tools -->
-              <button class="tb-btn" onclick="insertLink()" title="Insert Link"><i data-lucide="link" style="width:14px;height:14px;"></i></button>
-              <button class="tb-btn" onclick="insertImage()" title="Insert Image"><i data-lucide="image" style="width:14px;height:14px;"></i></button>
-              <button class="tb-btn" onclick="insertTable()" title="Insert Table"><i data-lucide="table" style="width:14px;height:14px;"></i></button>
-              <button class="tb-btn" onclick="insertHR()" title="Divider"><i data-lucide="minus" style="width:14px;height:14px;"></i></button>
-              <button class="tb-btn" onclick="insertBlockquote()" title="Blockquote"><i data-lucide="quote" style="width:14px;height:14px;"></i></button>
-
-              <div class="tb-separator"></div>
-
-              <!-- Amazon affiliate quick-insert -->
-              <button class="tb-btn" onclick="insertAffiliateCard()" title="Insert Amazon Affiliate Card" style="background:var(--surface);border-radius:6px;width:auto;padding:0 10px;font-size:10px;font-family:'DM Mono',monospace;color:var(--accent);gap:4px;">
-                <i data-lucide="shopping-cart" style="width:13px;height:13px;"></i> Affiliate
+              <div class="tb-sep"></div>
+              <button class="tb-btn" onclick="execCmd('bold')" title="Bold"><i data-lucide="bold" style="width:13px;height:13px;"></i></button>
+              <button class="tb-btn" onclick="execCmd('italic')" title="Italic"><i data-lucide="italic" style="width:13px;height:13px;"></i></button>
+              <button class="tb-btn" onclick="execCmd('underline')" title="Underline"><i data-lucide="underline" style="width:13px;height:13px;"></i></button>
+              <button class="tb-btn" onclick="execCmd('strikeThrough')" title="Strike"><i data-lucide="strikethrough" style="width:13px;height:13px;"></i></button>
+              <div class="tb-sep"></div>
+              <button class="tb-btn" onclick="execCmd('insertUnorderedList')" title="Bullet"><i data-lucide="list" style="width:13px;height:13px;"></i></button>
+              <button class="tb-btn" onclick="execCmd('insertOrderedList')" title="Numbered"><i data-lucide="list-ordered" style="width:13px;height:13px;"></i></button>
+              <div class="tb-sep"></div>
+              <button class="tb-btn" onclick="execCmd('justifyLeft')" title="Left"><i data-lucide="align-left" style="width:13px;height:13px;"></i></button>
+              <button class="tb-btn" onclick="execCmd('justifyCenter')" title="Center"><i data-lucide="align-center" style="width:13px;height:13px;"></i></button>
+              <button class="tb-btn" onclick="execCmd('justifyRight')" title="Right"><i data-lucide="align-right" style="width:13px;height:13px;"></i></button>
+              <div class="tb-sep"></div>
+              <button class="tb-btn" onclick="insertLink()" title="Link"><i data-lucide="link" style="width:13px;height:13px;"></i></button>
+              <button class="tb-btn" onclick="insertImage()" title="Image"><i data-lucide="image" style="width:13px;height:13px;"></i></button>
+              <button class="tb-btn" onclick="insertTable()" title="Table"><i data-lucide="table" style="width:13px;height:13px;"></i></button>
+              <button class="tb-btn" onclick="insertHR()" title="Divider"><i data-lucide="minus" style="width:13px;height:13px;"></i></button>
+              <button class="tb-btn" onclick="insertBlockquote()" title="Quote"><i data-lucide="quote" style="width:13px;height:13px;"></i></button>
+              <div class="tb-sep"></div>
+              <button class="tb-btn" onclick="insertAffiliateCard()" title="Affiliate" style="width:auto;padding:0 8px;font-size:10px;font-family:'DM Mono',monospace;color:var(--accent);gap:3px;">
+                <i data-lucide="shopping-cart" style="width:12px;height:12px;"></i><span>Aff</span>
               </button>
-
-              <div class="tb-separator"></div>
-
-              <!-- Undo/Redo -->
-              <button class="tb-btn" onclick="execCmd('undo')" title="Undo"><i data-lucide="undo-2" style="width:14px;height:14px;"></i></button>
-              <button class="tb-btn" onclick="execCmd('redo')" title="Redo"><i data-lucide="redo-2" style="width:14px;height:14px;"></i></button>
-
-              <!-- HTML toggle -->
-              <button class="tb-btn" onclick="toggleHtml()" title="Toggle HTML Source" id="html-toggle-btn" style="margin-left:auto;">
-                <i data-lucide="code" style="width:14px;height:14px;"></i>
+              <div class="tb-sep"></div>
+              <button class="tb-btn" onclick="execCmd('undo')" title="Undo"><i data-lucide="undo-2" style="width:13px;height:13px;"></i></button>
+              <button class="tb-btn" onclick="execCmd('redo')" title="Redo"><i data-lucide="redo-2" style="width:13px;height:13px;"></i></button>
+              <button class="tb-btn" onclick="toggleHtml()" title="HTML Source" id="html-toggle-btn" style="margin-left:auto;">
+                <i data-lucide="code" style="width:13px;height:13px;"></i>
               </button>
             </div>
-
-            <!-- Rich text content area -->
             <div class="editor-content" id="editor-content" contenteditable="true"
+                 data-placeholder="Start writing your article here..."
                  oninput="updateWordCount()"
-                 onkeydown="handleEditorKeydown(event)"
-                 placeholder="Start writing your article here...">
-            </div>
-
-            <!-- HTML source view (hidden by default) -->
-            <textarea id="html-source" style="display:none;width:100%;min-height:520px;padding:1.5rem;background:#111;color:#e8e8e8;font-family:'DM Mono',monospace;font-size:12px;border:none;outline:none;resize:vertical;line-height:1.7;"></textarea>
-
+                 onkeydown="handleEditorKeydown(event)"></div>
+            <textarea id="html-source" style="display:none;width:100%;min-height:460px;padding:1.5rem;background:#111;color:#e8e8e8;font-family:'DM Mono',monospace;font-size:12px;border:none;outline:none;resize:vertical;line-height:1.7;"></textarea>
             <div class="editor-footer">
               <span class="word-count" id="word-count">0 words</span>
               <span class="word-count" id="save-status" style="color:var(--green);">Ready</span>
@@ -597,30 +658,27 @@ body{font-family:'Instrument Sans',sans-serif;background:var(--surface);color:va
           </div>
         </div>
 
-        <!-- Right: settings -->
-        <div class="editor-sidebar">
+        <!-- Right: sidebar settings -->
+        <div class="editor-aside">
 
           <!-- Publish box -->
           <div class="field-group" style="border:1.5px solid var(--ink);">
             <div style="display:flex;justify-content:space-between;align-items:center;">
               <span style="font-weight:700;font-size:14px;">Publish</span>
-              <span class="status-pill" id="pub-status-badge">draft</span>
+              <span class="status-pill status-draft" id="pub-status-badge">draft</span>
             </div>
             <input type="hidden" id="art-id" value="">
-            <div style="display:flex;flex-direction:column;gap:.5rem;">
-              <button class="action-btn" onclick="saveArticle('draft')" style="justify-content:center;display:flex;align-items:center;gap:6px;padding:10px;">
-                <i data-lucide="save" style="width:14px;height:14px;"></i> Save Draft
-              </button>
-              <button class="action-btn primary" onclick="saveAndPublish()" style="justify-content:center;display:flex;align-items:center;gap:6px;padding:10px;">
-                <i data-lucide="send" style="width:14px;height:14px;"></i> Publish Article
-              </button>
-            </div>
+            <button class="action-btn" onclick="saveArticle('draft')" style="justify-content:center;padding:10px;" id="btn-save-draft">
+              <i data-lucide="save" style="width:14px;height:14px;"></i> Save Draft
+            </button>
+            <button class="action-btn primary" onclick="saveAndPublish()" style="justify-content:center;padding:10px;" id="btn-publish">
+              <i data-lucide="send" style="width:14px;height:14px;"></i> Publish Article
+            </button>
           </div>
 
           <!-- Article meta -->
           <div class="field-group">
-            <div style="font-weight:700;font-size:13px;margin-bottom:4px;">Article Settings</div>
-
+            <div style="font-weight:700;font-size:13px;">Article Settings</div>
             <div>
               <label class="field-label">Category</label>
               <select id="art-category" class="field-select">
@@ -636,7 +694,7 @@ body{font-family:'Instrument Sans',sans-serif;background:var(--surface);color:va
             </div>
             <div>
               <label class="field-label">Read Time (minutes)</label>
-              <input type="number" id="art-readtime" class="field-input" placeholder="5" min="1" max="60" value="5">
+              <input type="number" id="art-readtime" class="field-input" value="5" min="1" max="60">
             </div>
             <div>
               <label class="field-label">Rating (0–10)</label>
@@ -653,11 +711,11 @@ body{font-family:'Instrument Sans',sans-serif;background:var(--surface);color:va
 
           <!-- Cover image -->
           <div class="field-group">
-            <div style="font-weight:700;font-size:13px;margin-bottom:4px;">Cover Image</div>
+            <div style="font-weight:700;font-size:13px;">Cover Image</div>
             <div class="cover-preview" onclick="setCoverImage()" id="cover-preview-box">
               <img id="cover-preview-img" src="" alt="">
               <div class="cover-placeholder" id="cover-placeholder">
-                <i data-lucide="image" style="width:28px;height:28px;"></i>
+                <i data-lucide="image" style="width:26px;height:26px;"></i>
                 <span style="font-size:12px;">Click to set cover image URL</span>
               </div>
             </div>
@@ -667,10 +725,10 @@ body{font-family:'Instrument Sans',sans-serif;background:var(--surface);color:va
           <!-- Excerpt -->
           <div class="field-group">
             <label class="field-label">Excerpt / Summary</label>
-            <textarea id="art-excerpt" class="field-textarea" placeholder="2-3 sentence summary shown on the listing page..." rows="3"></textarea>
+            <textarea id="art-excerpt" class="field-textarea" placeholder="2–3 sentence summary shown on the listing page..." rows="3"></textarea>
           </div>
 
-          <!-- Quick affiliate card builder -->
+          <!-- Affiliate card builder -->
           <div class="aff-block">
             <h4>Amazon Affiliate Card</h4>
             <div style="display:flex;flex-direction:column;gap:.5rem;">
@@ -678,8 +736,8 @@ body{font-family:'Instrument Sans',sans-serif;background:var(--surface);color:va
               <input type="text" id="aff-price" class="field-input" placeholder="₹XX,XXX">
               <input type="text" id="aff-img" class="field-input" placeholder="Product image URL">
               <input type="text" id="aff-link" class="field-input" placeholder="Amazon affiliate link">
-              <button class="action-btn" onclick="insertAffiliateCard()" style="display:flex;align-items:center;justify-content:center;gap:6px;">
-                <i data-lucide="plus" style="width:14px;height:14px;"></i> Insert into Article
+              <button class="action-btn" onclick="insertAffiliateCard()" style="justify-content:center;gap:6px;">
+                <i data-lucide="plus" style="width:13px;height:13px;"></i> Insert into Article
               </button>
             </div>
           </div>
@@ -688,14 +746,21 @@ body{font-family:'Instrument Sans',sans-serif;background:var(--surface);color:va
       </div>
     </div>
 
-    <!-- ── WRITERS VIEW (Admin only) ──────────────────────── -->
+    <!-- ══════════════════════════════════════════════════════
+         WRITERS VIEW (Admin only)
+    ══════════════════════════════════════════════════════ -->
     <div class="view" id="view-writers">
-      <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:1.25rem;">
-        <h2 style="font-size:1.1rem;font-weight:700;">Team Writers</h2>
-        <button class="action-btn primary" onclick="openAddWriterModal()">+ Add Writer</button>
+      <div class="writers-header">
+        <h2 style="font-size:1rem;font-weight:700;">Team Writers</h2>
+        <button class="action-btn primary" onclick="openAddWriterModal()"><i data-lucide="user-plus" style="width:13px;height:13px;"></i> Add Writer</button>
       </div>
-      <div style="background:#fff;border:1.5px solid var(--border);border-radius:14px;overflow:hidden;">
-        <table class="writers-table">
+      <div class="table-wrap" style="position:relative;">
+        <div id="writers-skeleton" style="padding:1.25rem;display:flex;flex-direction:column;gap:.75rem;">
+          <div class="skel-row skeleton wide"></div>
+          <div class="skel-row skeleton mid"></div>
+          <div class="skel-row skeleton short"></div>
+        </div>
+        <table class="data-table" id="writers-table" style="display:none;">
           <thead>
             <tr>
               <th>Name</th>
@@ -706,40 +771,113 @@ body{font-family:'Instrument Sans',sans-serif;background:var(--surface);color:va
               <th>Actions</th>
             </tr>
           </thead>
-          <tbody id="writers-tbody">
-            <tr><td colspan="6" style="text-align:center;padding:2rem;color:var(--muted);">Loading...</td></tr>
-          </tbody>
+          <tbody id="writers-tbody"></tbody>
         </table>
+      </div>
+    </div>
+
+    <!-- ══════════════════════════════════════════════════════
+         SETTINGS / CHANGE PASSWORD VIEW
+    ══════════════════════════════════════════════════════ -->
+    <div class="view" id="view-settings">
+      <div style="max-width:480px;">
+        <h2 style="font-size:1.1rem;font-weight:700;margin-bottom:.4rem;">Change Password</h2>
+        <p style="font-size:13px;color:var(--muted);margin-bottom:1.5rem;line-height:1.6;">
+          Update your login password. You'll need to enter your current password to confirm.
+          If this is your first login, enter the temporary password set by Madhur.
+        </p>
+
+        <div class="field-group">
+          <div>
+            <label class="field-label">Current Password</label>
+            <div style="position:relative;">
+              <input type="password" id="cp-current" class="field-input" placeholder="Your current / temporary password" style="padding-right:42px;">
+              <button onclick="togglePwd('cp-current','cp-eye1')" style="position:absolute;right:10px;top:50%;transform:translateY(-50%);background:none;border:none;cursor:pointer;color:var(--muted);padding:4px;" id="cp-eye1">
+                <i data-lucide="eye" style="width:15px;height:15px;"></i>
+              </button>
+            </div>
+          </div>
+          <div>
+            <label class="field-label">New Password</label>
+            <div style="position:relative;">
+              <input type="password" id="cp-new" class="field-input" placeholder="At least 8 characters" oninput="checkPwdStrength()" style="padding-right:42px;">
+              <button onclick="togglePwd('cp-new','cp-eye2')" style="position:absolute;right:10px;top:50%;transform:translateY(-50%);background:none;border:none;cursor:pointer;color:var(--muted);padding:4px;" id="cp-eye2">
+                <i data-lucide="eye" style="width:15px;height:15px;"></i>
+              </button>
+            </div>
+            <div class="pwd-strength" id="pwd-strength-bar" style="background:var(--border);"></div>
+            <p id="pwd-strength-label" style="font-size:11px;color:var(--muted);margin-top:4px;font-family:'DM Mono',monospace;"></p>
+          </div>
+          <div>
+            <label class="field-label">Confirm New Password</label>
+            <div style="position:relative;">
+              <input type="password" id="cp-confirm" class="field-input" placeholder="Repeat new password" style="padding-right:42px;">
+              <button onclick="togglePwd('cp-confirm','cp-eye3')" style="position:absolute;right:10px;top:50%;transform:translateY(-50%);background:none;border:none;cursor:pointer;color:var(--muted);padding:4px;" id="cp-eye3">
+                <i data-lucide="eye" style="width:15px;height:15px;"></i>
+              </button>
+            </div>
+          </div>
+          <div id="cp-error" style="display:none;background:#FFF0ED;border:1px solid #FCCABB;border-radius:8px;padding:10px 14px;font-size:12px;color:var(--accent);"></div>
+          <button class="action-btn primary" onclick="changePassword()" id="cp-btn" style="justify-content:center;padding:12px;">
+            <i data-lucide="key-round" style="width:14px;height:14px;"></i> Update Password
+          </button>
+        </div>
+
+        <div style="margin-top:1.5rem;background:#fff;border:1.5px solid var(--border);border-radius:14px;padding:1.25rem;">
+          <p style="font-size:10px;font-family:'DM Mono',monospace;color:var(--muted);letter-spacing:.15em;text-transform:uppercase;margin-bottom:.75rem;">CURRENT SESSION</p>
+          <div style="display:flex;flex-direction:column;gap:.5rem;">
+            <div style="display:flex;justify-content:space-between;font-size:13px;">
+              <span style="color:var(--muted);">Logged in as</span>
+              <strong id="session-email">—</strong>
+            </div>
+            <div style="display:flex;justify-content:space-between;font-size:13px;">
+              <span style="color:var(--muted);">Role</span>
+              <span id="session-role">—</span>
+            </div>
+          </div>
+        </div>
       </div>
     </div>
 
   </div><!-- end main-area -->
 </div><!-- end app-screen -->
 
-<!-- ── Toast container ──────────────────────────────────── -->
+<!-- ── Toast container ─────────────────────────────────────── -->
 <div id="toast-container"></div>
 
-<!-- ── Delete confirm modal ──────────────────────────────── -->
+<!-- ══════════════════════════════════════════════════════════
+     MODALS
+══════════════════════════════════════════════════════════ -->
+
+<!-- Delete confirm -->
 <div class="modal-overlay" id="delete-modal">
   <div class="modal">
     <h3>Delete Article?</h3>
-    <p>This action is permanent and cannot be undone. The article will be removed from the database.</p>
+    <p class="modal-desc">This is permanent and cannot be undone. The article will be removed from the database.</p>
     <div class="modal-actions">
       <button class="action-btn" onclick="closeModal('delete-modal')">Cancel</button>
-      <button class="action-btn danger" id="confirm-delete-btn" onclick="confirmDelete()" style="background:var(--red);color:#fff;border-color:var(--red);">Delete</button>
+      <button class="action-btn danger" id="confirm-delete-btn" onclick="confirmDelete()" style="background:var(--red);color:#fff;border-color:var(--red);">
+        <i data-lucide="trash-2" style="width:13px;height:13px;"></i> Delete
+      </button>
     </div>
   </div>
 </div>
 
-<!-- ── Add Writer modal ───────────────────────────────────── -->
+<!-- Add Writer -->
 <div class="modal-overlay" id="add-writer-modal">
   <div class="modal">
     <h3>Add New Writer</h3>
-    <p>They'll receive access to the DEKHO CMS with the password you set here.</p>
-    <div style="display:flex;flex-direction:column;gap:.75rem;margin-bottom:1.25rem;">
+    <p class="modal-desc">Set a temporary password — they'll change it after their first login via the Change Password section.</p>
+    <div class="modal-body">
       <div><label class="field-label">Full Name</label><input type="text" id="new-writer-name" class="field-input" placeholder="Priya Sharma"></div>
       <div><label class="field-label">Email Address</label><input type="email" id="new-writer-email" class="field-input" placeholder="priya@email.com"></div>
-      <div><label class="field-label">Password</label><input type="text" id="new-writer-password" class="field-input" placeholder="Set a strong password"></div>
+      <div>
+        <label class="field-label">Temporary Password</label>
+        <div style="position:relative;">
+          <input type="text" id="new-writer-password" class="field-input" placeholder="Set a temporary password" style="padding-right:42px;">
+          <button onclick="generateTempPwd()" style="position:absolute;right:10px;top:50%;transform:translateY(-50%);background:none;border:none;cursor:pointer;color:var(--accent);padding:4px;font-size:10px;font-family:'DM Mono',monospace;" title="Generate random password">Auto</button>
+        </div>
+      </div>
       <div><label class="field-label">Role</label>
         <select id="new-writer-role" class="field-select">
           <option value="writer">Writer</option>
@@ -749,18 +887,18 @@ body{font-family:'Instrument Sans',sans-serif;background:var(--surface);color:va
     </div>
     <div class="modal-actions">
       <button class="action-btn" onclick="closeModal('add-writer-modal')">Cancel</button>
-      <button class="action-btn primary" onclick="addWriter()">Add Writer</button>
+      <button class="action-btn primary" onclick="addWriter()"><i data-lucide="user-plus" style="width:13px;height:13px;"></i> Add Writer</button>
     </div>
   </div>
 </div>
 
-<!-- ── Insert link modal ──────────────────────────────────── -->
+<!-- Insert Link -->
 <div class="modal-overlay" id="link-modal">
   <div class="modal">
     <h3>Insert Link</h3>
-    <div style="display:flex;flex-direction:column;gap:.75rem;margin-bottom:1.25rem;">
-      <div><label class="field-label">Link URL</label><input type="url" id="link-url" class="field-input" placeholder="https://..."></div>
-      <div><label class="field-label">Link Text (optional)</label><input type="text" id="link-text" class="field-input" placeholder="Leave blank to wrap selection"></div>
+    <div class="modal-body" style="margin-bottom:0;">
+      <div><label class="field-label">URL</label><input type="url" id="link-url" class="field-input" placeholder="https://..."></div>
+      <div><label class="field-label">Link Text (optional)</label><input type="text" id="link-text" class="field-input" placeholder="Leave blank to wrap selected text"></div>
       <label style="display:flex;align-items:center;gap:8px;font-size:13px;cursor:pointer;">
         <input type="checkbox" id="link-newtab" checked> Open in new tab
       </label>
@@ -772,11 +910,11 @@ body{font-family:'Instrument Sans',sans-serif;background:var(--surface);color:va
   </div>
 </div>
 
-<!-- ── Insert image modal ─────────────────────────────────── -->
+<!-- Insert Image -->
 <div class="modal-overlay" id="image-modal">
   <div class="modal">
     <h3>Insert Image</h3>
-    <div style="display:flex;flex-direction:column;gap:.75rem;margin-bottom:1.25rem;">
+    <div class="modal-body" style="margin-bottom:0;">
       <div><label class="field-label">Image URL</label><input type="url" id="img-url" class="field-input" placeholder="https://images.unsplash.com/..."></div>
       <div><label class="field-label">Alt Text</label><input type="text" id="img-alt" class="field-input" placeholder="Describe the image"></div>
       <div><label class="field-label">Caption (optional)</label><input type="text" id="img-caption" class="field-input" placeholder="Image caption"></div>
@@ -790,37 +928,39 @@ body{font-family:'Instrument Sans',sans-serif;background:var(--surface);color:va
 
 <script>
 // ══════════════════════════════════════════════════════════════
-// CONFIG — REPLACE WITH YOUR DEPLOYED APPS SCRIPT URL
+// CONFIG — Your Apps Script Web App URL
 // ══════════════════════════════════════════════════════════════
 const API_URL = 'https://script.google.com/macros/s/AKfycbxgACFFdcSB6pxDqyqEo83sN8ErTn1TuT33Qdst6nql7gXlO8CXtIpgYHdGbl-eYq3e/exec';
-// Example: 'https://script.google.com/macros/s/AKfycbxXXXXXX/exec'
 
 // ══════════════════════════════════════════════════════════════
 // STATE
 // ══════════════════════════════════════════════════════════════
-let SESSION = { token: null, writer: null };
-let ALL_ARTICLES = [];
-let CURRENT_ARTICLE_ID = null;
-let DELETE_TARGET_ID = null;
-let SAVED_SELECTION = null;
+let SESSION         = { token: null, writer: null };
+let ALL_ARTICLES    = [];
+let CURRENT_ART_ID  = null;
+let DELETE_TARGET   = null;
+let SAVED_SEL       = null;
+let htmlMode        = false;
 
 // ══════════════════════════════════════════════════════════════
-// INIT
+// BOOT
 // ══════════════════════════════════════════════════════════════
 window.addEventListener('DOMContentLoaded', async () => {
   lucide.createIcons();
 
-  // Show mobile menu btn on small screens
-  if (window.innerWidth < 768) {
-    document.getElementById('mobile-menu-btn').style.display = 'flex';
-  }
+  // Enter key on login
+  ['login-email','login-password'].forEach(id => {
+    document.getElementById(id)?.addEventListener('keydown', e => {
+      if (e.key === 'Enter') handleLogin();
+    });
+  });
 
   const token = localStorage.getItem('dekho_token');
   if (token) {
     const res = await api('verify', { token });
     if (res.ok) {
       SESSION = { token, writer: res.writer };
-      initApp();
+      await initApp();
       return;
     }
     localStorage.removeItem('dekho_token');
@@ -828,8 +968,14 @@ window.addEventListener('DOMContentLoaded', async () => {
   showScreen('login');
 });
 
+function hidePL() {
+  const pl = document.getElementById('page-loader');
+  pl.classList.add('hide');
+  setTimeout(() => pl.style.display = 'none', 450);
+}
+
 function showScreen(name) {
-  document.getElementById('page-loader').style.display = 'none';
+  hidePL();
   document.querySelectorAll('.screen').forEach(s => s.classList.remove('active'));
   document.getElementById(name + '-screen').classList.add('active');
   lucide.createIcons();
@@ -840,22 +986,24 @@ async function initApp() {
   document.getElementById('sidebar-name').textContent = w.name;
   document.getElementById('sidebar-role').textContent = w.role;
   document.getElementById('sidebar-avatar').textContent = w.name[0].toUpperCase();
+  document.getElementById('session-email').textContent = w.email;
+  document.getElementById('session-role').textContent = w.role;
   if (w.role === 'admin') {
     document.querySelectorAll('.admin-only').forEach(el => el.style.display = 'block');
   }
   showScreen('app');
-  loadArticles();
+  await loadArticles();
 }
 
 // ══════════════════════════════════════════════════════════════
-// API HELPER
+// API HELPER — NO Content-Type header (avoids CORS preflight on Apps Script)
 // ══════════════════════════════════════════════════════════════
 async function api(action, body = {}) {
   try {
     const res = await fetch(API_URL, {
-  method: 'POST',
-  body: JSON.stringify({ action, ...body })
-});
+      method: 'POST',
+      body: JSON.stringify({ action, ...body })
+    });
     return await res.json();
   } catch(e) {
     return { ok: false, error: 'Network error. Check your connection.' };
@@ -866,140 +1014,240 @@ async function api(action, body = {}) {
 // AUTH
 // ══════════════════════════════════════════════════════════════
 async function handleLogin() {
-  const email = document.getElementById('login-email').value.trim();
+  const email    = document.getElementById('login-email').value.trim();
   const password = document.getElementById('login-password').value;
-  const btn = document.getElementById('login-btn');
-  const errEl = document.getElementById('login-error');
+  const btn      = document.getElementById('login-btn');
+  const errEl    = document.getElementById('login-error');
 
-  if (!email || !password) { showError('Please enter email and password.'); return; }
+  if (!email || !password) { showLoginError('Please enter email and password.'); return; }
 
   btn.disabled = true;
   btn.innerHTML = '<span class="spinner"></span> Signing in...';
   errEl.style.display = 'none';
 
   const res = await api('login', { email, password });
+
   btn.disabled = false;
-  btn.textContent = 'Sign In to DEKHO';
+  btn.innerHTML = 'Sign In to DEKHO';
 
   if (res.ok) {
     SESSION = { token: res.token, writer: res.writer };
     localStorage.setItem('dekho_token', res.token);
-    initApp();
+    await initApp();
   } else {
-    errEl.textContent = res.error || 'Login failed.';
-    errEl.style.display = 'block';
+    showLoginError(res.error || 'Login failed. Check your credentials.');
   }
 }
 
 async function handleLogout() {
   await api('logout', { token: SESSION.token });
   SESSION = { token: null, writer: null };
+  ALL_ARTICLES = [];
   localStorage.removeItem('dekho_token');
+  document.getElementById('login-email').value = '';
+  document.getElementById('login-password').value = '';
   showScreen('login');
 }
 
-function showError(msg) {
+function showLoginError(msg) {
   const e = document.getElementById('login-error');
-  e.textContent = msg; e.style.display = 'block';
+  e.textContent = msg;
+  e.style.display = 'block';
 }
 
-function togglePwd() {
-  const inp = document.getElementById('login-password');
-  inp.type = inp.type === 'password' ? 'text' : 'password';
+// ══════════════════════════════════════════════════════════════
+// CHANGE PASSWORD
+// ══════════════════════════════════════════════════════════════
+function checkPwdStrength() {
+  const pwd  = document.getElementById('cp-new').value;
+  const bar  = document.getElementById('pwd-strength-bar');
+  const lbl  = document.getElementById('pwd-strength-label');
+  const len  = pwd.length;
+  let score  = 0;
+  if (len >= 8)  score++;
+  if (len >= 12) score++;
+  if (/[A-Z]/.test(pwd)) score++;
+  if (/[0-9]/.test(pwd)) score++;
+  if (/[^A-Za-z0-9]/.test(pwd)) score++;
+  const levels = [
+    { label:'Too short', color:'var(--red)',    w:'20%' },
+    { label:'Weak',      color:'var(--red)',    w:'30%' },
+    { label:'Fair',      color:'var(--yellow)', w:'50%' },
+    { label:'Good',      color:'var(--yellow)', w:'70%' },
+    { label:'Strong',    color:'var(--green)',  w:'90%' },
+    { label:'Very strong',color:'var(--green)', w:'100%'},
+  ];
+  const lvl = levels[Math.min(score, 5)];
+  bar.style.background = lvl.color;
+  bar.style.width = pwd ? lvl.w : '0';
+  lbl.textContent = pwd ? lvl.label : '';
+  lbl.style.color = lvl.color;
 }
 
-// Enter key on login
-document.addEventListener('DOMContentLoaded', () => {
-  ['login-email','login-password'].forEach(id => {
-    setTimeout(() => {
-      document.getElementById(id)?.addEventListener('keydown', e => {
-        if (e.key === 'Enter') handleLogin();
-      });
-    }, 100);
+async function changePassword() {
+  const current  = document.getElementById('cp-current').value;
+  const newPwd   = document.getElementById('cp-new').value;
+  const confirm  = document.getElementById('cp-confirm').value;
+  const btn      = document.getElementById('cp-btn');
+  const errEl    = document.getElementById('cp-error');
+
+  errEl.style.display = 'none';
+
+  if (!current || !newPwd || !confirm) {
+    errEl.textContent = 'Please fill in all three fields.';
+    errEl.style.display = 'block'; return;
+  }
+  if (newPwd.length < 8) {
+    errEl.textContent = 'New password must be at least 8 characters.';
+    errEl.style.display = 'block'; return;
+  }
+  if (newPwd !== confirm) {
+    errEl.textContent = 'New passwords do not match.';
+    errEl.style.display = 'block'; return;
+  }
+
+  btn.disabled = true;
+  btn.innerHTML = '<span class="spinner" style="border-top-color:var(--ink);border-color:rgba(0,0,0,.15);"></span> Updating...';
+
+  const res = await api('changePassword', {
+    token: SESSION.token,
+    currentPassword: current,
+    newPassword: newPwd
   });
-});
+
+  btn.disabled = false;
+  btn.innerHTML = '<i data-lucide="key-round" style="width:14px;height:14px;"></i> Update Password';
+  lucide.createIcons();
+
+  if (res.ok) {
+    toast('Password updated successfully! 🎉', 'success', 4000);
+    document.getElementById('cp-current').value = '';
+    document.getElementById('cp-new').value = '';
+    document.getElementById('cp-confirm').value = '';
+    document.getElementById('pwd-strength-bar').style.width = '0';
+    document.getElementById('pwd-strength-label').textContent = '';
+  } else {
+    errEl.textContent = res.error || 'Failed to update password.';
+    errEl.style.display = 'block';
+  }
+}
 
 // ══════════════════════════════════════════════════════════════
 // NAVIGATION
 // ══════════════════════════════════════════════════════════════
-function showView(name) {
+function navigate(name) {
+  closeSidebar();
   document.querySelectorAll('.view').forEach(v => v.classList.remove('active'));
   document.getElementById('view-' + name).classList.add('active');
   document.querySelectorAll('.nav-item').forEach(b => {
     b.classList.toggle('active', b.dataset.view === name);
   });
-  document.getElementById('topbar-title').textContent = {
-    dashboard: 'Dashboard', articles: 'All Articles',
-    editor: CURRENT_ARTICLE_ID ? 'Edit Article' : 'New Article',
-    writers: 'Team Writers'
-  }[name] || name;
-  document.getElementById('topbar-actions').innerHTML = '';
+  const titles = { dashboard:'Dashboard', articles:'All Articles', editor: CURRENT_ART_ID ? 'Edit Article' : 'New Article', writers:'Team Writers', settings:'Change Password' };
+  document.getElementById('topbar-title').textContent = titles[name] || name;
+
+  const actions = document.getElementById('topbar-actions');
+  actions.innerHTML = '';
   if (name === 'editor') {
-    document.getElementById('topbar-actions').innerHTML = `
-      <button class="action-btn" onclick="saveArticle('draft')">Save Draft</button>
-      <button class="action-btn primary" onclick="saveAndPublish()">Publish</button>`;
+    actions.innerHTML = `
+      <button class="action-btn" onclick="saveArticle('draft')" id="topbar-save"><i data-lucide="save" style="width:13px;height:13px;"></i> <span>Save Draft</span></button>
+      <button class="action-btn primary" onclick="saveAndPublish()" id="topbar-publish"><i data-lucide="send" style="width:13px;height:13px;"></i> <span>Publish</span></button>`;
   }
+  if (name === 'articles' && ALL_ARTICLES.length === 0) loadArticles();
   if (name === 'writers') loadWriters();
   lucide.createIcons();
 }
 
+// Mobile sidebar
+function openSidebar() {
+  document.getElementById('sidebar').classList.add('open');
+  document.getElementById('sidebar-overlay').classList.add('show');
+  document.body.style.overflow = 'hidden';
+}
+function closeSidebar() {
+  document.getElementById('sidebar').classList.remove('open');
+  document.getElementById('sidebar-overlay').classList.remove('show');
+  document.body.style.overflow = '';
+}
+
 // ══════════════════════════════════════════════════════════════
-// ARTICLES
+// ARTICLES — LOAD & RENDER
 // ══════════════════════════════════════════════════════════════
 async function loadArticles() {
+  // Show skeletons
+  showSkeleton('dashboard-skeleton', 'dashboard-recent', false);
+  showSkeleton('articles-skeleton', 'articles-table', false);
+
   const res = await api('getArticles', { token: SESSION.token });
-  if (!res.ok) { toast(res.error, 'error'); return; }
+
+  // Hide skeletons
+  showSkeleton('dashboard-skeleton', 'dashboard-recent', true);
+  showSkeleton('articles-skeleton', 'articles-table', true);
+
+  if (!res.ok) { toast(res.error || 'Failed to load articles.', 'error'); return; }
+
   ALL_ARTICLES = res.articles || [];
-  renderArticlesTable(ALL_ARTICLES);
+  document.getElementById('nav-article-count').textContent = ALL_ARTICLES.length;
   renderDashboard(ALL_ARTICLES);
-  document.getElementById('article-count').textContent = ALL_ARTICLES.length;
+  renderArticlesTable(ALL_ARTICLES);
   lucide.createIcons();
 }
 
-function renderDashboard(articles) {
-  const total = articles.length;
-  const pub = articles.filter(a => a.status === 'published').length;
-  const drafts = articles.filter(a => a.status === 'draft').length;
-  document.getElementById('stat-total').textContent = total;
+function showSkeleton(skelId, contentId, done) {
+  document.getElementById(skelId).style.display  = done ? 'none'  : 'flex';
+  document.getElementById(skelId).style.flexDirection = 'column';
+  document.getElementById(contentId).style.display = done ? '' : 'none';
+}
+
+function renderDashboard(arts) {
+  const pub    = arts.filter(a => a.status === 'published').length;
+  const drafts = arts.filter(a => a.status === 'draft').length;
+  document.getElementById('stat-total').textContent     = arts.length;
   document.getElementById('stat-published').textContent = pub;
-  document.getElementById('stat-drafts').textContent = drafts;
+  document.getElementById('stat-drafts').textContent    = drafts;
 
-  const recent = articles.slice(0, 5);
-  document.getElementById('dashboard-recent').innerHTML = recent.length ? `
-    <table class="article-table">
-      ${recent.map(a => `
-      <tr>
-        <td style="max-width:320px;"><strong>${a.title || 'Untitled'}</strong></td>
-        <td>${a.category || '—'}</td>
-        <td><span class="status-pill status-${a.status}">${a.status}</span></td>
-        <td>${formatDate(a.updatedAt)}</td>
-        <td>
-          <button class="action-btn primary" onclick="editArticle('${a.id}')">Edit</button>
-        </td>
-      </tr>`).join('')}
-    </table>` :
-    '<div style="padding:2rem;text-align:center;color:var(--muted);font-size:13px;">No articles yet. <a href="#" onclick="showView(\'editor\');newArticle()" style="color:var(--accent);">Create your first one →</a></div>';
+  const recent = arts.slice(0, 6);
+  const el = document.getElementById('dashboard-recent');
+  el.style.display = 'block';
+
+  if (!recent.length) {
+    el.innerHTML = '<div style="padding:2.5rem;text-align:center;color:var(--muted);font-size:13px;">No articles yet. <a href="#" onclick="navigate(\'editor\');newArticle()" style="color:var(--accent);">Create your first one →</a></div>';
+    return;
+  }
+  el.innerHTML = `
+    <table class="data-table">
+      <thead><tr><th>Title</th><th>Category</th><th>Status</th><th>Updated</th><th>Action</th></tr></thead>
+      <tbody>
+        ${recent.map(a => `
+        <tr>
+          <td style="max-width:300px;"><div style="font-weight:600;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;max-width:280px;">${esc(a.title||'Untitled')}</div></td>
+          <td><span class="status-pill" style="background:var(--surface);color:var(--muted);border-color:var(--border);">${a.category||'—'}</span></td>
+          <td><span class="status-pill status-${a.status}">${a.status}</span></td>
+          <td style="font-size:12px;color:var(--muted);">${fmtDate(a.updatedAt)}</td>
+          <td><button class="action-btn primary" onclick="editArticle('${a.id}')">Edit</button></td>
+        </tr>`).join('')}
+      </tbody>
+    </table>`;
   lucide.createIcons();
 }
 
-function renderArticlesTable(articles) {
+function renderArticlesTable(arts) {
   const tbody = document.getElementById('articles-tbody');
-  if (!articles.length) {
+  if (!arts.length) {
     tbody.innerHTML = '<tr><td colspan="6" style="text-align:center;padding:2.5rem;color:var(--muted);">No articles found.</td></tr>';
     return;
   }
-  tbody.innerHTML = articles.map(a => `
+  tbody.innerHTML = arts.map(a => `
     <tr>
-      <td style="max-width:280px;">
-        <div style="font-weight:600;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;max-width:260px;">${a.title || 'Untitled'}</div>
-        <div style="font-size:11px;color:var(--muted);font-family:'DM Mono',monospace;">${a.slug || ''}</div>
+      <td style="max-width:260px;">
+        <div style="font-weight:600;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;max-width:240px;">${esc(a.title||'Untitled')}</div>
+        <div style="font-size:11px;color:var(--muted);font-family:'DM Mono',monospace;">${a.slug||''}</div>
       </td>
-      <td><span class="status-pill" style="background:var(--surface);color:var(--muted);border-color:var(--border);">${a.category || '—'}</span></td>
+      <td><span class="status-pill" style="background:var(--surface);color:var(--muted);border-color:var(--border);">${a.category||'—'}</span></td>
       <td><span class="status-pill status-${a.status}">${a.status}</span></td>
-      <td style="font-size:12px;color:var(--muted);">${a.authorName || a.authorEmail || '—'}</td>
-      <td style="font-size:12px;color:var(--muted);">${formatDate(a.updatedAt)}</td>
+      <td style="font-size:12px;color:var(--muted);">${esc(a.authorName||a.authorEmail||'—')}</td>
+      <td style="font-size:12px;color:var(--muted);white-space:nowrap;">${fmtDate(a.updatedAt)}</td>
       <td>
-        <div style="display:flex;gap:5px;">
+        <div class="btn-actions">
           <button class="action-btn primary" onclick="editArticle('${a.id}')">Edit</button>
           ${a.status !== 'published' ? `<button class="action-btn" onclick="quickPublish('${a.id}')">Publish</button>` : ''}
           <button class="action-btn danger" onclick="openDeleteModal('${a.id}')">Delete</button>
@@ -1013,85 +1261,113 @@ function filterArticles() {
   const q = document.getElementById('articles-search').value.toLowerCase();
   const s = document.getElementById('filter-status').value;
   const c = document.getElementById('filter-cat').value;
-  const filtered = ALL_ARTICLES.filter(a =>
-    (!q || (a.title || '').toLowerCase().includes(q)) &&
+  renderArticlesTable(ALL_ARTICLES.filter(a =>
+    (!q || (a.title||'').toLowerCase().includes(q) || (a.authorName||'').toLowerCase().includes(q)) &&
     (!s || a.status === s) &&
     (!c || a.category === c)
-  );
-  renderArticlesTable(filtered);
+  ));
   lucide.createIcons();
 }
 
 async function quickPublish(id) {
   const res = await api('publishArticle', { token: SESSION.token, id });
   if (res.ok) { toast('Article published!', 'success'); loadArticles(); }
-  else toast(res.error, 'error');
+  else toast(res.error || 'Publish failed.', 'error');
 }
 
 function openDeleteModal(id) {
-  DELETE_TARGET_ID = id;
+  DELETE_TARGET = id;
   document.getElementById('delete-modal').classList.add('open');
 }
 
 async function confirmDelete() {
-  const res = await api('deleteArticle', { token: SESSION.token, id: DELETE_TARGET_ID });
+  if (!DELETE_TARGET) return;
+  const btn = document.getElementById('confirm-delete-btn');
+  btn.disabled = true;
+  btn.textContent = 'Deleting...';
+  const res = await api('deleteArticle', { token: SESSION.token, id: DELETE_TARGET });
   closeModal('delete-modal');
+  btn.disabled = false;
+  btn.innerHTML = '<i data-lucide="trash-2" style="width:13px;height:13px;"></i> Delete';
+  lucide.createIcons();
   if (res.ok) { toast('Article deleted.', 'success'); loadArticles(); }
-  else toast(res.error, 'error');
-}
-
-function closeModal(id) {
-  document.getElementById(id).classList.remove('open');
+  else toast(res.error || 'Delete failed.', 'error');
 }
 
 // ══════════════════════════════════════════════════════════════
-// EDITOR
+// EDITOR — NEW & EDIT
 // ══════════════════════════════════════════════════════════════
 function newArticle() {
-  CURRENT_ARTICLE_ID = null;
-  document.getElementById('art-id').value = '';
-  document.getElementById('art-title').value = '';
-  document.getElementById('art-slug').value = '';
-  document.getElementById('art-tag').value = '';
-  document.getElementById('art-category').value = 'review';
-  document.getElementById('art-readtime').value = '5';
-  document.getElementById('art-rating').value = '0';
-  document.getElementById('art-cover').value = '';
-  document.getElementById('art-excerpt').value = '';
-  document.getElementById('editor-content').innerHTML = '';
-  document.getElementById('rating-display').textContent = '—';
-  document.getElementById('pub-status-badge').textContent = 'draft';
-  document.getElementById('pub-status-badge').className = 'status-pill status-draft';
-  updateCoverPreview();
-  updateWordCount();
-  showView('editor');
+  CURRENT_ART_ID = null;
+  clearEditor();
+  navigate('editor');
   document.getElementById('topbar-title').textContent = 'New Article';
   document.getElementById('art-title').focus();
 }
 
+function clearEditor() {
+  document.getElementById('art-id').value        = '';
+  document.getElementById('art-title').value     = '';
+  document.getElementById('art-slug').value      = '';
+  document.getElementById('art-tag').value       = '';
+  document.getElementById('art-category').value  = 'review';
+  document.getElementById('art-readtime').value  = '5';
+  document.getElementById('art-rating').value    = '0';
+  document.getElementById('art-cover').value     = '';
+  document.getElementById('art-excerpt').value   = '';
+  document.getElementById('editor-content').innerHTML = '';
+  document.getElementById('rating-display').textContent = '—';
+  const badge = document.getElementById('pub-status-badge');
+  badge.textContent = 'draft';
+  badge.className = 'status-pill status-draft';
+  setSaveStatus('Ready');
+  updateCoverPreview();
+  updateWordCount();
+  if (htmlMode) toggleHtml(); // exit html mode if active
+}
+
 async function editArticle(id) {
+  // Switch to editor view first, show loading
+  navigate('editor');
+  document.getElementById('topbar-title').textContent = 'Loading...';
+  CURRENT_ART_ID = id;
+
+  // Show loading overlay on editor
+  const loader = document.getElementById('editor-loading');
+  loader.style.display = 'flex';
+
   const res = await api('getArticle', { token: SESSION.token, id });
-  if (!res.ok) { toast(res.error, 'error'); return; }
+
+  loader.style.display = 'none';
+
+  if (!res.ok) {
+    toast(res.error || 'Could not load article.', 'error');
+    navigate('articles');
+    return;
+  }
+
   const a = res.article;
-  CURRENT_ARTICLE_ID = id;
-  document.getElementById('art-id').value = id;
-  document.getElementById('art-title').value = a.title || '';
-  document.getElementById('art-slug').value = a.slug || '';
-  document.getElementById('art-tag').value = a.tag || '';
-  document.getElementById('art-category').value = a.category || 'review';
-  document.getElementById('art-readtime').value = a.readTime || '5';
-  document.getElementById('art-rating').value = a.rating || '0';
-  document.getElementById('art-cover').value = a.coverImage || '';
-  document.getElementById('art-excerpt').value = a.excerpt || '';
-  document.getElementById('editor-content').innerHTML = a.content || '';
+  document.getElementById('art-id').value          = id;
+  document.getElementById('art-title').value        = a.title       || '';
+  document.getElementById('art-slug').value         = a.slug        || '';
+  document.getElementById('art-tag').value          = a.tag         || '';
+  document.getElementById('art-category').value     = a.category    || 'review';
+  document.getElementById('art-readtime').value     = a.readTime    || '5';
+  document.getElementById('art-rating').value       = a.rating      || '0';
+  document.getElementById('art-cover').value        = a.coverImage  || '';
+  document.getElementById('art-excerpt').value      = a.excerpt     || '';
+  document.getElementById('editor-content').innerHTML = a.content  || '';
   updateRatingDisplay();
   updateCoverPreview();
   updateWordCount();
+
   const badge = document.getElementById('pub-status-badge');
   badge.textContent = a.status;
-  badge.className = 'status-pill status-' + a.status;
-  showView('editor');
+  badge.className   = 'status-pill status-' + (a.status || 'draft');
+
   document.getElementById('topbar-title').textContent = 'Edit: ' + (a.title || 'Untitled');
+  setSaveStatus('Loaded');
+  lucide.createIcons();
 }
 
 async function saveArticle(status) {
@@ -1099,6 +1375,12 @@ async function saveArticle(status) {
   if (!title) { toast('Please add a title first.', 'error'); return; }
 
   setSaveStatus('Saving...');
+
+  // If in HTML mode, sync content
+  if (htmlMode) {
+    document.getElementById('editor-content').innerHTML = document.getElementById('html-source').value;
+  }
+
   const article = {
     id:         document.getElementById('art-id').value || undefined,
     title,
@@ -1114,52 +1396,57 @@ async function saveArticle(status) {
   };
 
   const res = await api('saveArticle', { token: SESSION.token, article });
+
   if (res.ok) {
-    if (!article.id) {
+    if (!article.id && res.id) {
       document.getElementById('art-id').value = res.id;
-      CURRENT_ARTICLE_ID = res.id;
+      CURRENT_ART_ID = res.id;
     }
     setSaveStatus('Saved ✓');
     toast('Article saved!', 'success');
     loadArticles();
   } else {
     setSaveStatus('Save failed');
-    toast(res.error, 'error');
+    toast(res.error || 'Save failed.', 'error');
   }
+  return res.ok;
 }
 
 async function saveAndPublish() {
-  await saveArticle('published');
+  const saved = await saveArticle('published');
+  if (!saved) return;
   const id = document.getElementById('art-id').value;
-  if (id) {
-    const res = await api('publishArticle', { token: SESSION.token, id });
-    if (res.ok) {
-      toast('Article published! 🎉', 'success');
-      document.getElementById('pub-status-badge').textContent = 'published';
-      document.getElementById('pub-status-badge').className = 'status-pill status-published';
-      loadArticles();
-    }
+  if (!id) return;
+  const res = await api('publishArticle', { token: SESSION.token, id });
+  if (res.ok) {
+    toast('Article published! 🎉', 'success', 4000);
+    const badge = document.getElementById('pub-status-badge');
+    badge.textContent = 'published';
+    badge.className = 'status-pill status-published';
+    loadArticles();
+  } else {
+    toast(res.error || 'Publish failed.', 'error');
   }
 }
 
 function setSaveStatus(msg) {
   const el = document.getElementById('save-status');
   el.textContent = msg;
-  el.style.color = msg.includes('✓') ? 'var(--green)' : msg.includes('failed') ? 'var(--red)' : 'var(--muted)';
+  el.style.color = msg.includes('✓') ? 'var(--green)' : msg.includes('fail') ? 'var(--red)' : 'var(--muted)';
 }
 
-// Auto-save every 60s
+// Auto-save every 90s while editor is open
 setInterval(() => {
   const title = document.getElementById('art-title')?.value;
   if (title && document.getElementById('view-editor')?.classList.contains('active')) {
     saveArticle('draft');
   }
-}, 60000);
+}, 90000);
 
-// ── Editor helpers ────────────────────────────────────────
+// ── Editor helpers ────────────────────────────────────────────
 function updateAutoSlug() {
-  const title = document.getElementById('art-title').value;
-  const slug = title.toLowerCase().replace(/[^a-z0-9\s-]/g,'').replace(/\s+/g,'-').substring(0,80);
+  const slug = document.getElementById('art-title').value
+    .toLowerCase().replace(/[^a-z0-9\s-]/g,'').replace(/\s+/g,'-').substring(0,80);
   document.getElementById('art-slug').value = slug;
 }
 
@@ -1177,25 +1464,25 @@ function updateCoverPreview() {
 }
 
 function setCoverImage() {
-  const url = prompt('Enter image URL (e.g. from Unsplash):', document.getElementById('art-cover').value);
+  const cur = document.getElementById('art-cover').value;
+  const url = prompt('Enter image URL (Unsplash, etc.):', cur);
   if (url !== null) { document.getElementById('art-cover').value = url; updateCoverPreview(); }
 }
 
 function updateWordCount() {
-  const text = document.getElementById('editor-content').innerText || '';
+  const text  = document.getElementById('editor-content').innerText || '';
   const words = text.trim().split(/\s+/).filter(Boolean).length;
   document.getElementById('word-count').textContent = words + ' words';
   const mins = Math.max(1, Math.ceil(words / 200));
   document.getElementById('art-readtime').value = mins;
 }
 
-// ── Rich text toolbar ─────────────────────────────────────
+// ── Toolbar ─────────────────────────────────────────────────
 function execCmd(cmd, val = null) {
   document.getElementById('editor-content').focus();
   document.execCommand(cmd, false, val);
 }
 
-let htmlMode = false;
 function toggleHtml() {
   const rich = document.getElementById('editor-content');
   const src  = document.getElementById('html-source');
@@ -1213,42 +1500,33 @@ function toggleHtml() {
 }
 
 function handleEditorKeydown(e) {
-  if (e.key === 'Tab') { e.preventDefault(); execCmd('insertHTML', '&nbsp;&nbsp;&nbsp;&nbsp;'); }
+  if (e.key === 'Tab') { e.preventDefault(); execCmd('insertHTML','&nbsp;&nbsp;&nbsp;&nbsp;'); }
 }
 
-// ── Insert link ───────────────────────────────────────────
+// ── Insert modals ────────────────────────────────────────────
 function insertLink() {
-  SAVED_SELECTION = saveSelection();
+  SAVED_SEL = saveSelection();
   document.getElementById('link-url').value = '';
   document.getElementById('link-text').value = '';
   document.getElementById('link-modal').classList.add('open');
   setTimeout(() => document.getElementById('link-url').focus(), 100);
 }
 function confirmInsertLink() {
-  const url = document.getElementById('link-url').value;
+  const url  = document.getElementById('link-url').value;
   if (!url) return;
-  const text = document.getElementById('link-text').value;
+  const text   = document.getElementById('link-text').value;
   const newTab = document.getElementById('link-newtab').checked;
-  restoreSelection(SAVED_SELECTION);
+  const target = newTab ? ' target="_blank" rel="noopener"' : '';
+  restoreSelection(SAVED_SEL);
   document.getElementById('editor-content').focus();
-  if (text) {
-    execCmd('insertHTML', `<a href="${url}"${newTab?' target="_blank" rel="noopener"':''}>${text}</a>`);
-  } else {
-    execCmd('createLink', url);
-    if (newTab) {
-      const sel = window.getSelection();
-      if (sel.anchorNode?.parentElement?.tagName === 'A') {
-        sel.anchorNode.parentElement.target = '_blank';
-        sel.anchorNode.parentElement.rel = 'noopener';
-      }
-    }
-  }
+  execCmd('insertHTML', text
+    ? `<a href="${url}"${target}>${text}</a>`
+    : `<a href="${url}"${target}>${url}</a>`);
   closeModal('link-modal');
 }
 
-// ── Insert image ──────────────────────────────────────────
 function insertImage() {
-  SAVED_SELECTION = saveSelection();
+  SAVED_SEL = saveSelection();
   document.getElementById('img-url').value = '';
   document.getElementById('img-alt').value = '';
   document.getElementById('img-caption').value = '';
@@ -1260,7 +1538,7 @@ function confirmInsertImage() {
   if (!url) return;
   const alt = document.getElementById('img-alt').value;
   const cap = document.getElementById('img-caption').value;
-  restoreSelection(SAVED_SELECTION);
+  restoreSelection(SAVED_SEL);
   document.getElementById('editor-content').focus();
   const html = cap
     ? `<figure><img src="${url}" alt="${alt}" style="max-width:100%;border-radius:10px;"><figcaption style="text-align:center;font-size:12px;color:#888;margin-top:6px;">${cap}</figcaption></figure><p></p>`
@@ -1269,17 +1547,16 @@ function confirmInsertImage() {
   closeModal('image-modal');
 }
 
-// ── Insert table ──────────────────────────────────────────
 function insertTable() {
-  const rows = parseInt(prompt('Number of rows:', '3') || '3');
-  const cols = parseInt(prompt('Number of columns:', '3') || '3');
+  const rows = parseInt(prompt('Number of rows:','3')||'3');
+  const cols = parseInt(prompt('Number of columns:','3')||'3');
   if (!rows || !cols) return;
   let html = '<table style="width:100%;border-collapse:collapse;margin:1rem 0;">';
-  for (let r = 0; r < rows; r++) {
+  for (let r=0; r<rows; r++) {
     html += '<tr>';
-    for (let c = 0; c < cols; c++) {
-      const tag = r === 0 ? 'th' : 'td';
-      html += `<${tag} style="border:1px solid #E2E0DA;padding:8px 12px;">${r===0?`Column ${c+1}`:''}</${tag}>`;
+    for (let c=0; c<cols; c++) {
+      const tag = r===0 ? 'th' : 'td';
+      html += `<${tag} style="border:1px solid #E2E0DA;padding:8px 12px;">${r===0?`Col ${c+1}`:''}</${tag}>`;
     }
     html += '</tr>';
   }
@@ -1287,17 +1564,14 @@ function insertTable() {
   execCmd('insertHTML', html);
 }
 
-// ── Insert HR ─────────────────────────────────────────────
 function insertHR() {
-  execCmd('insertHTML', '<hr style="border:none;border-top:1.5px solid #E2E0DA;margin:1.5rem 0;"><p></p>');
+  execCmd('insertHTML','<hr style="border:none;border-top:1.5px solid #E2E0DA;margin:1.5rem 0;"><p></p>');
 }
 
-// ── Insert blockquote ─────────────────────────────────────
 function insertBlockquote() {
-  execCmd('insertHTML', '<blockquote style="border-left:3px solid #E8380D;padding:.75rem 1.25rem;margin:1.25rem 0;background:#FFF0ED;border-radius:0 8px 8px 0;"><p style="color:#E8380D;font-style:italic;">Quote text here...</p></blockquote><p></p>');
+  execCmd('insertHTML','<blockquote style="border-left:3px solid #E8380D;padding:.75rem 1.25rem;margin:1.25rem 0;background:#FFF0ED;border-radius:0 8px 8px 0;"><p style="color:#E8380D;font-style:italic;">Quote text here...</p></blockquote><p></p>');
 }
 
-// ── Insert Amazon affiliate card ──────────────────────────
 function insertAffiliateCard() {
   const name  = document.getElementById('aff-name').value  || 'Product Name';
   const price = document.getElementById('aff-price').value || '₹X,XXX';
@@ -1317,15 +1591,13 @@ function insertAffiliateCard() {
   document.getElementById('editor-content').focus();
   execCmd('insertHTML', html);
   toast('Affiliate card inserted!', 'success');
-  // Clear fields
   ['aff-name','aff-price','aff-img','aff-link'].forEach(id => document.getElementById(id).value = '');
 }
 
-// ── Selection save/restore (for modals) ──────────────────
+// ── Selection helpers ────────────────────────────────────────
 function saveSelection() {
   const sel = window.getSelection();
-  if (sel.rangeCount > 0) return sel.getRangeAt(0).cloneRange();
-  return null;
+  return sel.rangeCount > 0 ? sel.getRangeAt(0).cloneRange() : null;
 }
 function restoreSelection(range) {
   if (!range) return;
@@ -1338,8 +1610,17 @@ function restoreSelection(range) {
 // WRITERS (Admin)
 // ══════════════════════════════════════════════════════════════
 async function loadWriters() {
+  document.getElementById('writers-skeleton').style.display = 'flex';
+  document.getElementById('writers-skeleton').style.flexDirection = 'column';
+  document.getElementById('writers-table').style.display = 'none';
+
   const res = await api('getWriters', { token: SESSION.token });
-  if (!res.ok) { toast(res.error, 'error'); return; }
+
+  document.getElementById('writers-skeleton').style.display = 'none';
+  document.getElementById('writers-table').style.display = '';
+
+  if (!res.ok) { toast(res.error || 'Failed to load writers.', 'error'); return; }
+
   const tbody = document.getElementById('writers-tbody');
   if (!res.writers.length) {
     tbody.innerHTML = '<tr><td colspan="6" style="text-align:center;padding:2rem;color:var(--muted);">No writers yet.</td></tr>';
@@ -1347,63 +1628,105 @@ async function loadWriters() {
   }
   tbody.innerHTML = res.writers.map(w => `
     <tr>
-      <td><strong>${w.name}</strong></td>
-      <td style="font-size:12px;color:var(--muted);">${w.email}</td>
+      <td><div style="display:flex;align-items:center;gap:8px;">
+        <div style="width:28px;height:28px;border-radius:50%;background:var(--ink);display:flex;align-items:center;justify-content:center;color:var(--lime);font-family:'Bebas Neue',sans-serif;font-size:13px;flex-shrink:0;">${(w.name||'?')[0].toUpperCase()}</div>
+        <strong>${esc(w.name)}</strong>
+      </div></td>
+      <td style="font-size:12px;color:var(--muted);">${esc(w.email)}</td>
       <td><span class="status-pill ${w.role==='admin'?'status-published':'status-draft'}">${w.role}</span></td>
-      <td style="font-size:12px;color:var(--muted);">${formatDate(w.addedOn)}</td>
+      <td style="font-size:12px;color:var(--muted);">${fmtDate(w.addedOn)}</td>
       <td><span class="status-pill ${w.active?'status-published':'status-draft'}">${w.active?'Active':'Inactive'}</span></td>
-      <td>${w.email !== SESSION.writer.email ? `<button class="action-btn danger" onclick="removeWriter('${w.email}')">Remove</button>` : '<span style="font-size:11px;color:var(--muted);">You</span>'}</td>
+      <td>${w.email !== SESSION.writer.email
+        ? `<button class="action-btn danger" onclick="removeWriter('${w.email}')">Remove</button>`
+        : '<span style="font-size:11px;color:var(--muted);">You</span>'}</td>
     </tr>`).join('');
   lucide.createIcons();
 }
 
 function openAddWriterModal() {
   ['new-writer-name','new-writer-email','new-writer-password'].forEach(id => document.getElementById(id).value = '');
+  document.getElementById('new-writer-role').value = 'writer';
   document.getElementById('add-writer-modal').classList.add('open');
 }
 
+function generateTempPwd() {
+  const chars = 'ABCDEFGHJKLMNPQRSTUVWXYZabcdefghjkmnpqrstuvwxyz23456789!@#';
+  let pwd = '';
+  for (let i = 0; i < 10; i++) pwd += chars[Math.floor(Math.random() * chars.length)];
+  document.getElementById('new-writer-password').value = pwd;
+  toast('Temp password generated — copy it before closing!', 'info', 5000);
+}
+
 async function addWriter() {
-  const name = document.getElementById('new-writer-name').value;
-  const email = document.getElementById('new-writer-email').value;
+  const name     = document.getElementById('new-writer-name').value.trim();
+  const email    = document.getElementById('new-writer-email').value.trim();
   const password = document.getElementById('new-writer-password').value;
-  const role = document.getElementById('new-writer-role').value;
+  const role     = document.getElementById('new-writer-role').value;
   if (!email || !password) { toast('Email and password required.', 'error'); return; }
   const res = await api('addWriter', { token: SESSION.token, email, name, password, role });
-  closeModal('add-writer-modal');
-  if (res.ok) { toast('Writer added!', 'success'); loadWriters(); }
-  else toast(res.error, 'error');
+  if (res.ok) {
+    closeModal('add-writer-modal');
+    toast('Writer added! Share their credentials securely.', 'success', 5000);
+    loadWriters();
+  } else {
+    toast(res.error || 'Failed to add writer.', 'error');
+  }
 }
 
 async function removeWriter(email) {
-  if (!confirm(`Remove access for ${email}?`)) return;
+  if (!confirm(`Remove access for ${email}? They won't be able to log in.`)) return;
   const res = await api('removeWriter', { token: SESSION.token, email });
-  if (res.ok) { toast('Writer removed.', 'success'); loadWriters(); }
-  else toast(res.error, 'error');
+  if (res.ok) { toast('Writer deactivated.', 'success'); loadWriters(); }
+  else toast(res.error || 'Failed.', 'error');
 }
 
 // ══════════════════════════════════════════════════════════════
 // UTILITIES
 // ══════════════════════════════════════════════════════════════
-function toast(msg, type = 'info', duration = 3000) {
+function toast(msg, type='info', duration=3200) {
   const c = document.getElementById('toast-container');
   const t = document.createElement('div');
   t.className = 'toast ' + type;
-  const icons = { success: 'check-circle', error: 'x-circle', info: 'info' };
-  t.innerHTML = `<i data-lucide="${icons[type]||'info'}" style="width:16px;height:16px;flex-shrink:0;"></i> ${msg}`;
+  const icons = { success:'check-circle', error:'x-circle', info:'info' };
+  t.innerHTML = `<i data-lucide="${icons[type]||'info'}" style="width:15px;height:15px;flex-shrink:0;"></i> ${msg}`;
   c.appendChild(t);
   lucide.createIcons();
-  setTimeout(() => { t.style.opacity = '0'; t.style.transform = 'translateX(100%)'; t.style.transition = 'all .3s'; setTimeout(() => t.remove(), 300); }, duration);
+  setTimeout(() => {
+    t.style.opacity = '0';
+    t.style.transform = 'translateX(110%)';
+    t.style.transition = 'all .3s';
+    setTimeout(() => t.remove(), 300);
+  }, duration);
 }
 
-function formatDate(iso) {
+function fmtDate(iso) {
   if (!iso) return '—';
-  try {
-    return new Date(iso).toLocaleDateString('en-IN', { day: 'numeric', month: 'short', year: 'numeric' });
-  } catch { return '—'; }
+  try { return new Date(iso).toLocaleDateString('en-IN',{day:'numeric',month:'short',year:'numeric'}); }
+  catch { return '—'; }
+}
+
+function esc(str) {
+  if (!str) return '';
+  return String(str).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');
+}
+
+function togglePwd(inputId, btnId) {
+  const inp = document.getElementById(inputId);
+  inp.type = inp.type === 'password' ? 'text' : 'password';
+  // swap icon
+  const btn = document.getElementById(btnId);
+  btn.innerHTML = inp.type === 'text'
+    ? '<i data-lucide="eye-off" style="width:15px;height:15px;"></i>'
+    : '<i data-lucide="eye" style="width:15px;height:15px;"></i>';
+  lucide.createIcons();
+}
+
+function closeModal(id) {
+  document.getElementById(id).classList.remove('open');
 }
 
 // Close modals on overlay click
-document.querySelectorAll('.modal-overlay')?.forEach(overlay => {
+document.querySelectorAll('.modal-overlay').forEach(overlay => {
   overlay.addEventListener('click', e => { if (e.target === overlay) overlay.classList.remove('open'); });
 });
 
@@ -1411,7 +1734,11 @@ document.querySelectorAll('.modal-overlay')?.forEach(overlay => {
 document.addEventListener('keydown', e => {
   if ((e.ctrlKey || e.metaKey) && e.key === 's') {
     e.preventDefault();
-    if (document.getElementById('view-editor').classList.contains('active')) saveArticle('draft');
+    if (document.getElementById('view-editor')?.classList.contains('active')) saveArticle('draft');
+  }
+  if (e.key === 'Escape') {
+    document.querySelectorAll('.modal-overlay.open').forEach(m => m.classList.remove('open'));
+    closeSidebar();
   }
 });
 </script>
