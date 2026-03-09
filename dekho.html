@@ -444,9 +444,6 @@
 
 <!-- WhatsApp float -->
 <a href="https://wa.me/918052743378" target="_blank" rel="noopener"
-
-<!-- WhatsApp float -->
-<a href="https://wa.me/918052743378" target="_blank" rel="noopener"
    style="position:fixed;bottom:1.5rem;right:1.5rem;z-index:40;width:52px;height:52px;background:#25D366;border-radius:50%;display:flex;align-items:center;justify-content:center;box-shadow:0 4px 20px rgba(37,211,102,0.4);transition:transform .2s;"
    onmouseover="this.style.transform='scale(1.1)'" onmouseout="this.style.transform='scale(1)'"
    aria-label="Chat on WhatsApp">
@@ -465,6 +462,32 @@ var API = 'https://script.google.com/macros/s/AKfycbyFtGvUQnioGE21cOmZhV5HS4wvRX
 var allArticles = [];   // full list from API
 var activeFilter = 'all';
 var activeSearch = '';
+
+// ================================================================
+// LOCAL CACHE — localStorage + timestamp (5 min TTL)
+// ================================================================
+var LOCAL_CACHE_KEY = 'dekho_articles';
+var LOCAL_CACHE_TTL = 5 * 60 * 1000; // 5 minutes in ms
+
+function getCachedArticles() {
+    try {
+        var raw = localStorage.getItem(LOCAL_CACHE_KEY);
+        if (!raw) return null;
+        var entry = JSON.parse(raw);
+        if (!entry || !entry.ts || !entry.data) return null;
+        if (Date.now() - entry.ts > LOCAL_CACHE_TTL) return null;
+        return entry.data;
+    } catch(e) { return null; }
+}
+
+function setCachedArticles(data) {
+    try {
+        localStorage.setItem(LOCAL_CACHE_KEY, JSON.stringify({ ts: Date.now(), data: data }));
+    } catch(e) {}
+}
+// ================================================================
+// END LOCAL CACHE
+// ================================================================
 
 // ── BOOT ─────────────────────────────────────────────────────────
 document.addEventListener('DOMContentLoaded', function() {
@@ -516,6 +539,49 @@ function loadArticles() {
     hide('empty-state');
     hide('articles-loaded');
 
+    // ── Try local cache first ──
+    var _localHit = getCachedArticles();
+    if (_localHit) {
+        hide('loading-state');
+        allArticles = _localHit;
+        var _count = allArticles.length;
+        document.getElementById('article-count').textContent = _count;
+        var _heroCount = document.getElementById('hero-article-count');
+        if (_heroCount) _heroCount.textContent = _count;
+        if (allArticles.length === 0) { show('empty-state'); }
+        else {
+            renderFeatured();
+            renderGrid(allArticles);
+            show('articles-loaded');
+            initReveal();
+        }
+        // Refresh in background silently (stale-while-revalidate)
+        fetch(API, {
+            method: 'POST',
+            headers: { 'Content-Type': 'text/plain' },
+            body: JSON.stringify({ action: 'listPublished' })
+        })
+        .then(function(res) { return res.json(); })
+        .then(function(data) {
+            if (data.ok && data.articles) {
+                setCachedArticles(data.articles);
+                var _newCount = data.articles.length;
+                if (_newCount !== _count) {
+                    allArticles = data.articles;
+                    document.getElementById('article-count').textContent = _newCount;
+                    if (_heroCount) _heroCount.textContent = _newCount;
+                    renderFeatured();
+                    renderGrid(allArticles);
+                    show('articles-loaded');
+                    initReveal();
+                }
+            }
+        })
+        .catch(function() {}); // silent fail on background refresh
+        return; // served from cache, done
+    }
+
+    // ── Cache miss — fetch from API ──
     fetch(API, {
         method: 'POST',
         headers: { 'Content-Type': 'text/plain' },
@@ -529,6 +595,7 @@ function loadArticles() {
         hide('loading-state');
         if (!data.ok) { showError(data.error || 'Failed to load articles.'); return; }
         allArticles = data.articles || [];
+        setCachedArticles(allArticles);
         if (allArticles.length === 0) { show('empty-state'); return; }
         var count = allArticles.length;
         document.getElementById('article-count').textContent = count;
