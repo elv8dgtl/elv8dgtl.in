@@ -21,9 +21,10 @@
 :root {
   --ink:#0D0D0D; --paper:#FAFAF8; --surface:#F2F1EE; --border:#E2E0DA;
   --muted:#8A8880; --accent:#E8380D; --accent2:#1A6BFF; --lime:#CCF381;
+  --green:#25D366; --ig:#E1306C; --li:#0A66C2;
 }
 *,*::before,*::after { box-sizing:border-box; margin:0; padding:0; }
-html { font-size:16px; }
+html { font-size:16px; scroll-behavior:smooth; }
 body { background:var(--paper); color:var(--ink); font-family:'Instrument Sans',sans-serif; overflow-x:hidden; }
 .display { font-family:'Bebas Neue',sans-serif; letter-spacing:.02em; line-height:.95; }
 .mono { font-family:'DM Mono',monospace; }
@@ -33,7 +34,9 @@ body { background:var(--paper); color:var(--ink); font-family:'Instrument Sans',
 /* ── Progress bar ── */
 #progress-bar {
   position:fixed; top:0; left:0; height:3px; width:0%;
-  background:var(--accent); z-index:200; transition:width .1s linear;
+  background:linear-gradient(90deg,var(--accent),#FF6B35); z-index:9999;
+  transition:width .12s linear; border-radius:0 2px 2px 0;
+  box-shadow:0 0 8px rgba(232,56,13,.5);
 }
 
 /* ── Navbar ── */
@@ -53,8 +56,8 @@ body { background:var(--paper); color:var(--ink); font-family:'Instrument Sans',
 .tag-guide      { background:#F5F0FF; color:#6B3FD4;        border:1px solid #CDB8FF; }
 
 /* ── Layout ── */
-.article-layout { max-width:1200px; margin:0 auto; padding:2rem 1.5rem 5rem; display:grid; grid-template-columns:1fr 280px; gap:3rem; }
-@media(max-width:900px) { .article-layout { grid-template-columns:1fr; } .article-sidebar { display:none; } }
+.article-layout { max-width:1200px; margin:0 auto; padding:2rem 1.5rem 5rem; display:grid; grid-template-columns:1fr 288px; gap:3rem; }
+@media(max-width:900px) { .article-layout { grid-template-columns:1fr; } .article-sidebar { display:none !important; } }
 
 /* ── Article body ── */
 .article-body { min-width:0; }
@@ -79,15 +82,16 @@ body { background:var(--paper); color:var(--ink); font-family:'Instrument Sans',
 
 /* ── Cover image ── */
 .cover-wrap { position:relative; border-radius:20px; overflow:hidden; aspect-ratio:16/7; margin-bottom:2rem; background:var(--surface); }
-.cover-wrap img { width:100%; height:100%; object-fit:cover; display:block; }
-.cover-placeholder { width:100%; height:100%; display:flex; align-items:center; justify-content:center; }
-.cover-placeholder span { font-family:'Bebas Neue',sans-serif; font-size:4rem; color:var(--border); letter-spacing:.1em; }
+.cover-wrap img { width:100%; height:100%; object-fit:cover; display:block; transition:transform .6s ease; }
+.cover-wrap:hover img { transform:scale(1.02); }
+.cover-placeholder { width:100%; height:100%; display:flex; align-items:center; justify-content:center; background:linear-gradient(135deg,#f5f4f1,#e8e6e0); }
+.cover-placeholder span { font-family:'Bebas Neue',sans-serif; font-size:5rem; color:var(--border); letter-spacing:.15em; }
 
 /* ── Rating circle ── */
 .rating-circle { width:80px; height:80px; position:relative; flex-shrink:0; }
 .rating-circle svg { transform:rotate(-90deg); }
 .rating-circle .rc-track { fill:none; stroke:var(--surface); stroke-width:6; }
-.rating-circle .rc-fill  { fill:none; stroke:var(--accent); stroke-width:6; stroke-linecap:round; transition:stroke-dashoffset .8s ease; }
+.rating-circle .rc-fill  { fill:none; stroke:var(--accent); stroke-width:6; stroke-linecap:round; transition:stroke-dashoffset 1s cubic-bezier(.22,1,.36,1); }
 .rating-num { position:absolute; inset:0; display:flex; flex-direction:column; align-items:center; justify-content:center; font-family:'Bebas Neue',sans-serif; font-size:1.5rem; line-height:1; color:var(--ink); }
 .rating-num span { font-family:'DM Mono',monospace; font-size:9px; color:var(--muted); }
 
@@ -98,10 +102,26 @@ body { background:var(--paper); color:var(--ink); font-family:'Instrument Sans',
 .toc-list { list-style:none; padding:0; display:flex; flex-direction:column; gap:.3rem; }
 .toc-item { font-size:13px; color:var(--muted); padding:5px 8px; border-radius:6px; cursor:pointer; transition:all .15s; line-height:1.4; }
 .toc-item:hover,.toc-item.active { background:var(--surface); color:var(--ink); }
+.toc-item.active { border-left:2px solid var(--accent); padding-left:10px; }
+
+/* ── Connect buttons ── */
+.connect-grid { display:grid; grid-template-columns:1fr 1fr; gap:.45rem; }
+.connect-btn {
+  display:flex; align-items:center; justify-content:center; gap:5px;
+  padding:8px 6px; border-radius:8px; font-size:11px; font-weight:700;
+  font-family:'DM Mono',monospace; letter-spacing:.04em;
+  text-decoration:none; border:none; cursor:pointer;
+  transition:all .2s; white-space:nowrap;
+}
+.connect-btn:hover { transform:translateY(-1px); box-shadow:0 4px 12px rgba(0,0,0,.12); }
+.cb-wa   { background:#25D366; color:#fff; grid-column:1/-1; }
+.cb-ig   { background:linear-gradient(135deg,#F58529,#DD2A7B,#8134AF); color:#fff; }
+.cb-li   { background:#0A66C2; color:#fff; }
+.cb-mail { background:var(--ink); color:#fff; grid-column:1/-1; }
 
 /* ── States ── */
-.state-box { text-align:center; padding:5rem 0; }
-.state-box .big { font-family:'Bebas Neue',sans-serif; font-size:4rem; color:var(--border); }
+.state-box { text-align:center; padding:5rem 1.5rem; }
+.state-box .big { font-family:'Bebas Neue',sans-serif; font-size:5rem; color:var(--border); line-height:1; }
 
 /* ── Share bar ── */
 .share-btn { display:inline-flex; align-items:center; gap:6px; padding:8px 16px; border-radius:999px; border:1.5px solid var(--border); font-size:12px; font-weight:600; cursor:pointer; background:#fff; color:var(--ink); transition:all .2s; text-decoration:none; }
@@ -111,14 +131,125 @@ body { background:var(--paper); color:var(--ink); font-family:'Instrument Sans',
 #mobile-menu { position:fixed; inset:0; background:var(--paper); z-index:150; transform:translateX(100%); transition:transform .4s cubic-bezier(.4,0,.2,1); display:flex; flex-direction:column; align-items:center; justify-content:center; gap:2rem; }
 #mobile-menu.open { transform:translateX(0); }
 
+/* ── Floating Action Buttons (right side) ── */
+#fab-rail {
+  position:fixed; right:1.25rem; bottom:6rem; z-index:50;
+  display:flex; flex-direction:column; gap:.5rem; align-items:center;
+}
+.fab {
+  width:44px; height:44px; border-radius:50%; border:none; cursor:pointer;
+  display:flex; align-items:center; justify-content:center;
+  font-size:18px; transition:all .25s cubic-bezier(.34,1.56,.64,1);
+  box-shadow:0 2px 12px rgba(0,0,0,.15); text-decoration:none;
+}
+.fab:hover { transform:scale(1.12); box-shadow:0 6px 20px rgba(0,0,0,.2); }
+.fab-wa   { background:#25D366; color:#fff; }
+.fab-ig   { background:linear-gradient(135deg,#F58529,#DD2A7B,#8134AF); color:#fff; }
+.fab-li   { background:#0A66C2; color:#fff; }
+.fab-mail { background:var(--ink); color:#fff; }
+.fab-sub  { background:var(--accent); color:#fff; width:50px; height:50px; }
+
+/* ── Subscribe popup ── */
+#subscribe-popup {
+  position:fixed; inset:0; z-index:300; display:none;
+  align-items:center; justify-content:center;
+  background:rgba(13,13,13,.6); backdrop-filter:blur(6px);
+}
+#subscribe-popup.on { display:flex; }
+.sub-modal {
+  background:#fff; border-radius:24px; padding:2.5rem 2rem 2rem;
+  width:min(480px,92vw); position:relative; overflow:hidden;
+  border:1.5px solid var(--border);
+  animation:subSlideIn .4s cubic-bezier(.34,1.4,.64,1);
+}
+@keyframes subSlideIn { from{transform:translateY(28px) scale(.95);opacity:0;} to{transform:translateY(0) scale(1);opacity:1;} }
+.sub-modal::before {
+  content:''; position:absolute; top:0; left:0; right:0; height:4px;
+  background:linear-gradient(90deg,var(--accent),#FF6B35,#FFB347);
+}
+.sub-close {
+  position:absolute; top:1rem; right:1rem;
+  width:32px; height:32px; border-radius:50%;
+  background:var(--surface); border:none; cursor:pointer;
+  display:flex; align-items:center; justify-content:center;
+  color:var(--muted); transition:all .15s;
+}
+.sub-close:hover { background:var(--border); color:var(--ink); }
+.sub-badge {
+  display:inline-flex; align-items:center; gap:6px;
+  background:var(--lime); color:var(--ink);
+  padding:4px 12px; border-radius:999px;
+  font-family:'DM Mono',monospace; font-size:10px; font-weight:600;
+  letter-spacing:.12em; margin-bottom:1rem;
+}
+.sub-title { font-family:'Bebas Neue',sans-serif; font-size:2.4rem; line-height:1; color:var(--ink); margin-bottom:.4rem; }
+.sub-subtitle { font-size:14px; color:var(--muted); line-height:1.6; margin-bottom:1.5rem; }
+.sub-form { display:flex; gap:0; background:var(--surface); border:1.5px solid var(--border); border-radius:999px; padding:5px 5px 5px 18px; }
+.sub-input { flex:1; border:none; outline:none; background:transparent; font-family:'Instrument Sans',sans-serif; font-size:14px; color:var(--ink); min-width:0; }
+.sub-input::placeholder { color:var(--muted); }
+.sub-btn { background:var(--accent); color:#fff; border:none; padding:10px 22px; border-radius:999px; font-size:13px; font-weight:700; cursor:pointer; white-space:nowrap; transition:opacity .2s; }
+.sub-btn:hover { opacity:.87; }
+.sub-social-row { display:flex; align-items:center; gap:.75rem; margin-top:1.25rem; flex-wrap:wrap; }
+.sub-social-lbl { font-family:'DM Mono',monospace; font-size:10px; color:var(--muted); letter-spacing:.12em; }
+.sub-social-btn { display:flex; align-items:center; gap:5px; padding:7px 14px; border-radius:999px; font-size:12px; font-weight:700; text-decoration:none; transition:all .2s; }
+.sub-social-btn:hover { transform:translateY(-1px); }
+.ssb-wa  { background:#25D36620; color:#25D366; }
+.ssb-ig  { background:#DD2A7B20; color:#DD2A7B; }
+.ssb-li  { background:#0A66C220; color:#0A66C2; }
+.sub-perks { display:flex; gap:.75rem; margin-bottom:1.5rem; flex-wrap:wrap; }
+.sub-perk { display:flex; align-items:center; gap:5px; font-size:12px; color:var(--muted); }
+.sub-perk::before { content:'✓'; color:var(--accent); font-weight:700; font-size:11px; }
+
+/* ── Article end card ── */
+.article-end { margin:3rem 0 0; padding:2.5rem; background:var(--ink); border-radius:20px; position:relative; overflow:hidden; }
+.article-end::before { content:'DEKHO'; position:absolute; right:-20px; top:50%; transform:translateY(-50%) rotate(-8deg); font-family:'Bebas Neue',sans-serif; font-size:7rem; color:rgba(255,255,255,.04); pointer-events:none; white-space:nowrap; }
+.article-end h3 { font-family:'Bebas Neue',sans-serif; font-size:2rem; color:#fff; margin-bottom:.4rem; line-height:1; }
+.article-end p { font-size:13px; color:#666; margin-bottom:1.25rem; line-height:1.6; }
+.end-form { display:flex; gap:0; background:#1a1a1a; border:1.5px solid #2a2a2a; border-radius:999px; padding:5px 5px 5px 18px; max-width:400px; }
+.end-input { flex:1; border:none; outline:none; background:transparent; font-family:'Instrument Sans',sans-serif; font-size:13px; color:#fff; min-width:0; }
+.end-input::placeholder { color:#444; }
+.end-btn { background:var(--accent); color:#fff; border:none; padding:9px 20px; border-radius:999px; font-size:13px; font-weight:700; cursor:pointer; transition:opacity .2s; }
+.end-btn:hover { opacity:.85; }
+.end-connects { display:flex; gap:.6rem; margin-top:1.25rem; flex-wrap:wrap; }
+.end-conn-btn { display:flex; align-items:center; gap:6px; padding:8px 16px; border-radius:999px; font-size:12px; font-weight:700; text-decoration:none; transition:all .2s; }
+.end-conn-btn:hover { transform:translateY(-2px); }
+.ec-wa   { background:#25D36618; color:#25D366; border:1px solid #25D36640; }
+.ec-ig   { background:#DD2A7B18; color:#DD2A7B; border:1px solid #DD2A7B40; }
+.ec-li   { background:#0A66C218; color:#0A66C2; border:1px solid #0A66C240; }
+.ec-mail { background:#ffffff18; color:#fff; border:1px solid #ffffff30; }
+
+/* ── Cache debug badge ── */
+#cache-badge {
+  display:none; position:fixed; bottom:1.25rem; left:1.25rem; z-index:200;
+  font-family:'DM Mono',monospace; font-size:10px; letter-spacing:.1em;
+  padding:5px 12px; border-radius:999px; pointer-events:none;
+  animation:fadeInUp .4s ease;
+}
+#cache-badge.hit   { background:#F0FDE8; color:#16A34A; border:1px solid #B6EDAA; display:block; }
+#cache-badge.miss  { background:#FFF0ED; color:#E8380D; border:1px solid #FCCABB; display:block; }
+@keyframes fadeInUp { from{transform:translateY(6px);opacity:0;} to{transform:translateY(0);opacity:1;} }
+
+/* ── Animations ── */
 @keyframes spin { to { transform:rotate(360deg); } }
+.reveal { opacity:0; transform:translateY(16px); transition:opacity .6s ease, transform .6s ease; }
+.reveal.on { opacity:1; transform:translateY(0); }
+
+/* ── Responsive mobile FAB adjustments ── */
+@media(max-width:600px) {
+  #fab-rail { right:.75rem; bottom:5.5rem; }
+  .fab { width:38px; height:38px; }
+  .fab-sub { width:44px; height:44px; }
+}
 </style>
 </head>
 <body>
 
 <div id="progress-bar"></div>
 
-<!-- Navbar -->
+<!-- ── Cache debug badge (appears briefly to show cache hit/miss) ── -->
+<div id="cache-badge"></div>
+
+<!-- ── Navbar ── -->
 <nav id="navbar">
   <div class="nav-inner">
     <a href="dekho.html" style="display:flex;align-items:center;gap:6px;color:var(--muted);font-size:12px;text-decoration:none;" class="mono">
@@ -146,7 +277,7 @@ body { background:var(--paper); color:var(--ink); font-family:'Instrument Sans',
   <a href="contact.html" onclick="toggleMobileMenu()" style="margin-top:1rem;background:var(--accent);color:#fff;padding:12px 36px;border-radius:999px;font-weight:700;text-decoration:none;font-size:14px;">Get a Quote</a>
 </div>
 
-<!-- Page states -->
+<!-- ── Page states ── -->
 <div id="state-loading" class="state-box" style="margin-top:80px;">
   <div style="display:inline-block;width:36px;height:36px;border:3px solid var(--border);border-top-color:var(--ink);border-radius:50%;animation:spin .8s linear infinite;"></div>
   <p class="mono" style="font-size:11px;color:var(--muted);letter-spacing:.15em;margin-top:1rem;">LOADING ARTICLE…</p>
@@ -158,31 +289,117 @@ body { background:var(--paper); color:var(--ink); font-family:'Instrument Sans',
   <a href="dekho.html" style="display:inline-block;margin-top:1.5rem;padding:9px 24px;background:var(--ink);color:#fff;border-radius:999px;font-size:13px;font-weight:700;text-decoration:none;">← Back to DEKHO</a>
 </div>
 
-<!-- Article content (hidden until loaded) -->
+<!-- ── Article content ── -->
 <div id="article-wrap" style="display:none;margin-top:64px;">
-
-  <!-- Hero header -->
   <div id="article-hero" style="max-width:1200px;margin:0 auto;padding:2.5rem 1.5rem 0;"></div>
-
-  <!-- Body + sidebar -->
   <div class="article-layout">
     <div class="article-body" id="article-body"></div>
     <aside class="article-sidebar" id="article-sidebar"></aside>
   </div>
-
 </div>
 
-<!-- WhatsApp float -->
+<!-- ── Floating Action Rail (right side) ── -->
+<div id="fab-rail">
+  <button class="fab fab-sub" onclick="openSubscribe()" title="Subscribe to DEKHO" style="position:relative;">
+    <i data-lucide="bell" style="width:20px;height:20px;"></i>
+    <span style="position:absolute;top:-2px;right:-2px;width:10px;height:10px;background:var(--lime);border-radius:50%;border:2px solid var(--paper);"></span>
+  </button>
+  <a href="https://wa.me/918052743378" target="_blank" rel="noopener" class="fab fab-wa" title="WhatsApp">
+    <i data-lucide="message-circle" style="width:18px;height:18px;"></i>
+  </a>
+  <a href="https://instagram.com/elv8dgtl.in" target="_blank" rel="noopener" class="fab fab-ig" title="Instagram">
+    <i data-lucide="instagram" style="width:18px;height:18px;"></i>
+  </a>
+  <a href="https://linkedin.com/company/elv8dgtl" target="_blank" rel="noopener" class="fab fab-li" title="LinkedIn">
+    <i data-lucide="linkedin" style="width:18px;height:18px;"></i>
+  </a>
+  <a href="mailto:hello@elv8dgtl.in" class="fab fab-mail" title="Email us">
+    <i data-lucide="mail" style="width:18px;height:18px;"></i>
+  </a>
+</div>
+
+<!-- ── WhatsApp float (bottom left) ── -->
 <a href="https://wa.me/918052743378" target="_blank" rel="noopener"
-   style="position:fixed;bottom:1.5rem;right:1.5rem;z-index:40;width:52px;height:52px;background:#25D366;border-radius:50%;display:flex;align-items:center;justify-content:center;box-shadow:0 4px 20px rgba(37,211,102,.4);transition:transform .2s;"
+   style="position:fixed;bottom:1.5rem;left:1.5rem;z-index:40;width:52px;height:52px;background:#25D366;border-radius:50%;display:flex;align-items:center;justify-content:center;box-shadow:0 4px 20px rgba(37,211,102,.4);transition:transform .2s;"
    onmouseover="this.style.transform='scale(1.1)'" onmouseout="this.style.transform='scale(1)'"
    aria-label="Chat on WhatsApp">
   <i data-lucide="message-circle" style="width:26px;height:26px;color:#fff;"></i>
 </a>
 
+<!-- ── Subscribe Popup ── -->
+<div id="subscribe-popup" onclick="if(event.target===this)closeSubscribe()">
+  <div class="sub-modal">
+    <button class="sub-close" onclick="closeSubscribe()">
+      <i data-lucide="x" style="width:14px;height:14px;"></i>
+    </button>
+    <div class="sub-badge">
+      <span style="width:6px;height:6px;background:var(--accent);border-radius:50%;display:inline-block;"></span>
+      WEEKLY DROPS · FREE
+    </div>
+    <h2 class="sub-title">GET DEKHO<br>IN YOUR INBOX</h2>
+    <p class="sub-subtitle">Real reviews. Honest comparisons. Curated picks — every week, no spam.</p>
+    <div class="sub-perks">
+      <span class="sub-perk">New reviews weekly</span>
+      <span class="sub-perk">No sponsored fluff</span>
+      <span class="sub-perk">Unsubscribe anytime</span>
+    </div>
+    <form class="sub-form" onsubmit="handleSubscribe(event)">
+      <input class="sub-input" id="sub-email" type="email" placeholder="your@email.com" required>
+      <button class="sub-btn" type="submit" id="sub-submit-btn">Subscribe</button>
+    </form>
+    <div class="sub-social-row">
+      <span class="sub-social-lbl">OR FOLLOW ON:</span>
+      <a href="https://wa.me/918052743378" target="_blank" class="sub-social-btn ssb-wa">
+        <i data-lucide="message-circle" style="width:13px;height:13px;"></i> WhatsApp
+      </a>
+      <a href="https://instagram.com/elv8dgtl.in" target="_blank" class="sub-social-btn ssb-ig">
+        <i data-lucide="instagram" style="width:13px;height:13px;"></i> Instagram
+      </a>
+      <a href="https://linkedin.com/company/elv8dgtl" target="_blank" class="sub-social-btn ssb-li">
+        <i data-lucide="linkedin" style="width:13px;height:13px;"></i> LinkedIn
+      </a>
+    </div>
+  </div>
+</div>
+
 <script>
-// ── CONFIG — same URL as dekho-cms.html ─────────────────────────
+// ── CONFIG ──────────────────────────────────────────────────────────────────
 var API = 'https://script.google.com/macros/s/AKfycbyFtGvUQnioGE21cOmZhV5HS4wvRXEFydMVgnsVM-vjeHdVh4aPUKb9g5AZHUbIuFAV/exec';
+
+// ================================================================
+// ARTICLE CACHE — localStorage + timestamp (5 min TTL)
+// Key: 'dekho_art_<id>'   Value: { ts, data: articleObject }
+// ================================================================
+var ART_CACHE_TTL = 5 * 60 * 1000; // 5 minutes
+
+function getArtCache(key) {
+  try {
+    var raw = localStorage.getItem('dekho_art_' + key);
+    if (!raw) return null;
+    var entry = JSON.parse(raw);
+    if (!entry || !entry.ts || !entry.data) return null;
+    if (Date.now() - entry.ts > ART_CACHE_TTL) return null; // expired
+    return entry.data;
+  } catch(e) { return null; }
+}
+
+function setArtCache(key, data) {
+  try {
+    localStorage.setItem('dekho_art_' + key, JSON.stringify({ ts: Date.now(), data: data }));
+  } catch(e) {}
+}
+
+// ── Shows cache hit/miss badge in bottom-left for 4 seconds ──
+function showCacheBadge(hit) {
+  var badge = document.getElementById('cache-badge');
+  badge.className = hit ? 'hit' : 'miss';
+  badge.textContent = hit ? '⚡ CACHE HIT — served from localStorage' : '🔄 CACHE MISS — fetched from API';
+  clearTimeout(badge._t);
+  badge._t = setTimeout(function() { badge.style.opacity = '0'; badge.style.transition = 'opacity .5s'; setTimeout(function(){ badge.className=''; badge.style.opacity=''; badge.style.transition=''; }, 500); }, 4000);
+}
+// ================================================================
+// END ARTICLE CACHE
+// ================================================================
 
 // ── BOOT ─────────────────────────────────────────────────────────
 document.addEventListener('DOMContentLoaded', function() {
@@ -205,18 +422,47 @@ document.addEventListener('DOMContentLoaded', function() {
     document.body.style.overflow = m.classList.contains('open') ? 'hidden' : '';
   };
 
-  // Get article ID from URL
+  // Auto-open subscribe popup after 45s (only once per session)
+  if (!sessionStorage.getItem('sub_shown')) {
+    setTimeout(function() {
+      if (!document.getElementById('subscribe-popup').classList.contains('on')) {
+        openSubscribe();
+        sessionStorage.setItem('sub_shown', '1');
+      }
+    }, 45000);
+  }
+
+  // Get article ID/slug from URL
   var params = new URLSearchParams(window.location.search);
   var id     = params.get('id');
   var slug   = params.get('slug');
-
   if (!id && !slug) { showError('No article specified.'); return; }
-
   loadArticle(id, slug);
 });
 
-// ── LOAD ARTICLE ──────────────────────────────────────────────────
+// ── LOAD ARTICLE ─────────────────────────────────────────────────
 function loadArticle(id, slug) {
+  var cacheKey = id || slug;
+
+  // ── Check localStorage cache first ──
+  var _cached = getArtCache(cacheKey);
+  if (_cached) {
+    showCacheBadge(true); // ⚡ CACHE HIT
+    renderArticle(_cached);
+    // Background refresh — silent, updates cache only
+    fetch(API, {
+      method: 'POST',
+      headers: { 'Content-Type': 'text/plain' },
+      body: JSON.stringify({ action: 'getPublishedArticle', id: id || undefined, slug: slug || undefined })
+    })
+    .then(function(r) { return r.json(); })
+    .then(function(d) { if (d.ok && d.article) setArtCache(cacheKey, d.article); })
+    .catch(function() {});
+    return;
+  }
+
+  // ── Cache miss — fetch from API ──
+  showCacheBadge(false); // 🔄 CACHE MISS
   var body = { action: 'getPublishedArticle' };
   if (id)   body.id   = id;
   if (slug) body.slug = slug;
@@ -232,6 +478,7 @@ function loadArticle(id, slug) {
   })
   .then(function(data) {
     if (!data.ok || !data.article) { showError(data.error || 'Article not found.'); return; }
+    setArtCache(cacheKey, data.article); // store for next visit
     renderArticle(data.article);
   })
   .catch(function(err) {
@@ -242,7 +489,6 @@ function loadArticle(id, slug) {
 
 // ── RENDER ────────────────────────────────────────────────────────
 function renderArticle(a) {
-  // Update page meta
   document.title = a.title + ' — DEKHO by elv8';
   setMeta('meta-canonical', 'href', 'https://www.elv8dgtl.in/dekho-article.html?id=' + a.id);
   setMeta('og-title', null, a.title);
@@ -250,24 +496,24 @@ function renderArticle(a) {
   setMeta('og-image', null, a.coverImage || '');
   setMeta('og-url',   null, 'https://www.elv8dgtl.in/dekho-article.html?id=' + a.id);
 
-  var tagClass = tagCls(a.category);
-  var tagLabel = tagDisplay(a.category);
-  var dateStr  = fmtDate(a.publishedAt);
-  var initials = (a.authorName || 'D').charAt(0).toUpperCase();
-  var rating   = a.rating ? parseFloat(a.rating) : null;
-  var shareUrl = encodeURIComponent(window.location.href);
-  var shareTitle = encodeURIComponent(a.title);
+  var tagClass  = tagCls(a.category);
+  var tagLabel  = tagDisplay(a.category);
+  var dateStr   = fmtDate(a.publishedAt);
+  var initials  = (a.authorName || 'D').charAt(0).toUpperCase();
+  var rating    = a.rating ? parseFloat(a.rating) : null;
+  var shareUrl  = encodeURIComponent(window.location.href);
+  var shareTxt  = encodeURIComponent(a.title);
 
-  // ── HERO ────────────────────────────────────────────────────────
+  // ── HERO ──────────────────────────────────────────────────────
   var hero = document.getElementById('article-hero');
   hero.innerHTML =
-    '<div style="margin-bottom:1.25rem;display:flex;align-items:center;gap:.75rem;flex-wrap:wrap;">' +
+    '<div style="margin-bottom:1.25rem;display:flex;align-items:center;gap:.75rem;flex-wrap:wrap;" class="reveal">' +
     '<a href="dekho.html" class="mono" style="font-size:11px;color:var(--muted);text-decoration:none;display:flex;align-items:center;gap:4px;">← DEKHO</a>' +
     '<span style="color:var(--border);font-size:11px;">/</span>' +
     '<span class="tag ' + tagClass + '">' + tagLabel + '</span>' +
     '</div>' +
-    '<h1 class="display" style="font-size:clamp(28px,5vw,64px);color:var(--ink);line-height:.97;margin-bottom:1.25rem;">' + esc(a.title) + '</h1>' +
-    '<div style="display:flex;align-items:center;gap:1.5rem;flex-wrap:wrap;margin-bottom:2rem;">' +
+    '<h1 class="display reveal" style="font-size:clamp(28px,5vw,64px);color:var(--ink);line-height:.97;margin-bottom:1.25rem;transition-delay:.06s;">' + esc(a.title) + '</h1>' +
+    '<div class="reveal" style="display:flex;align-items:center;gap:1.5rem;flex-wrap:wrap;margin-bottom:2rem;transition-delay:.12s;">' +
     '<div style="display:flex;align-items:center;gap:10px;">' +
     '<div style="width:36px;height:36px;border-radius:50%;background:var(--ink);display:flex;align-items:center;justify-content:center;color:var(--lime);font-family:\'Bebas Neue\',sans-serif;font-size:16px;">' + initials + '</div>' +
     '<div><div style="font-size:13px;font-weight:700;">' + esc(a.authorName||'DEKHO') + '</div>' +
@@ -276,47 +522,59 @@ function renderArticle(a) {
     (rating ? '<div style="display:flex;align-items:center;gap:8px;padding:6px 14px;background:var(--surface);border-radius:999px;border:1.5px solid var(--border);">' +
       '<span style="font-family:\'Bebas Neue\',sans-serif;font-size:1.6rem;line-height:1;color:var(--accent);">' + rating.toFixed(1) + '</span>' +
       '<span class="mono" style="font-size:10px;color:var(--muted);">/ 10</span></div>' : '') +
-    '<div style="display:flex;gap:.5rem;margin-left:auto;">' +
-    '<a href="https://twitter.com/intent/tweet?url=' + shareUrl + '&text=' + shareTitle + '" target="_blank" class="share-btn">𝕏 Share</a>' +
-    '<a href="https://wa.me/?text=' + shareTitle + '%20' + shareUrl + '" target="_blank" class="share-btn">WhatsApp</a>' +
-    '</div>' +
-    '</div>' +
-    // Cover image
-    '<div class="cover-wrap">' +
+    '<div style="display:flex;gap:.5rem;margin-left:auto;flex-wrap:wrap;">' +
+    '<a href="https://twitter.com/intent/tweet?url=' + shareUrl + '&text=' + shareTxt + '" target="_blank" class="share-btn">𝕏 Share</a>' +
+    '<a href="https://wa.me/?text=' + shareTxt + '%20' + shareUrl + '" target="_blank" class="share-btn">WhatsApp</a>' +
+    '</div></div>' +
+    '<div class="cover-wrap reveal" style="transition-delay:.18s;">' +
     (a.coverImage
       ? '<img src="' + esc(a.coverImage) + '" alt="' + esc(a.title) + '" onerror="this.parentElement.innerHTML=\'<div class=cover-placeholder><span>DEKHO</span></div>\'">'
       : '<div class="cover-placeholder"><span>DEKHO</span></div>') +
     '</div>';
 
-  // ── BODY ────────────────────────────────────────────────────────
+  // ── BODY ──────────────────────────────────────────────────────
   var bodyEl = document.getElementById('article-body');
-  bodyEl.innerHTML = a.content || '<p style="color:var(--muted);">No content available.</p>';
+  bodyEl.innerHTML = (a.content || '<p style="color:var(--muted);">No content available.</p>');
 
-  // ── SIDEBAR ─────────────────────────────────────────────────────
+  // ── Article end CTA card ──────────────────────────────────────
+  var endCard = document.createElement('div');
+  endCard.className = 'article-end';
+  endCard.innerHTML =
+    '<p class="mono" style="font-size:10px;color:#3a3a3a;letter-spacing:.2em;margin-bottom:.4rem;">// STAY CONNECTED</p>' +
+    '<h3>LIKED THIS ARTICLE?</h3>' +
+    '<p>Get honest reviews like this in your inbox weekly — no ads, no fluff.</p>' +
+    '<form class="end-form" onsubmit="handleEndSubscribe(event)">' +
+    '<input class="end-input" id="end-email" type="email" placeholder="your@email.com" required>' +
+    '<button class="end-btn" type="submit" id="end-submit-btn">Subscribe Free</button>' +
+    '</form>' +
+    '<div class="end-connects">' +
+    '<a href="https://wa.me/918052743378" target="_blank" rel="noopener" class="end-conn-btn ec-wa"><i data-lucide="message-circle" style="width:14px;height:14px;"></i> WhatsApp</a>' +
+    '<a href="https://instagram.com/elv8dgtl.in" target="_blank" rel="noopener" class="end-conn-btn ec-ig"><i data-lucide="instagram" style="width:14px;height:14px;"></i> Instagram</a>' +
+    '<a href="https://linkedin.com/company/elv8dgtl" target="_blank" rel="noopener" class="end-conn-btn ec-li"><i data-lucide="linkedin" style="width:14px;height:14px;"></i> LinkedIn</a>' +
+    '<a href="mailto:hello@elv8dgtl.in" class="end-conn-btn ec-mail"><i data-lucide="mail" style="width:14px;height:14px;"></i> Email us</a>' +
+    '</div>';
+  bodyEl.appendChild(endCard);
+  lucide.createIcons({ el: endCard });
+
+  // ── SIDEBAR ──────────────────────────────────────────────────
   var sidebar = document.getElementById('article-sidebar');
   var headings = bodyEl.querySelectorAll('h2, h3');
   var tocHtml = '';
 
   if (headings.length > 0) {
-    // Assign IDs to headings for scroll targeting
     headings.forEach(function(h, i) {
-      var headingId = 'section-' + i;
-      h.id = headingId;
-      tocHtml += '<li class="toc-item" onclick="scrollTo(\'' + headingId + '\')" id="toc-' + i + '">' + esc(h.textContent) + '</li>';
+      var hId = 'section-' + i;
+      h.id = hId;
+      var isH3 = h.tagName === 'H3';
+      tocHtml += '<li class="toc-item" onclick="scrollToSection(\'' + hId + '\')" id="toc-' + i + '" style="' + (isH3 ? 'padding-left:18px;font-size:12px;' : '') + '">' + esc(h.textContent) + '</li>';
     });
-
-    tocHtml = '<div class="sidebar-card">' +
-      '<h4>In this article</h4>' +
-      '<ul class="toc-list">' + tocHtml + '</ul>' +
-      '</div>';
+    tocHtml = '<div class="sidebar-card"><h4>In this article</h4><ul class="toc-list">' + tocHtml + '</ul></div>';
   }
 
-  // Rating card in sidebar
   var ratingCard = '';
   if (rating) {
-    var deg = Math.round((rating / 10) * 360);
-    var circumference = 2 * Math.PI * 32; // r=32
-    var dashOffset = circumference - (rating / 10) * circumference;
+    var circumference = 2 * Math.PI * 32;
+    var dashOffset    = circumference - (rating / 10) * circumference;
     ratingCard =
       '<div class="sidebar-card" style="text-align:center;">' +
       '<h4>DEKHO Score</h4>' +
@@ -324,7 +582,7 @@ function renderArticle(a) {
       '<div class="rating-circle">' +
       '<svg width="80" height="80" viewBox="0 0 80 80">' +
       '<circle class="rc-track" cx="40" cy="40" r="32"/>' +
-      '<circle class="rc-fill" cx="40" cy="40" r="32" stroke-dasharray="' + circumference + '" stroke-dashoffset="' + dashOffset + '"/>' +
+      '<circle class="rc-fill" id="rc-fill-el" cx="40" cy="40" r="32" stroke-dasharray="' + circumference + '" stroke-dashoffset="' + circumference + '"/>' +
       '</svg>' +
       '<div class="rating-num">' + rating.toFixed(1) + '<span>/ 10</span></div>' +
       '</div></div>' +
@@ -332,41 +590,90 @@ function renderArticle(a) {
       '</div>';
   }
 
-  // Back link
-  var backCard =
+  // Connect sidebar card
+  var connectCard =
     '<div class="sidebar-card">' +
-    '<a href="dekho.html" style="display:flex;align-items:center;gap:8px;font-size:13px;font-weight:600;color:var(--ink);text-decoration:none;">' +
-    '← More articles</a>' +
+    '<h4>Connect with us</h4>' +
+    '<div class="connect-grid">' +
+    '<a href="https://wa.me/918052743378" target="_blank" rel="noopener" class="connect-btn cb-wa"><i data-lucide="message-circle" style="width:13px;height:13px;"></i> WhatsApp</a>' +
+    '<a href="https://instagram.com/elv8dgtl.in" target="_blank" rel="noopener" class="connect-btn cb-ig"><i data-lucide="instagram" style="width:13px;height:13px;"></i> Instagram</a>' +
+    '<a href="https://linkedin.com/company/elv8dgtl" target="_blank" rel="noopener" class="connect-btn cb-li"><i data-lucide="linkedin" style="width:13px;height:13px;"></i> LinkedIn</a>' +
+    '<a href="mailto:hello@elv8dgtl.in" class="connect-btn cb-mail" style="grid-column:1/-1;"><i data-lucide="mail" style="width:13px;height:13px;"></i> hello@elv8dgtl.in</a>' +
+    '</div>' +
+    '<div style="border-top:1.5px solid var(--border);margin-top:1rem;padding-top:1rem;">' +
+    '<a href="dekho.html" style="display:flex;align-items:center;gap:8px;font-size:13px;font-weight:600;color:var(--ink);text-decoration:none;">← More articles</a>' +
     '<div style="margin-top:.75rem;display:flex;gap:.5rem;flex-wrap:wrap;">' +
-    '<a href="https://twitter.com/intent/tweet?url=' + shareUrl + '&text=' + shareTitle + '" target="_blank" class="share-btn" style="font-size:11px;padding:5px 11px;">𝕏 Tweet</a>' +
-    '<a href="https://wa.me/?text=' + shareTitle + '%20' + shareUrl + '" target="_blank" class="share-btn" style="font-size:11px;padding:5px 11px;">WhatsApp</a>' +
-    '</div></div>';
+    '<a href="https://twitter.com/intent/tweet?url=' + shareUrl + '&text=' + shareTxt + '" target="_blank" class="share-btn" style="font-size:11px;padding:5px 11px;">𝕏 Tweet</a>' +
+    '<a href="https://wa.me/?text=' + shareTxt + '%20' + shareUrl + '" target="_blank" class="share-btn" style="font-size:11px;padding:5px 11px;">Share</a>' +
+    '</div></div></div>';
 
-  sidebar.innerHTML = ratingCard + tocHtml + backCard;
+  sidebar.innerHTML = ratingCard + tocHtml + connectCard;
+  lucide.createIcons({ el: sidebar });
 
-  // ── SHOW ────────────────────────────────────────────────────────
+  // ── SHOW ──────────────────────────────────────────────────────
   document.getElementById('state-loading').style.display = 'none';
   document.getElementById('article-wrap').style.display  = 'block';
 
-  // TOC active tracking on scroll
+  // Animate rating ring
+  if (rating) {
+    setTimeout(function() {
+      var fillEl = document.getElementById('rc-fill-el');
+      if (fillEl) fillEl.style.strokeDashoffset = (2 * Math.PI * 32) - (rating / 10) * (2 * Math.PI * 32);
+    }, 200);
+  }
+
+  // Reveal animations
+  var revealEls = document.querySelectorAll('.reveal');
+  var revObs = new IntersectionObserver(function(entries) {
+    entries.forEach(function(e) { if (e.isIntersecting) { e.target.classList.add('on'); revObs.unobserve(e.target); } });
+  }, { threshold: 0.05 });
+  revealEls.forEach(function(el) { revObs.observe(el); });
+
+  // TOC active on scroll
   if (headings.length > 0) {
     window.addEventListener('scroll', function() {
-      var scrollY = window.scrollY + 100;
+      var scrollY = window.scrollY + 120;
       var active = 0;
-      headings.forEach(function(h, i) {
-        if (h.offsetTop <= scrollY) active = i;
-      });
+      headings.forEach(function(h, i) { if (h.offsetTop <= scrollY) active = i; });
       document.querySelectorAll('.toc-item').forEach(function(el) { el.classList.remove('active'); });
-      var activeToc = document.getElementById('toc-' + active);
-      if (activeToc) activeToc.classList.add('active');
+      var el = document.getElementById('toc-' + active);
+      if (el) el.classList.add('active');
     });
   }
 }
 
-// ── HELPERS ───────────────────────────────────────────────────────
-function scrollTo(id) {
+// ── SUBSCRIBE ────────────────────────────────────────────────────
+function openSubscribe() {
+  document.getElementById('subscribe-popup').classList.add('on');
+  document.body.style.overflow = 'hidden';
+  setTimeout(function() { var i = document.getElementById('sub-email'); if (i) i.focus(); }, 100);
+}
+function closeSubscribe() {
+  document.getElementById('subscribe-popup').classList.remove('on');
+  document.body.style.overflow = '';
+}
+document.addEventListener('keydown', function(e) { if (e.key === 'Escape') closeSubscribe(); });
+
+function handleSubscribe(e) {
+  e.preventDefault();
+  var btn = document.getElementById('sub-submit-btn');
+  btn.textContent = 'Subscribed ✓';
+  btn.style.background = '#16A34A';
+  btn.disabled = true;
+  setTimeout(closeSubscribe, 1800);
+}
+function handleEndSubscribe(e) {
+  e.preventDefault();
+  var btn = document.getElementById('end-submit-btn');
+  btn.textContent = 'Subscribed ✓';
+  btn.style.background = '#16A34A';
+  btn.disabled = true;
+}
+
+// ── HELPERS ──────────────────────────────────────────────────────
+function scrollToSection(id) {
   var el = document.getElementById(id);
-  if (el) window.scrollTo({ top: el.offsetTop - 80, behavior: 'smooth' });
+  if (el) window.scrollTo({ top: el.offsetTop - 84, behavior: 'smooth' });
 }
 function tagCls(cat) {
   var m = { review:'tag-review', comparison:'tag-comparison', top:'tag-top', guide:'tag-guide' };
@@ -393,10 +700,9 @@ function esc(s) {
   return String(s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');
 }
 function setMeta(id, attr, val) {
-  var el = document.getElementById(id);
-  if (!el) return;
+  var el = document.getElementById(id); if (!el) return;
   if (attr) el.setAttribute(attr, val);
-  else { el.setAttribute('content', val); }
+  else el.setAttribute('content', val);
 }
 function showError(msg) {
   document.getElementById('state-loading').style.display = 'none';
