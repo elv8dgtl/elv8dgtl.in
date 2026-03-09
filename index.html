@@ -961,19 +961,12 @@
     <!-- ══════════════════════════════════════════════════════════
          DEKHO — Editorial section (live articles from CMS)
     ══════════════════════════════════════════════════════════ -->
-    <!-- Outer band: light gray, gives DEKHO card clear separation from footer -->
     <div class="dks-outer">
         <div class="container mx-auto px-6 md:px-12">
-
-            <!-- Floating card wrapper — dark, elevated, floating above the band -->
             <div class="dks-card">
-
-                <!-- Noise + glow stay inside the card -->
                 <div class="dks-noise"></div>
                 <div class="dks-glow"></div>
-
                 <div class="dks-inner">
-
                     <!-- Header row -->
                     <div class="dks-hd">
                         <div>
@@ -992,9 +985,8 @@
 
                     <!-- Pill shell -->
                     <div class="dks-shell" id="dks-shell">
-
                         <div id="dks-list">
-                            <!-- 4 skeleton rows -->
+                            <!-- 4 skeleton rows shown while loading -->
                             <div class="dks-sk"><div class="dks-s" style="width:20px;height:16px;"></div><div><div class="dks-s" style="width:56px;height:12px;border-radius:3px;margin-bottom:7px;"></div><div class="dks-s" style="height:13px;width:72%;"></div></div><div class="dks-s" style="width:48px;height:10px;"></div><div class="dks-s" style="width:30px;height:30px;border-radius:50%;"></div></div>
                             <div class="dks-sk"><div class="dks-s" style="width:20px;height:16px;"></div><div><div class="dks-s" style="width:68px;height:12px;border-radius:3px;margin-bottom:7px;"></div><div class="dks-s" style="height:13px;width:85%;"></div></div><div class="dks-s" style="width:48px;height:10px;"></div><div class="dks-s" style="width:30px;height:30px;border-radius:50%;"></div></div>
                             <div class="dks-sk"><div class="dks-s" style="width:20px;height:16px;"></div><div><div class="dks-s" style="width:50px;height:12px;border-radius:3px;margin-bottom:7px;"></div><div class="dks-s" style="height:13px;width:65%;"></div></div><div class="dks-s" style="width:48px;height:10px;"></div><div class="dks-s" style="width:30px;height:30px;border-radius:50%;"></div></div>
@@ -1020,19 +1012,46 @@
     </div><!-- end dks-outer -->
 
     <script>
-    /* ── DEKHO live article fetcher ──────────────────────────────
-       Lazy-loads when section enters viewport.
-       Replaces 4 skeleton rows with real articles from CMS API.
-    ──────────────────────────────────────────────────────────── */
+    /* ══════════════════════════════════════════════════════════════
+       DEKHO live article fetcher — with localStorage cache
+       ─────────────────────────────────────────────────────────────
+       Cache key:  'dekho_articles'  (SHARED with dekho.html)
+       TTL:        5 minutes
+       Strategy:   Cache-first → render instantly → refresh in bg
+       Benefit:    If user visited dekho.html first, the DEKHO card
+                   on this page shows articles without ANY API call.
+    ══════════════════════════════════════════════════════════════ */
     (function(){
         var API = 'https://script.google.com/macros/s/AKfycbyFtGvUQnioGE21cOmZhV5HS4wvRXEFydMVgnsVM-vjeHdVh4aPUKb9g5AZHUbIuFAV/exec';
         var CAT = { review:'Review', comparison:'Compare', top:'Top List', guide:'Guide', seo:'SEO', marketing:'Marketing', web:'Web Dev', social:'Social', tips:'Tips', tools:'Tools' };
+
+        // ── localStorage cache helpers ────────────────────────────
+        var CACHE_KEY = 'dekho_articles'; // same key as dekho.html — shared cache
+        var CACHE_TTL = 5 * 60 * 1000;   // 5 minutes in ms
+
+        function getCached() {
+            try {
+                var raw = localStorage.getItem(CACHE_KEY);
+                if (!raw) return null;
+                var entry = JSON.parse(raw);
+                if (!entry || !entry.ts || !entry.data) return null;
+                if (Date.now() - entry.ts > CACHE_TTL) return null; // expired
+                return entry.data;
+            } catch(e) { return null; }
+        }
+
+        function setCached(data) {
+            try {
+                localStorage.setItem(CACHE_KEY, JSON.stringify({ ts: Date.now(), data: data }));
+            } catch(e) {}
+        }
+        // ── end cache helpers ─────────────────────────────────────
 
         function esc(s){ return String(s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;'); }
         function catLabel(c){ return CAT[(c||'').toLowerCase()] || (c ? c.charAt(0).toUpperCase()+c.slice(1) : 'Article'); }
 
         function buildRow(art, i){
-            var href = art.slug ? 'dekho.html?slug='+encodeURIComponent(art.slug) : 'dekho.html?id='+encodeURIComponent(art.id);
+            var href = art.slug ? 'dekho-article.html?slug='+encodeURIComponent(art.slug) : 'dekho-article.html?id='+encodeURIComponent(art.id);
             var rt   = parseInt(art.readTime)||4;
             var ttl  = (art.title||'Untitled').trim();
             if(ttl.length > 82) ttl = ttl.substring(0,79)+'…';
@@ -1063,16 +1082,43 @@
             return a;
         }
 
+        function renderArts(arts, list) {
+            var slice = arts.slice(0, 4);
+            list.innerHTML = '';
+            slice.forEach(function(art, i){ list.appendChild(buildRow(art, i)); });
+        }
+
         function load(){
             var list = document.getElementById('dks-list');
             if(!list) return;
-            fetch(API,{ method:'POST', headers:{'Content-Type':'text/plain'}, body:JSON.stringify({action:'listPublished'}) })
+
+            // ── Cache-first: render immediately if cache is warm ──
+            var _cached = getCached();
+            if (_cached) {
+                renderArts(_cached, list);
+                // Quietly refresh in background — update cache only
+                fetch(API, { method:'POST', headers:{'Content-Type':'text/plain'}, body:JSON.stringify({action:'listPublished'}) })
+                .then(function(r){ return r.json(); })
+                .then(function(d){
+                    if(d.ok && d.articles && d.articles.length) {
+                        setCached(d.articles);
+                        // Re-render only if article count changed
+                        if (d.articles.length !== _cached.length) {
+                            renderArts(d.articles, list);
+                        }
+                    }
+                })
+                .catch(function(){}); // silent — don't disturb the user
+                return;
+            }
+
+            // ── Cache miss: fetch from API, then cache result ──
+            fetch(API, { method:'POST', headers:{'Content-Type':'text/plain'}, body:JSON.stringify({action:'listPublished'}) })
             .then(function(r){ return r.json(); })
             .then(function(d){
                 if(!d.ok||!d.articles||!d.articles.length){ showErr(list); return; }
-                var arts = d.articles.slice(0,4);
-                list.innerHTML = '';
-                arts.forEach(function(art,i){ list.appendChild(buildRow(art,i)); });
+                setCached(d.articles); // store for next visit / next page
+                renderArts(d.articles, list);
             })
             .catch(function(){ showErr(list); });
         }
@@ -1081,6 +1127,7 @@
             list.innerHTML = '<div class="dks-err">Couldn\'t load right now — <a href="dekho.html">visit DEKHO directly →</a></div>';
         }
 
+        // Lazy-load when section scrolls into view (200px early)
         var sec = document.querySelector('.dks-outer');
         if(!sec){ return; }
         if('IntersectionObserver' in window){
