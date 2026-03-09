@@ -844,13 +844,76 @@ var $ = {
   uplTarget: 'body'       // 'body' | 'cover'  — where to insert after upload
 };
 
+// ================================================================
+// COOKIE SESSION HELPERS
+// Stores token + user info in a cookie so boot skips getMe() API
+// call when the cookie is still fresh (< 7h old).
+// ================================================================
+var COOKIE_NAME   = 'dekho_session';
+var COOKIE_TTL_H  = 7; // hours — slightly under token's 8h server expiry
+
+function setCookieSession(token, user) {
+  try {
+    var val     = encodeURIComponent(JSON.stringify({ token: token, user: user, ts: Date.now() }));
+    var expires = new Date(Date.now() + COOKIE_TTL_H * 3600000).toUTCString();
+    document.cookie = COOKIE_NAME + '=' + val + '; expires=' + expires + '; path=/; SameSite=Strict';
+  } catch(e) {}
+}
+
+function getCookieSession() {
+  try {
+    var match = document.cookie.split(';').map(function(c){ return c.trim(); })
+      .find(function(c){ return c.startsWith(COOKIE_NAME + '='); });
+    if (!match) return null;
+    var raw = decodeURIComponent(match.split('=').slice(1).join('='));
+    var obj = JSON.parse(raw);
+    if (!obj || !obj.token || !obj.user || !obj.ts) return null;
+    if (Date.now() - obj.ts > COOKIE_TTL_H * 3600000) return null;
+    return obj;
+  } catch(e) { return null; }
+}
+
+function clearCookieSession() {
+  try {
+    document.cookie = COOKIE_NAME + '=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/; SameSite=Strict';
+  } catch(e) {}
+}
+// ================================================================
+// END COOKIE SESSION HELPERS
+// ================================================================
+
 // ── BOOT ─────────────────────────────────────────────────────────────────────
 (function boot() {
   var t = '';
   try { t = localStorage.getItem('dekho_token') || ''; } catch(e){}
   if (!t) { showLogin(); return; }
+
+  // ── Cookie fast-path: skip getMe() API call if cookie is fresh ──
+  var _cookieSession = getCookieSession();
+  if (_cookieSession && _cookieSession.token === t) {
+    $.token = t; $.user = _cookieSession.user;
+    bootApp();
+    // Verify token in background — silent, user is already in
+    call('getMe', { token: t }).then(function(r) {
+      if (!r.ok) {
+        // Token expired server-side — force re-login
+        try { localStorage.removeItem('dekho_token'); } catch(e){}
+        clearCookieSession();
+        location.reload();
+      } else {
+        setCookieSession(t, r.user); // refresh cookie with latest user data
+      }
+    }).catch(function() {}); // silent fail — don't kick user out on network error
+    return;
+  }
+
+  // ── No valid cookie — do full getMe() call ──
   call('getMe', { token: t }).then(function(r) {
-    if (r.ok) { $.token = t; $.user = r.user; bootApp(); }
+    if (r.ok) {
+      $.token = t; $.user = r.user;
+      setCookieSession(t, r.user); // set cookie on successful verify
+      bootApp();
+    }
     else { try { localStorage.removeItem('dekho_token'); } catch(e){} showLogin(); }
   }).catch(function() { showLogin(); });
 })();
@@ -900,6 +963,7 @@ function doLogin() {
     if (r.ok) {
       $.token = r.token; $.user = r.user;
       try { localStorage.setItem('dekho_token', r.token); } catch(e){}
+      setCookieSession(r.token, r.user); // ← set cookie on login
       bootApp();
     } else { showLErr(r.error || 'Login failed.'); }
   });
@@ -914,6 +978,7 @@ function doLogout() {
   call('logout', { token: $.token });
   $.token = null; $.user = null; $.arts = [];
   try { localStorage.removeItem('dekho_token'); } catch(e){}
+  clearCookieSession(); // ← clear cookie on logout
   document.getElementById('l-email').value = '';
   document.getElementById('l-pass').value  = '';
   document.getElementById('l-err').style.display = 'none';
@@ -1669,6 +1734,7 @@ function closeSidebar() {
   }
   function nukeContent() {
     try{localStorage.removeItem('dekho_token');}catch(e){}
+    clearCookieSession();
     document.body.innerHTML=
       '<div style="position:fixed;inset:0;background:#0D0D0D;display:flex;flex-direction:column;align-items:center;justify-content:center;font-family:\'DM Mono\',monospace;color:#fff;text-align:center;padding:2rem;">'+
       '<div style="font-family:\'Bebas Neue\',sans-serif;font-size:5rem;color:#E8380D;letter-spacing:.1em;line-height:1;">DEKHO</div>'+
