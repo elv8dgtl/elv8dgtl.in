@@ -1,1 +1,7 @@
 
+name: Update Article Sitemap
+
+on:
+  schedule:
+    - cron: '0 2 * * *'
+  workflow_dispatch:
