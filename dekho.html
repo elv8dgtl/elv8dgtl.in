@@ -38,16 +38,13 @@
             overflow-x: hidden;
         }
 
-        /* ── Typography ─────────────────────────── */
         .display { font-family: 'Bebas Neue', sans-serif; letter-spacing: 0.02em; line-height: 0.95; }
         .mono    { font-family: 'DM Mono', monospace; }
 
-        /* ── Scrollbar ──────────────────────────── */
         ::-webkit-scrollbar { width: 5px; }
         ::-webkit-scrollbar-track { background: var(--paper); }
         ::-webkit-scrollbar-thumb { background: var(--border); border-radius: 4px; }
 
-        /* ── Nav ────────────────────────────────── */
         #navbar {
             position: fixed; top: 0; left: 0; width: 100%; z-index: 50;
             background: rgba(250,250,248,0.92);
@@ -57,7 +54,6 @@
         }
         #navbar.scrolled { box-shadow: 0 2px 24px rgba(0,0,0,0.06); }
 
-        /* ── Tags ───────────────────────────────── */
         .tag {
             display: inline-block;
             font-family: 'DM Mono', monospace;
@@ -69,8 +65,9 @@
         .tag-comparison { background: #EDF3FF; color: var(--accent2); border: 1px solid #BCCFFF; }
         .tag-top        { background: #F0FDE8; color: #2E7D10; border: 1px solid #B6EDAA; }
         .tag-guide      { background: #F5F0FF; color: #6B3FD4; border: 1px solid #CDB8FF; }
+        .tag-news       { background: #EFF8FF; color: #0369A1; border: 1px solid #BAE6FD; }
+        .tag-opinion    { background: #FFF7ED; color: #C2410C; border: 1px solid #FED7AA; }
 
-        /* ── Cards ──────────────────────────────── */
         .card {
             background: #fff;
             border: 1.5px solid var(--border);
@@ -89,7 +86,6 @@
         .card:hover .card-title { color: var(--accent); }
         .card-title { transition: color .2s; }
 
-        /* Rating stamp */
         .rating-stamp {
             position: absolute; top: 12px; right: 12px;
             width: 46px; height: 46px;
@@ -105,7 +101,6 @@
         }
         .rating-stamp span { font-family: 'DM Mono', monospace; font-size: 8px; color: #aaa; line-height: 1; }
 
-        /* ── Hero featured card ─────────────────── */
         .hero-card {
             background: #fff;
             border: 1.5px solid var(--border);
@@ -118,11 +113,9 @@
         .hero-img { overflow: hidden; }
         .hero-img img { transition: transform .6s ease; }
 
-        /* ── Ticker ─────────────────────────────── */
         @keyframes ticker { 0%{transform:translateX(0)} 100%{transform:translateX(-50%)} }
         .ticker-inner { display: flex; white-space: nowrap; animation: ticker 22s linear infinite; }
 
-        /* ── Category filter ────────────────────── */
         .cat-btn {
             padding: 7px 18px; border-radius: 999px;
             border: 1.5px solid var(--border);
@@ -133,12 +126,8 @@
             cursor: pointer; transition: all .2s;
         }
         .cat-btn:hover { border-color: var(--ink); color: var(--ink); }
-        .cat-btn.active {
-            background: var(--ink); color: var(--lime);
-            border-color: var(--ink);
-        }
+        .cat-btn.active { background: var(--ink); color: var(--lime); border-color: var(--ink); }
 
-        /* ── Search ─────────────────────────────── */
         .search-box {
             display: flex; align-items: center; gap: 8px;
             background: #fff; border: 1.5px solid var(--border);
@@ -153,14 +142,11 @@
         }
         .search-box input::placeholder { color: var(--muted); }
 
-        /* ── Reveal ─────────────────────────────── */
         .reveal { opacity: 0; transform: translateY(20px); transition: opacity .7s ease, transform .7s ease; }
         .reveal.active { opacity: 1; transform: translateY(0); }
 
-        /* ── Affiliate note ─────────────────────── */
         .aff-note { font-family: 'DM Mono', monospace; font-size: 10px; color: var(--muted); }
 
-        /* ── Hindi watermark ────────────────────── */
         .hindi-bg {
             position: absolute; right: -40px; top: 50%; transform: translateY(-50%) rotate(-8deg);
             font-family: 'Bebas Neue', sans-serif;
@@ -170,7 +156,6 @@
             white-space: nowrap; z-index: 0;
         }
 
-        /* ── Newsletter ─────────────────────────── */
         .nl-input {
             flex: 1; border: none; outline: none; background: transparent;
             font-family: 'Instrument Sans', sans-serif;
@@ -178,7 +163,6 @@
         }
         .nl-input::placeholder { color: var(--muted); }
 
-        /* ── Mobile menu ────────────────────────── */
         #mobile-menu {
             position: fixed; inset: 0; background: var(--paper);
             z-index: 60; transform: translateX(100%);
@@ -187,11 +171,24 @@
         }
         #mobile-menu.open { transform: translateX(0); }
 
-        /* ── Footer link ────────────────────────── */
         .footer-link { position: relative; color: #666; transition: color .2s; }
         .footer-link::after { content:''; position:absolute; bottom:-2px; left:0; width:0; height:1px; background:var(--ink); transition:width .3s; }
         .footer-link:hover { color: var(--ink); }
         .footer-link:hover::after { width: 100%; }
+
+        /* ── Playground embed on live site ────────────────────────── */
+        .pg-embed {
+            margin: 1.25rem 0;
+            border-radius: 10px;
+            overflow: hidden;
+            position: relative;
+        }
+        .pg-embed iframe {
+            width: 100%;
+            border: none;
+            display: block;
+            transition: height .3s ease;
+        }
     </style>
 </head>
 <body>
@@ -200,20 +197,14 @@
 <nav id="navbar">
     <div style="max-width:1280px;margin:auto;padding:0 1.5rem;">
         <div style="display:flex;align-items:center;justify-content:space-between;height:64px;gap:1rem;">
-
-            <!-- Back to elv8 -->
             <a href="index.html" style="display:flex;align-items:center;gap:6px;color:var(--muted);font-size:12px;text-decoration:none;white-space:nowrap;" class="mono">
                 <i data-lucide="arrow-left" style="width:14px;height:14px;"></i>
                 elv8dgtl.in
             </a>
-
-            <!-- Wordmark -->
             <a href="dekho.html" style="display:flex;flex-direction:column;align-items:center;text-decoration:none;line-height:1;">
                 <span class="display" style="font-size:2rem;color:var(--ink);letter-spacing:0.1em;">DEKHO</span>
                 <span class="mono" style="font-size:9px;color:var(--muted);letter-spacing:0.2em;margin-top:2px;">BY ELV8 DGTL</span>
             </a>
-
-            <!-- Right -->
             <div style="display:flex;align-items:center;gap:1rem;">
                 <div class="search-box" style="display:none;" id="search-wrap">
                     <i data-lucide="search" style="width:14px;height:14px;color:var(--muted);flex-shrink:0;"></i>
@@ -309,6 +300,8 @@
                 <button class="cat-btn" onclick="filterCat('comparison')" data-cat="comparison">Comparisons</button>
                 <button class="cat-btn" onclick="filterCat('top')" data-cat="top">Top Lists</button>
                 <button class="cat-btn" onclick="filterCat('guide')" data-cat="guide">Guides</button>
+                <button class="cat-btn" onclick="filterCat('news')" data-cat="news">News</button>
+                <button class="cat-btn" onclick="filterCat('opinion')" data-cat="opinion">Opinion</button>
             </div>
             <div style="display:flex;align-items:center;gap:8px;">
                 <span class="mono" style="font-size:11px;color:var(--muted);">Sort:</span>
@@ -324,47 +317,34 @@
 <!-- ── Main Content ──────────────────────────────────── -->
 <main style="max-width:1280px;margin:auto;padding:2.5rem 1.5rem 5rem;">
 
-    <!-- Loading state -->
     <div id="loading-state" style="text-align:center;padding:5rem 0;">
         <div style="display:inline-block;width:36px;height:36px;border:3px solid var(--border);border-top-color:var(--ink);border-radius:50%;animation:spin .8s linear infinite;"></div>
         <p class="mono" style="font-size:11px;color:var(--muted);letter-spacing:.15em;margin-top:1rem;">LOADING ARTICLES…</p>
     </div>
 
-    <!-- Error state (hidden initially) -->
     <div id="error-state" style="display:none;text-align:center;padding:5rem 0;">
         <p class="display" style="font-size:3rem;color:var(--border);">OOPS</p>
         <p style="color:var(--muted);margin-top:.5rem;font-size:14px;" id="error-msg">Could not load articles.</p>
         <button onclick="loadArticles()" style="margin-top:1.5rem;padding:9px 24px;background:var(--ink);color:#fff;border:none;border-radius:999px;font-size:13px;font-weight:700;cursor:pointer;">Try Again</button>
     </div>
 
-    <!-- Empty state (hidden initially) -->
     <div id="empty-state" style="display:none;text-align:center;padding:5rem 0;">
         <p class="display" style="font-size:3rem;color:var(--border);">COMING SOON</p>
         <p style="color:var(--muted);margin-top:.5rem;font-size:14px;">No published articles yet. Check back soon.</p>
     </div>
 
-    <!-- Articles (hidden until loaded) -->
     <div id="articles-loaded" style="display:none;">
-
-        <!-- Featured Article (first/highest rated) -->
         <div id="featured-wrap" style="margin-bottom:2rem;"></div>
-
-        <!-- Article count badge -->
         <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:1.25rem;">
             <p class="mono" style="font-size:11px;color:var(--muted);letter-spacing:.15em;">
                 <span id="article-count">0</span> ARTICLES PUBLISHED
             </p>
         </div>
-
-        <!-- 3-col Grid -->
         <div id="article-grid" style="display:grid;grid-template-columns:repeat(auto-fill,minmax(320px,1fr));gap:1.5rem;"></div>
-
-        <!-- No results after filter/search -->
         <div id="no-results" style="display:none;text-align:center;padding:4rem 0;">
             <p class="display" style="font-size:3rem;color:var(--border);">NO RESULTS</p>
             <p style="color:var(--muted);margin-top:.5rem;">Try a different category or search term.</p>
         </div>
-
     </div>
 
     <!-- Newsletter -->
@@ -382,6 +362,7 @@
     </div>
 
 </main>
+
 <!-- ── Footer ────────────────────────────────────────────── -->
 <footer style="background:var(--surface);border-top:1.5px solid var(--border);padding:3.5rem 1.5rem 2rem;">
     <div style="max-width:1280px;margin:auto;">
@@ -413,8 +394,8 @@
             <div>
                 <p class="mono" style="font-size:10px;color:var(--muted);letter-spacing:0.15em;margin-bottom:1.25rem;">REACH US</p>
                 <div style="display:flex;flex-direction:column;gap:0.75rem;">
-                    <a href="/cdn-cgi/l/email-protection#6a020f0606052a0f061c520e0d1e06440304" style="font-size:13px;color:var(--muted);text-decoration:none;display:flex;align-items:center;gap:6px;transition:color .2s;" onmouseover="this.style.color='var(--ink)'" onmouseout="this.style.color='var(--muted)'">
-                        <i data-lucide="mail" style="width:14px;height:14px;"></i> <span class="__cf_email__" data-cfemail="355d5059595a755059430d515241591b5c5b">[email&#160;protected]</span>
+                    <a href="/cdn-cgi/l/email-protection#0a626f6666654a6f667c326e6d7e66246364" style="font-size:13px;color:var(--muted);text-decoration:none;display:flex;align-items:center;gap:6px;transition:color .2s;" onmouseover="this.style.color='var(--ink)'" onmouseout="this.style.color='var(--muted)'">
+                        <i data-lucide="mail" style="width:14px;height:14px;"></i> <span class="__cf_email__" data-cfemail="ea828f868685aa8f869cd28e8d9e86c48384">[email&#160;protected]</span>
                     </a>
                     <a href="https://wa.me/918052743378" target="_blank" style="font-size:13px;color:var(--muted);text-decoration:none;display:flex;align-items:center;gap:6px;transition:color .2s;" onmouseover="this.style.color='#25D366'" onmouseout="this.style.color='var(--muted)'">
                         <i data-lucide="message-circle" style="width:14px;height:14px;"></i> WhatsApp Us
@@ -452,22 +433,23 @@
 
 <style>
 @keyframes spin { to { transform: rotate(360deg); } }
+        /* CMS crop wrapper support */
+        .img-crop-wrap { overflow:hidden; display:block; max-width:100%; line-height:0; }
+        .img-crop-wrap img { display:block; width:100%; }
 </style>
 
-<script>
-// ── CONFIG — replace with your real Apps Script URL ─────────────
-var API = 'https://script.google.com/macros/s/AKfycbyFtGvUQnioGE21cOmZhV5HS4wvRXEFydMVgnsVM-vjeHdVh4aPUKb9g5AZHUbIuFAV/exec';
+<script data-cfasync="false" src="/cdn-cgi/scripts/5c5dd728/cloudflare-static/email-decode.min.js"></script><script>
+// ── CONFIG ───────────────────────────────────────────────────────
+var API = 'https://script.google.com/macros/s/AKfycbxkn1yEQRSPIOtb9HGHkGC3pk5KfQSvdcQkyMcuj5LiVO8HZLBDSaMaY-P9KXjzjw6Q/exec';
 
 // ── STATE ────────────────────────────────────────────────────────
-var allArticles = [];   // full list from API
+var allArticles  = [];
 var activeFilter = 'all';
 var activeSearch = '';
 
-// ================================================================
-// LOCAL CACHE — localStorage + timestamp (5 min TTL)
-// ================================================================
+// ── LOCAL CACHE (5 min TTL) ──────────────────────────────────────
 var LOCAL_CACHE_KEY = 'dekho_articles';
-var LOCAL_CACHE_TTL = 5 * 60 * 1000; // 5 minutes in ms
+var LOCAL_CACHE_TTL = 5 * 60 * 1000;
 
 function getCachedArticles() {
     try {
@@ -479,27 +461,103 @@ function getCachedArticles() {
         return entry.data;
     } catch(e) { return null; }
 }
-
 function setCachedArticles(data) {
-    try {
-        localStorage.setItem(LOCAL_CACHE_KEY, JSON.stringify({ ts: Date.now(), data: data }));
-    } catch(e) {}
+    try { localStorage.setItem(LOCAL_CACHE_KEY, JSON.stringify({ ts: Date.now(), data: data })); } catch(e) {}
 }
-// ================================================================
-// END LOCAL CACHE
-// ================================================================
+
+// ── PLAYGROUND: auto-height via postMessage ──────────────────────
+// Iframes injected by restorePlaygrounds() post their scrollHeight here.
+window.addEventListener('message', function(e) {
+    if (!e.data || e.data.type !== 'pg-resize') return;
+    var h = parseInt(e.data.h);
+    if (!h || h < 50) return;
+    // Find the iframe whose contentWindow matches the message source
+    document.querySelectorAll('.pg-embed iframe').forEach(function(f) {
+        try {
+            if (f.contentWindow === e.source) {
+                f.style.height = (h + 24) + 'px';
+            }
+        } catch(x) {}
+    });
+});
+
+// ── PLAYGROUND: restore [[PG:uid]] tokens in article content ─────
+// Called before injecting article HTML into the DOM.
+// content   = raw HTML string with [[PG:uid]] placeholders
+// playgrounds = { uid: { html, css, js, height, border, scroll, autoheight } }
+function restorePlaygrounds(content, playgrounds) {
+    if (!content) return content || '';
+    if (!playgrounds || !Object.keys(playgrounds).length) return content;
+
+    return content.replace(/(?:<span[^>]*data-pg-token="([^"]+)"[^>]*>[\s\S]*?<\/span>|\[\[PG:([^\]]+)\]\])/g, function(match, uid1, uid2) {
+        var uid = uid1 || uid2;
+        if (!uid) return '';
+        var pg = playgrounds[uid];
+        if (!pg) return ''; // orphaned token — just remove it
+
+        var isAuto  = pg.autoheight !== '0';
+        var height  = isAuto ? '200px' : (pg.height || '400px');
+        var border  = pg.border === '1' ? 'border:1.5px solid #E2E0DA;' : '';
+        var scroll  = pg.scroll === '1' ? 'auto' : 'hidden';
+
+        // Auto-height reporter injected into the iframe document
+        var autoScript = isAuto
+            ? '<scr' + 'ipt>(function(){function r(){var h=document.documentElement.scrollHeight||document.body.scrollHeight;parent.postMessage({type:"pg-resize",h:h},"*");}window.addEventListener("load",r);window.addEventListener("resize",r);setTimeout(r,200);setTimeout(r,800);})();<\/scr' + 'ipt>'
+            : '';
+
+        // Build the complete sandboxed document
+        var doc = '<!DOCTYPE html><html><head>' +
+            '<meta charset="UTF-8">' +
+            '<meta name="viewport" content="width=device-width,initial-scale=1">' +
+            '<style>html,body{margin:0;padding:0;}</style>' +
+            (pg.css ? '<style>' + pg.css + '</style>' : '') +
+            autoScript +
+            '</head><body>' +
+            (pg.html || '') +
+            (pg.js ? '<scr' + 'ipt>' + pg.js + '<\/scr' + 'ipt>' : '') +
+            '</body></html>';
+
+        // Wrap in a div, create iframe, set srcdoc via JS (avoids attribute escaping issues)
+        // We use a data-srcdoc attribute and activate it via initPlaygrounds() after DOM insert
+        var safeDoc = doc.replace(/&/g,'&amp;').replace(/"/g,'&quot;');
+        return '<div class="pg-embed" style="' + border + '">' +
+            '<iframe data-srcdoc="' + safeDoc + '" ' +
+            'style="width:100%;height:' + height + ';border:none;display:block;overflow:' + scroll + ';transition:height .3s ease;" ' +
+            'sandbox="allow-scripts allow-same-origin" loading="lazy">' +
+            '</iframe>' +
+            '</div>';
+    });
+}
+
+// After inserting restored HTML into the DOM, activate iframes by writing srcdoc
+// (We can't put the full HTML in an attribute safely — so we stored it encoded and decode here)
+function initPlaygrounds(container) {
+    var iframes = (container || document).querySelectorAll('iframe[data-srcdoc]');
+    iframes.forEach(function(iframe) {
+        var encoded = iframe.getAttribute('data-srcdoc');
+        if (!encoded) return;
+        var doc = encoded
+            .replace(/&quot;/g, '"')
+            .replace(/&amp;/g, '&');
+        iframe.removeAttribute('data-srcdoc');
+        try {
+            iframe.srcdoc = doc;
+        } catch(e) {
+            var blob = new Blob([doc], { type: 'text/html' });
+            iframe.src = URL.createObjectURL(blob);
+        }
+    });
+}
 
 // ── BOOT ─────────────────────────────────────────────────────────
 document.addEventListener('DOMContentLoaded', function() {
     lucide.createIcons();
 
-    // Nav scroll
     var navbar = document.getElementById('navbar');
     window.addEventListener('scroll', function() {
         navbar.classList.toggle('scrolled', window.scrollY > 40);
     });
 
-    // Desktop 'Work with us' link
     var workLink = document.querySelector('.md-flex');
     if (workLink) {
         workLink.style.display = window.innerWidth >= 768 ? 'flex' : 'none';
@@ -508,21 +566,18 @@ document.addEventListener('DOMContentLoaded', function() {
         });
     }
 
-    // Mobile menu
     window.toggleMobileMenu = function() {
         var m = document.getElementById('mobile-menu');
         m.classList.toggle('open');
         document.body.style.overflow = m.classList.contains('open') ? 'hidden' : '';
     };
 
-    // Search input listener
     document.getElementById('search-input').addEventListener('input', function() {
         activeSearch = this.value.toLowerCase().trim();
         renderSearchOverlay(activeSearch);
         applyFilterAndSearch();
     });
 
-    // Close search on outside click
     document.addEventListener('click', function(e) {
         if (!e.target.closest('#search-wrap') && !e.target.closest('#search-results') && !e.target.closest('[onclick="toggleSearch()"]')) {
             document.getElementById('search-results').style.display = 'none';
@@ -539,7 +594,6 @@ function loadArticles() {
     hide('empty-state');
     hide('articles-loaded');
 
-    // ── Try local cache first ──
     var _localHit = getCachedArticles();
     if (_localHit) {
         hide('loading-state');
@@ -555,38 +609,27 @@ function loadArticles() {
             show('articles-loaded');
             initReveal();
         }
-        // Refresh in background silently (stale-while-revalidate)
-        fetch(API, {
-            method: 'POST',
-            headers: { 'Content-Type': 'text/plain' },
-            body: JSON.stringify({ action: 'listPublished' })
-        })
-        .then(function(res) { return res.json(); })
-        .then(function(data) {
+        // Background revalidate
+        fetch(API, { method:'POST', headers:{'Content-Type':'text/plain'}, body: JSON.stringify({action:'listPublished'}) })
+        .then(function(res){ return res.json(); })
+        .then(function(data){
             if (data.ok && data.articles) {
                 setCachedArticles(data.articles);
-                var _newCount = data.articles.length;
-                if (_newCount !== _count) {
+                if (data.articles.length !== _count) {
                     allArticles = data.articles;
-                    document.getElementById('article-count').textContent = _newCount;
-                    if (_heroCount) _heroCount.textContent = _newCount;
+                    document.getElementById('article-count').textContent = data.articles.length;
+                    if (_heroCount) _heroCount.textContent = data.articles.length;
                     renderFeatured();
                     renderGrid(allArticles);
                     show('articles-loaded');
                     initReveal();
                 }
             }
-        })
-        .catch(function() {}); // silent fail on background refresh
-        return; // served from cache, done
+        }).catch(function(){});
+        return;
     }
 
-    // ── Cache miss — fetch from API ──
-    fetch(API, {
-        method: 'POST',
-        headers: { 'Content-Type': 'text/plain' },
-        body: JSON.stringify({ action: 'listPublished' })
-    })
+    fetch(API, { method:'POST', headers:{'Content-Type':'text/plain'}, body: JSON.stringify({action:'listPublished'}) })
     .then(function(res) {
         if (!res.ok) throw new Error('Network error: ' + res.status);
         return res.json();
@@ -615,17 +658,16 @@ function loadArticles() {
 
 // ── RENDER FEATURED ───────────────────────────────────────────────
 function renderFeatured() {
-    // Featured = first article (API returns newest first)
     var a = allArticles[0];
     if (!a) return;
-    var wrap = document.getElementById('featured-wrap');
+    var wrap     = document.getElementById('featured-wrap');
     var tagClass = tagCls(a.category);
     var tagLabel = tagDisplay(a.category);
-    var dateStr = fmtDate(a.publishedAt);
-    var cover = a.coverImage || 'https://images.unsplash.com/photo-1593642632559-0c6d3fc62b89?w=900&q=80';
-    var rating = a.rating ? parseFloat(a.rating).toFixed(1) : '';
+    var dateStr  = fmtDate(a.publishedAt);
+    var cover    = a.coverImage || 'https://images.unsplash.com/photo-1593642632559-0c6d3fc62b89?w=900&q=80';
+    var rating   = a.rating ? parseFloat(a.rating).toFixed(1) : '';
     var initials = (a.authorName || 'D').charAt(0).toUpperCase();
-    var url = 'dekho-article.html?id=' + encodeURIComponent(a.id);
+    var url      = 'dekho-article.html?id=' + encodeURIComponent(a.id);
 
     wrap.innerHTML =
         '<div class="article-item reveal" data-cat="' + esc(a.category) + '" data-rating="' + (a.rating||0) + '" data-date="' + dateSortKey(a.publishedAt) + '">' +
@@ -649,7 +691,7 @@ function renderFeatured() {
         '<div style="width:32px;height:32px;border-radius:50%;background:var(--ink);display:flex;align-items:center;justify-content:center;color:var(--lime);font-family:\'Bebas Neue\',sans-serif;font-size:14px;">' + initials + '</div>' +
         '<span style="font-size:13px;color:var(--muted);">' + esc(a.authorName||'') + '</span>' +
         '</div>' +
-        '<span style="display:flex;align-items:center;gap:4px;color:var(--accent);font-size:13px;font-weight:600;">Read full review →</span>' +
+        '<span style="display:flex;align-items:center;gap:4px;color:var(--accent);font-size:13px;font-weight:600;">' + readCTA(a.category) + '</span>' +
         '</div>' +
         '</div>' +
         '</div>' +
@@ -659,21 +701,16 @@ function renderFeatured() {
 // ── RENDER GRID ───────────────────────────────────────────────────
 function renderGrid(articles) {
     var grid = document.getElementById('article-grid');
-    // Skip first (featured) for the grid
     var rest = articles.slice(1);
-
-    if (rest.length === 0) {
-        grid.innerHTML = '';
-        return;
-    }
+    if (rest.length === 0) { grid.innerHTML = ''; return; }
 
     grid.innerHTML = rest.map(function(a, i) {
         var tagClass = tagCls(a.category);
         var tagLabel = tagDisplay(a.category);
-        var cover = a.coverImage || 'https://images.unsplash.com/photo-1593642632559-0c6d3fc62b89?w=600&q=80';
-        var rating = a.rating ? parseFloat(a.rating).toFixed(1) : '';
-        var url = 'dekho-article.html?id=' + encodeURIComponent(a.id);
-        var delay = (i % 3) * 0.08;
+        var cover    = a.coverImage || 'https://images.unsplash.com/photo-1593642632559-0c6d3fc62b89?w=600&q=80';
+        var rating   = a.rating ? parseFloat(a.rating).toFixed(1) : '';
+        var url      = 'dekho-article.html?id=' + encodeURIComponent(a.id);
+        var delay    = (i % 3) * 0.08;
 
         return '<div class="article-item reveal" data-cat="' + esc(a.category) + '" data-rating="' + (a.rating||0) + '" data-date="' + dateSortKey(a.publishedAt) + '" style="transition-delay:' + delay + 's;">' +
             '<a href="' + url + '" style="text-decoration:none;">' +
@@ -690,8 +727,11 @@ function renderGrid(articles) {
             '<h3 class="card-title display" style="font-size:22px;color:var(--ink);line-height:1.15;margin-bottom:.75rem;">' + esc(a.title) + '</h3>' +
             '<p style="color:var(--muted);font-size:13px;line-height:1.65;flex:1;margin-bottom:1rem;">' + esc(a.excerpt||'') + '</p>' +
             '<div style="display:flex;justify-content:space-between;align-items:center;">' +
+            '<div>' +
             '<span class="aff-note">By ' + esc(a.authorName||'DEKHO') + '</span>' +
-            '<span style="color:var(--accent);font-size:12px;font-weight:600;">Read →</span>' +
+            '<div class="mono" style="font-size:10px;color:var(--muted);margin-top:2px;">' + fmtDate(a.publishedAt) + '</div>' +
+            '</div>' +
+            '<span style="color:var(--accent);font-size:12px;font-weight:600;">' + readCTA(a.category) + '</span>' +
             '</div></div></div></a></div>';
     }).join('');
 
@@ -708,37 +748,53 @@ window.filterCat = function(cat) {
 };
 
 function applyFilterAndSearch() {
-    var items = document.querySelectorAll('.article-item');
+    var items   = document.querySelectorAll('.article-item');
     var visible = 0;
     items.forEach(function(item) {
-        var catMatch = activeFilter === 'all' || item.dataset.cat === activeFilter;
-        var titleEl = item.querySelector('h2, h3');
-        var titleText = titleEl ? titleEl.textContent.toLowerCase() : '';
-        var searchMatch = !activeSearch || titleText.includes(activeSearch);
-        var show = catMatch && searchMatch;
+        var catMatch    = activeFilter === 'all' || item.dataset.cat === activeFilter;
+        var titleEl     = item.querySelector('h2, h3');
+        var titleText   = titleEl ? titleEl.textContent.toLowerCase() : '';
+        var descEl      = item.querySelector('p');
+        var descText    = descEl ? descEl.textContent.toLowerCase() : '';
+        var searchMatch = !activeSearch || titleText.includes(activeSearch) || descText.includes(activeSearch);
+        var isVis       = catMatch && searchMatch;
         item.style.transition = 'opacity .3s';
-        if (show) { item.style.display = ''; item.style.opacity = '1'; visible++; }
-        else { item.style.opacity = '0'; setTimeout(function() { if (item.style.opacity === '0') item.style.display = 'none'; }, 300); }
+        if (isVis) { item.style.display = ''; item.style.opacity = '1'; visible++; }
+        else { item.style.opacity = '0'; setTimeout(function(el){ return function(){ if(el.style.opacity==='0') el.style.display='none'; }; }(item), 300); }
     });
+    // Also hide/show featured card when it doesn't match active filter
+    var fw = document.getElementById('featured-wrap');
+    if (fw) {
+        var fi = fw.querySelector('.article-item');
+        if (fi) {
+            var featVis = (activeFilter === 'all' || fi.dataset.cat === activeFilter) &&
+                          (!activeSearch || fw.textContent.toLowerCase().includes(activeSearch));
+            fw.style.display = featVis ? '' : 'none';
+        }
+    }
     document.getElementById('no-results').style.display = visible === 0 ? 'block' : 'none';
 }
 
 // ── SORT ──────────────────────────────────────────────────────────
 window.sortArticles = function() {
-    var val = document.getElementById('sort-select').value;
+    var val    = document.getElementById('sort-select').value;
     var sorted = allArticles.slice().sort(function(a, b) {
         if (val === 'rating') return parseFloat(b.rating||0) - parseFloat(a.rating||0);
         return new Date(b.publishedAt) - new Date(a.publishedAt);
     });
-    renderFeatured(sorted[0]);
+    // Temporarily swap so renderFeatured/renderGrid see sorted order
+    var _orig   = allArticles;
+    allArticles = sorted;
+    renderFeatured();
     renderGrid(sorted);
+    allArticles = _orig;
     applyFilterAndSearch();
 };
 
 // ── SEARCH OVERLAY ────────────────────────────────────────────────
 function renderSearchOverlay(q) {
     var results = document.getElementById('search-results');
-    var inner = document.getElementById('search-results-inner');
+    var inner   = document.getElementById('search-results-inner');
     if (!q) { results.style.display = 'none'; return; }
 
     var matches = allArticles.filter(function(a) {
@@ -762,14 +818,14 @@ function renderSearchOverlay(q) {
 }
 
 window.toggleSearch = function() {
-    var wrap = document.getElementById('search-wrap');
+    var wrap   = document.getElementById('search-wrap');
     var isOpen = wrap.style.display === 'flex';
     wrap.style.display = isOpen ? 'none' : 'flex';
     if (!isOpen) document.getElementById('search-input').focus();
     else document.getElementById('search-results').style.display = 'none';
 };
 
-// ── REVEAL (scroll animation) ─────────────────────────────────────
+// ── REVEAL ────────────────────────────────────────────────────────
 function initReveal() {
     var obs = new IntersectionObserver(function(entries) {
         entries.forEach(function(e) { if (e.isIntersecting) e.target.classList.add('active'); });
@@ -788,19 +844,20 @@ window.handleNewsletter = function(e) {
 
 // ── HELPERS ───────────────────────────────────────────────────────
 function tagCls(cat) {
-    var m = { review:'tag-review', comparison:'tag-comparison', top:'tag-top', guide:'tag-guide' };
+    var m = { review:'tag-review', comparison:'tag-comparison', top:'tag-top', guide:'tag-guide', news:'tag-news', opinion:'tag-opinion' };
     return m[cat] || 'tag-review';
 }
 function tagDisplay(cat) {
-    var m = { review:'Review', comparison:'Comparison', top:'Top List', guide:'Guide' };
-    return m[cat] || (cat||'Review');
+    var m = { review:'Review', comparison:'Comparison', top:'Top List', guide:'Guide', news:'News', opinion:'Opinion' };
+    return m[cat] ? m[cat] : (cat ? cat.charAt(0).toUpperCase()+cat.slice(1) : 'Article');
+}
+function readCTA(cat) {
+    var m = { review:'Read full review', comparison:'See comparison', top:'View top list', guide:'Read guide', news:'Read more', opinion:'Read opinion' };
+    return (m[cat] || 'Read article') + ' →';
 }
 function fmtDate(iso) {
     if (!iso) return '';
-    try {
-        var d = new Date(iso);
-        return d.toLocaleDateString('en-IN', { month:'short', year:'numeric' });
-    } catch(e) { return ''; }
+    try { return new Date(iso).toLocaleDateString('en-IN', { month:'short', year:'numeric' }); } catch(e) { return ''; }
 }
 function dateSortKey(iso) {
     if (!iso) return '0';
@@ -810,12 +867,4 @@ function esc(s) {
     if (!s) return '';
     return String(s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');
 }
-function show(id) { var el = document.getElementById(id); if (el) el.style.display = ''; }
-function hide(id) { var el = document.getElementById(id); if (el) el.style.display = 'none'; }
-function showError(msg) {
-    document.getElementById('error-msg').textContent = msg;
-    show('error-state');
-}
-</script>
-</body>
-</html>
+function show(id) { var el = document.getElementById(id); if (el) el.style.display = '
