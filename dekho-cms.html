@@ -670,6 +670,43 @@ table.t tr:hover td{background:var(--paper);}
   .stats{grid-template-columns:1fr;}
   .llogo h1{font-size:2.2rem;}
 }
+
+/* ── Color Picker / Palette ──────────────────────────── */
+.tb-color-wrap{position:relative;display:inline-flex;align-items:center;flex-shrink:0;}
+.tb-color{
+  width:28px;height:28px;border-radius:5px;border:1.5px solid #ddd;
+  cursor:pointer;padding:0;background:none;
+  display:flex;flex-direction:column;align-items:center;
+  justify-content:center;gap:2px;transition:border-color .12s;position:relative;
+}
+.tb-color:hover{border-color:#999;}
+.tb-color svg{width:13px;height:13px;flex-shrink:0;}
+.tb-color-bar{width:18px;height:4px;border-radius:2px;margin-top:-1px;transition:background .1s;}
+.color-palette{
+  display:none;position:absolute;top:34px;left:0;z-index:400;
+  background:#fff;border:1.5px solid var(--border);border-radius:10px;
+  padding:10px;width:220px;box-shadow:0 8px 24px rgba(0,0,0,.16);
+  flex-direction:column;gap:8px;
+}
+.color-palette.open{display:flex;}
+.color-palette-title{font-family:'DM Mono',monospace;font-size:9px;color:var(--muted);letter-spacing:.12em;text-transform:uppercase;}
+.color-swatches{display:flex;flex-wrap:wrap;gap:5px;}
+.color-swatch{
+  width:22px;height:22px;border-radius:4px;cursor:pointer;
+  border:1.5px solid transparent;transition:transform .1s,border-color .1s;flex-shrink:0;
+}
+.color-swatch:hover{transform:scale(1.18);border-color:#999;}
+.color-swatch.selected{border-color:#111;transform:scale(1.1);}
+.color-custom-row{display:flex;align-items:center;gap:6px;margin-top:2px;}
+.color-custom-row label{font-family:'DM Mono',monospace;font-size:10px;color:var(--muted);}
+.color-custom-row input[type="color"]{width:28px;height:22px;border-radius:4px;border:1.5px solid #ddd;cursor:pointer;padding:0;}
+.color-custom-row input[type="text"]{flex:1;border:1.5px solid #e5e5e5;border-radius:5px;padding:3px 7px;font-family:'DM Mono',monospace;font-size:11px;outline:none;color:var(--ink);}
+.color-custom-row input[type="text"]:focus{border-color:var(--blue);}
+.color-apply-btn{width:100%;padding:6px;background:var(--ink);color:#fff;border:none;border-radius:6px;font-family:'DM Mono',monospace;font-size:11px;cursor:pointer;transition:opacity .15s;margin-top:2px;}
+.color-apply-btn:hover{opacity:.85;}
+/* Pre block in editor */
+.ed-body pre{background:#1a1a1a;color:#e2e8f0;padding:1.25rem 1.5rem;border-radius:10px;font-family:'DM Mono',monospace;font-size:13px;line-height:1.7;overflow-x:auto;margin:1.25rem 0;white-space:pre-wrap;}
+
 </style>
 </head>
 
@@ -900,38 +937,110 @@ table.t tr:hover td{background:var(--paper);}
           <!-- Toolbar -->
           <div class="tbar-wrap">
           <div class="tbar">
-            <select class="tsel" onchange="applyFormat(this.value);this.value=''" title="Format">
+
+            <!-- BLOCK FORMAT -->
+            <select class="tsel" onchange="applyFormat(this.value);this.value=''" title="Block Format">
               <option value="">Format</option>
               <option value="h2">Heading 2</option>
               <option value="h3">Heading 3</option>
+              <option value="h4">Heading 4</option>
               <option value="p">Paragraph</option>
               <option value="blockquote">Blockquote</option>
+              <option value="pre">Code Block</option>
             </select>
+
+            <!-- FONT FAMILY -->
+            <select class="tsel" id="tbar-font" onchange="applyFontFamily(this.value)" title="Font Family" style="width:110px;">
+              <option value="">Font</option>
+              <option value="'Instrument Sans',sans-serif">Instrument Sans</option>
+              <option value="'Georgia',serif">Georgia</option>
+              <option value="'Times New Roman',serif">Times New Roman</option>
+              <option value="'DM Mono',monospace">DM Mono</option>
+              <option value="'Arial',sans-serif">Arial</option>
+              <option value="'Trebuchet MS',sans-serif">Trebuchet MS</option>
+              <option value="'Verdana',sans-serif">Verdana</option>
+            </select>
+
             <div class="tsep"></div>
-            <button class="tb" onclick="fmt('bold')" title="Bold"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M6 4h8a4 4 0 0 1 4 4 4 4 0 0 1-4 4H6z"/><path d="M6 12h9a4 4 0 0 1 4 4 4 4 0 0 1-4 4H6z"/></svg></button>
-            <button class="tb" onclick="fmt('italic')" title="Italic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><line x1="19" y1="4" x2="10" y2="4"/><line x1="14" y1="20" x2="5" y2="20"/><line x1="15" y1="4" x2="9" y2="20"/></svg></button>
-            <button class="tb" onclick="fmt('underline')" title="Underline"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M6 3v7a6 6 0 0 0 6 6 6 6 0 0 0 6-6V3"/><line x1="4" y1="21" x2="20" y2="21"/></svg></button>
-            <button class="tb" onclick="fmt('strikeThrough')" title="Strike"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="5" y1="12" x2="19" y2="12"/><path d="M16 6C16 6 14.5 4 12 4s-5 1.5-5 4c0 5 9 3.5 9 8 0 2.5-2 4-4 4s-5-1.5-5-4"/></svg></button>
+
+            <!-- INLINE STYLES -->
+            <button class="tb" id="tb-bold"      onclick="fmtToggle('bold')"          title="Bold (Ctrl+B)"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M6 4h8a4 4 0 0 1 4 4 4 4 0 0 1-4 4H6z"/><path d="M6 12h9a4 4 0 0 1 4 4 4 4 0 0 1-4 4H6z"/></svg></button>
+            <button class="tb" id="tb-italic"    onclick="fmtToggle('italic')"        title="Italic (Ctrl+I)"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><line x1="19" y1="4" x2="10" y2="4"/><line x1="14" y1="20" x2="5" y2="20"/><line x1="15" y1="4" x2="9" y2="20"/></svg></button>
+            <button class="tb" id="tb-underline" onclick="fmtToggle('underline')"     title="Underline (Ctrl+U)"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M6 3v7a6 6 0 0 0 6 6 6 6 0 0 0 6-6V3"/><line x1="4" y1="21" x2="20" y2="21"/></svg></button>
+            <button class="tb" id="tb-strike"    onclick="fmtToggle('strikeThrough')" title="Strikethrough"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="5" y1="12" x2="19" y2="12"/><path d="M16 6C16 6 14.5 4 12 4s-5 1.5-5 4c0 5 9 3.5 9 8 0 2.5-2 4-4 4s-5-1.5-5-4"/></svg></button>
+            <button class="tb" onclick="fmt('superscript')" title="Superscript" style="font-family:'DM Mono',monospace;font-size:11px;width:auto;padding:0 5px;">X<sup>2</sup></button>
+            <button class="tb" onclick="fmt('subscript')"   title="Subscript"   style="font-family:'DM Mono',monospace;font-size:11px;width:auto;padding:0 5px;">X<sub>2</sub></button>
+            <button class="tb" onclick="clearFormatting()"  title="Clear all formatting" style="font-family:'DM Mono',monospace;font-size:12px;width:auto;padding:0 6px;text-decoration:line-through;color:#888;">T</button>
+
             <div class="tsep"></div>
+
+            <!-- TEXT COLOUR -->
+            <div class="tb-color-wrap" id="tc-wrap">
+              <button class="tb-color" id="tc-btn" onclick="toggleColorPalette('tc')" title="Text Colour">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 3L3 20h3l2-5h8l2 5h3L15 3z"/><line x1="6.5" y1="13" x2="17.5" y2="13"/></svg>
+                <div class="tb-color-bar" id="tc-bar" style="background:#E8380D;"></div>
+              </button>
+              <div class="color-palette" id="tc-palette">
+                <div class="color-palette-title">Text Colour</div>
+                <div class="color-swatches" id="tc-swatches"></div>
+                <div class="color-custom-row">
+                  <label>Hex</label>
+                  <input type="color" id="tc-picker" oninput="applyTextColor(this.value);document.getElementById('tc-hex').value=this.value;">
+                  <input type="text"  id="tc-hex" placeholder="#000000" maxlength="7"
+                    oninput="if(/^#[0-9a-fA-F]{6}$/.test(this.value)){applyTextColor(this.value);document.getElementById('tc-picker').value=this.value;}">
+                </div>
+                <button class="color-apply-btn" onclick="closeColorPalettes()">Done</button>
+              </div>
+            </div>
+
+            <!-- HIGHLIGHT COLOUR -->
+            <div class="tb-color-wrap" id="hc-wrap">
+              <button class="tb-color" id="hc-btn" onclick="toggleColorPalette('hc')" title="Highlight / Background Colour">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 20h9"/><path d="M16.5 3.5a2.12 2.12 0 0 1 3 3L7 19l-4 1 1-4z"/></svg>
+                <div class="tb-color-bar" id="hc-bar" style="background:#FEF08A;"></div>
+              </button>
+              <div class="color-palette" id="hc-palette">
+                <div class="color-palette-title">Highlight Colour</div>
+                <div class="color-swatches" id="hc-swatches"></div>
+                <div class="color-custom-row">
+                  <label>Hex</label>
+                  <input type="color" id="hc-picker" oninput="applyHighlight(this.value);document.getElementById('hc-hex').value=this.value;">
+                  <input type="text"  id="hc-hex" placeholder="#FEF08A" maxlength="7"
+                    oninput="if(/^#[0-9a-fA-F]{6}$/.test(this.value)){applyHighlight(this.value);document.getElementById('hc-picker').value=this.value;}">
+                </div>
+                <button class="color-apply-btn" onclick="closeColorPalettes()">Done</button>
+              </div>
+            </div>
+
+            <div class="tsep"></div>
+
+            <!-- LISTS + INDENT -->
             <button class="tb" onclick="fmt('insertUnorderedList')" title="Bullet List"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="9" y1="6" x2="20" y2="6"/><line x1="9" y1="12" x2="20" y2="12"/><line x1="9" y1="18" x2="20" y2="18"/><circle cx="4" cy="6" r="1" fill="currentColor"/><circle cx="4" cy="12" r="1" fill="currentColor"/><circle cx="4" cy="18" r="1" fill="currentColor"/></svg></button>
-            <button class="tb" onclick="fmt('insertOrderedList')" title="Numbered List"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="10" y1="6" x2="21" y2="6"/><line x1="10" y1="12" x2="21" y2="12"/><line x1="10" y1="18" x2="21" y2="18"/><path d="M4 6h1v4"/><path d="M4 10h2"/><path d="M6 18H4c0-1 2-2 2-3s-1-1.5-2-1"/></svg></button>
+            <button class="tb" onclick="fmt('insertOrderedList')"   title="Numbered List"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="10" y1="6" x2="21" y2="6"/><line x1="10" y1="12" x2="21" y2="12"/><line x1="10" y1="18" x2="21" y2="18"/><path d="M4 6h1v4"/><path d="M4 10h2"/><path d="M6 18H4c0-1 2-2 2-3s-1-1.5-2-1"/></svg></button>
+            <button class="tb" onclick="fmt('outdent')" title="Decrease Indent"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="7 8 3 12 7 16"/><line x1="21" y1="12" x2="3" y2="12"/><line x1="21" y1="6" x2="11" y2="6"/><line x1="21" y1="18" x2="11" y2="18"/></svg></button>
+            <button class="tb" onclick="fmt('indent')"  title="Increase Indent"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="17 8 21 12 17 16"/><line x1="3" y1="12" x2="21" y2="12"/><line x1="3" y1="6" x2="13" y2="6"/><line x1="3" y1="18" x2="13" y2="18"/></svg></button>
+
             <div class="tsep"></div>
+
+            <!-- ALIGNMENT -->
             <button class="tb" onclick="fmt('justifyLeft')"   title="Align Left"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="3" y1="6" x2="21" y2="6"/><line x1="3" y1="12" x2="15" y2="12"/><line x1="3" y1="18" x2="18" y2="18"/></svg></button>
             <button class="tb" onclick="fmt('justifyCenter')" title="Align Centre"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="3" y1="6" x2="21" y2="6"/><line x1="6" y1="12" x2="18" y2="12"/><line x1="4" y1="18" x2="20" y2="18"/></svg></button>
             <button class="tb" onclick="fmt('justifyRight')"  title="Align Right"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="3" y1="6" x2="21" y2="6"/><line x1="9" y1="12" x2="21" y2="12"/><line x1="6" y1="18" x2="21" y2="18"/></svg></button>
             <button class="tb" onclick="fmt('justifyFull')"   title="Justify"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="3" y1="6" x2="21" y2="6"/><line x1="3" y1="12" x2="21" y2="12"/><line x1="3" y1="18" x2="21" y2="18"/></svg></button>
+
             <div class="tsep"></div>
-            <!-- Font size -->
-            <div class="tspacing-group" title="Font Size">
+
+            <!-- FONT SIZE -->
+            <div class="tspacing-group" title="Font Size (px)">
               <span class="tspacing-lbl">Fz</span>
               <input class="tspacing-num" id="tbar-fz" type="number" min="8" max="96" value="" placeholder="px"
                 onchange="applyFontSize(this.value)"
                 onkeydown="if(event.key==='Enter'){applyFontSize(this.value);this.blur();}">
             </div>
             <div class="tsep"></div>
-            <!-- Line spacing -->
-            <div class="tspacing-group" title="Line Spacing — drag or type, then press Enter">
-              <span class="tspacing-lbl">↕</span>
+            <!-- LINE SPACING -->
+            <div class="tspacing-group" title="Line Spacing">
+              <span class="tspacing-lbl">&#8597;</span>
               <input class="tspacing-range" id="tbar-ls-range" type="range" min="0" max="3" step="0.05" value="0"
                 onmousedown="_lockSpacingTarget()"
                 oninput="applyLineSpacingLive(this.value)">
@@ -939,12 +1048,12 @@ table.t tr:hover td{background:var(--paper);}
                 onfocus="_lockSpacingTarget()"
                 oninput="applyLineSpacingLive(this.value)"
                 onkeydown="if(event.key==='Enter'){applyLineSpacingLive(this.value);this.blur();}">
-              <button class="tspacing-reset" onclick="resetLineSpacing()" title="Reset line spacing">↺</button>
+              <button class="tspacing-reset" onclick="resetLineSpacing()" title="Reset">&#8635;</button>
             </div>
             <div class="tsep"></div>
-            <!-- Letter spacing -->
-            <div class="tspacing-group" title="Letter Spacing in px — drag or type, then Enter">
-              <span class="tspacing-lbl">↔</span>
+            <!-- LETTER SPACING -->
+            <div class="tspacing-group" title="Letter Spacing (px)">
+              <span class="tspacing-lbl">&#8596;</span>
               <input class="tspacing-range" id="tbar-ltsp-range" type="range" min="0" max="20" step="0.5" value="0"
                 onmousedown="_lockSpacingTarget()"
                 oninput="applyLetterSpacingLive(this.value)">
@@ -953,26 +1062,31 @@ table.t tr:hover td{background:var(--paper);}
                 oninput="applyLetterSpacingLive(this.value)"
                 onkeydown="if(event.key==='Enter'){applyLetterSpacingLive(this.value);this.blur();}">
               <span class="tspacing-unit">px</span>
-              <button class="tspacing-reset" onclick="resetLetterSpacing()" title="Reset letter spacing">↺</button>
+              <button class="tspacing-reset" onclick="resetLetterSpacing()" title="Reset">&#8635;</button>
             </div>
+
             <div class="tsep"></div>
-            <button class="tb" onclick="insLink()" title="Insert Link"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M10 13a5 5 0 0 0 7.54.54l3-3a5 5 0 0 0-7.07-7.07l-1.72 1.71"/><path d="M14 11a5 5 0 0 0-7.54-.54l-3 3a5 5 0 0 0 7.07 7.07l1.71-1.71"/></svg></button>
-            <button class="tb-upload" onclick="openUpload()" title="Upload image">
-              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="16 16 12 12 8 16"/><line x1="12" y1="12" x2="12" y2="21"/><path d="M20.39 18.39A5 5 0 0 0 18 9h-1.26A8 8 0 1 0 3 16.3"/></svg>
-              Upload
-            </button>
-            <button class="tb-gallery" onclick="openGallery()" title="My Image Gallery">
-              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="18" height="18" rx="2"/><circle cx="8.5" cy="8.5" r="1.5"/><polyline points="21 15 16 10 5 21"/></svg>
-              Gallery
-            </button>
-            <button class="tb" onclick="insImg()" title="Insert image by URL"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="18" height="18" rx="2"/><circle cx="8.5" cy="8.5" r="1.5"/><polyline points="21 15 16 10 5 21"/></svg></button>
-            <button class="tb" onclick="openCodeModal()" title="Insert Code Block" style="width:auto;padding:0 8px;font-family:'DM Mono',monospace;font-size:11px;color:var(--blue);">&lt;/&gt; Code</button>
-            <button class="tb" onclick="insTable()" title="Insert Table"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="18" height="18" rx="2"/><line x1="3" y1="9" x2="21" y2="9"/><line x1="3" y1="15" x2="21" y2="15"/><line x1="9" y1="3" x2="9" y2="21"/><line x1="15" y1="3" x2="15" y2="21"/></svg></button>
-            <button class="tb" onclick="insHR()" title="Divider"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="3" y1="12" x2="21" y2="12"/></svg></button>
-            <button class="tb" onclick="fmt('undo')" title="Undo"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="1 4 1 10 7 10"/><path d="M3.51 15a9 9 0 1 0 .49-3"/></svg></button>
-            <button class="tb" onclick="fmt('redo')" title="Redo"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="23 4 23 10 17 10"/><path d="M20.49 15a9 9 0 1 1-.49-3"/></svg></button>
+
+            <!-- LINKS + MEDIA -->
+            <button class="tb" onclick="insLink()" title="Insert / Edit Link"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M10 13a5 5 0 0 0 7.54.54l3-3a5 5 0 0 0-7.07-7.07l-1.72 1.71"/><path d="M14 11a5 5 0 0 0-7.54-.54l-3 3a5 5 0 0 0 7.07 7.07l1.71-1.71"/></svg></button>
+            <button class="tb" onclick="fmt('unlink')" title="Remove Link"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M10 13a5 5 0 0 0 7.54.54l3-3a5 5 0 0 0-7.07-7.07l-1.72 1.71"/><path d="M14 11a5 5 0 0 0-7.54-.54l-3 3a5 5 0 0 0 7.07 7.07l1.71-1.71"/><line x1="2" y1="2" x2="22" y2="22"/></svg></button>
+            <button class="tb-upload"  onclick="openUpload()"  title="Upload Image"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="16 16 12 12 8 16"/><line x1="12" y1="12" x2="12" y2="21"/><path d="M20.39 18.39A5 5 0 0 0 18 9h-1.26A8 8 0 1 0 3 16.3"/></svg> Upload</button>
+            <button class="tb-gallery" onclick="openGallery()" title="Image Gallery"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="18" height="18" rx="2"/><circle cx="8.5" cy="8.5" r="1.5"/><polyline points="21 15 16 10 5 21"/></svg> Gallery</button>
+            <button class="tb" onclick="insImg()"       title="Insert Image by URL"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="18" height="18" rx="2"/><circle cx="8.5" cy="8.5" r="1.5"/><polyline points="21 15 16 10 5 21"/></svg></button>
+            <button class="tb" onclick="openCodeModal()" title="Code Block" style="width:auto;padding:0 8px;font-family:'DM Mono',monospace;font-size:11px;color:var(--blue);">&lt;/&gt;</button>
+            <button class="tb" onclick="insTable()"     title="Insert Table"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="18" height="18" rx="2"/><line x1="3" y1="9" x2="21" y2="9"/><line x1="3" y1="15" x2="21" y2="15"/><line x1="9" y1="3" x2="9" y2="21"/><line x1="15" y1="3" x2="15" y2="21"/></svg></button>
+            <button class="tb" onclick="insHR()"        title="Divider"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="3" y1="12" x2="21" y2="12"/></svg></button>
+
             <div class="tsep"></div>
-            <button class="tb-paste" onclick="pasteTextFromClipboard()" title="Paste plain text from clipboard (strips all formatting)">
+
+            <!-- UNDO / REDO -->
+            <button class="tb" onclick="fmt('undo')" title="Undo (Ctrl+Z)"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="1 4 1 10 7 10"/><path d="M3.51 15a9 9 0 1 0 .49-3"/></svg></button>
+            <button class="tb" onclick="fmt('redo')" title="Redo (Ctrl+Y)"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="23 4 23 10 17 10"/><path d="M20.49 15a9 9 0 1 1-.49-3"/></svg></button>
+
+            <div class="tsep"></div>
+
+            <!-- PASTE TEXT + AFFILIATE -->
+            <button class="tb-paste" onclick="pasteTextFromClipboard()" title="Paste plain text (strips formatting)">
               <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M16 4h2a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2V6a2 2 0 0 1 2-2h2"/><rect x="8" y="2" width="8" height="4" rx="1" ry="1"/><line x1="12" y1="11" x2="12" y2="17"/><line x1="9" y1="14" x2="15" y2="14"/></svg>
               Paste Text
             </button>
@@ -1559,7 +1673,7 @@ table.t tr:hover td{background:var(--paper);}
 <!-- ═══════════ SCRIPT ══════════════════════════════════════════════════════ -->
 <script>
 // ── CONFIG ──────────────────────────────────────────────────────────────────
-var API = 'https://script.google.com/macros/s/AKfycbxkn1yEQRSPIOtb9HGHkGC3pk5KfQSvdcQkyMcuj5LiVO8HZLBDSaMaY-P9KXjzjw6Q/exec';
+var API = 'https://script.google.com/macros/s/AKfycbxkn1yEQRSPIOtb9HGHkGC3pk5KfQSvdcQkyMcuj5LiVO8HZLBDSaMaY-P9KXjzjw6Q';
 
 // ── STATE ────────────────────────────────────────────────────────────────────
 var $ = {
@@ -1641,7 +1755,7 @@ function bootApp() {
   go('dashboard');
   loadArts();
   // Init image toolbar (click-to-select + floating controls)
-  setTimeout(function(){ imgToolbarInit(); _imgResizeInit(); }, 300);
+  setTimeout(function(){ imgToolbarInit(); _imgResizeInit(); buildSwatches(); }, 300);
 }
 
 // ── API ──────────────────────────────────────────────────────────────────────
@@ -2046,14 +2160,17 @@ function saveArt(status) {
 
 function submitReview() {
   if (!document.getElementById('ed-title').value.trim()) { toast('Please add a title first.', 'bad'); return; }
-  var art = buildArtPayload('draft');
+  // Save content with status='review' directly so there is no intermediate
+  // 'draft' flash in the admin Articles tab. The article goes straight to
+  // Pending Review the moment the writer submits.
+  var art = buildArtPayload('review');
   callSaveArticle(art, $.token).then(function(r) {
     if (!r.ok) { setSv('Failed ✗'); toast('Save failed: ' + (r.error||''), 'bad'); return; }
     if (!$.editId) $.editId = r.id;
-    call('submitReview', { token: $.token, id: $.editId }).then(function(r2) {
-      if (r2.ok) { toast(r2.message || 'Submitted for review!', 'ok'); setPill('review'); setSv('Submitted ✓'); loadArts(); }
-      else { toast(r2.error, 'bad'); setSv('Ready'); }
-    });
+    toast('Submitted for review! Admin will approve shortly.', 'ok');
+    setPill('review');
+    setSv('Submitted ✓');
+    loadArts();
   });
 }
 
@@ -2312,81 +2429,82 @@ function edKey(e) {
   }
 
   if (e.key === 'Enter' && !e.shiftKey) {
-    e.preventDefault();
     var body = document.getElementById('ed-body');
     var sel  = window.getSelection();
     if (!sel || !sel.rangeCount) return;
 
     var range = sel.getRangeAt(0);
-    if (!range.collapsed) range.deleteContents();
 
-    // Walk up from cursor to find the nearest block ancestor inside ed-body
-    var anchor = range.startContainer;
-    if (anchor.nodeType === 3) anchor = anchor.parentNode; // text → element
-
-    var block = anchor;
+    // Walk up to find the nearest block element inside ed-body
+    var node = range.startContainer;
+    if (node.nodeType === 3) node = node.parentNode;
+    var block = node;
     while (block && block !== body) {
-      var tag = block.nodeName;
-      if (tag === 'P' || tag === 'H1' || tag === 'H2' || tag === 'H3' ||
-          tag === 'H4' || tag === 'H5' || tag === 'H6' || tag === 'BLOCKQUOTE') break;
-      if (tag === 'LI') {
-        // Let browser handle list Enter natively
-        document.execCommand('insertParagraph');
+      var tn = block.nodeName;
+      if (tn === 'P' || tn === 'H1' || tn === 'H2' || tn === 'H3' ||
+          tn === 'H4' || tn === 'H5' || tn === 'H6' || tn === 'BLOCKQUOTE') break;
+      if (tn === 'LI') {
+        // Let browser handle list Enter naturally
         return;
       }
       block = block.parentNode;
     }
 
-    // block is now a <p>/<h2>/etc or body itself
-    var newP = document.createElement('p');
-    newP.appendChild(document.createElement('br')); // placeholder so cursor can enter
+    var isHeading = block && /^H[1-6]$/.test(block.nodeName);
 
-    if (block && block !== body) {
-      // Cursor is inside a known block — split it at cursor position
-      // Extract everything from cursor to end of block into newP
+    if (isHeading) {
+      // Special case: Enter inside/at-end of heading — always produce a new <p>
+      e.preventDefault();
+
+      // Delete selection if any
+      if (!range.collapsed) range.deleteContents();
+
+      // Split heading at cursor
       var splitRange = document.createRange();
       splitRange.setStart(range.startContainer, range.startOffset);
       splitRange.setEnd(block, block.childNodes.length);
-      var extracted = splitRange.extractContents();
+      var tail = splitRange.extractContents();
 
-      // Only use extracted content if it has real text/elements (not just empty br)
-      var extText = extracted.textContent || '';
-      var extHasEl = extracted.querySelector && extracted.querySelector('img,video,iframe,table');
-      if (extText.trim() || extHasEl) {
-        // Clear the placeholder br and use extracted content
-        newP.innerHTML = '';
-        newP.appendChild(extracted);
-        // Ensure newP ends with something the cursor can sit in
-        if (!newP.lastChild || newP.lastChild.nodeName === 'BR') {
-          // fine
-        } else if (newP.lastChild.nodeType !== 3) {
-          newP.appendChild(document.createElement('br'));
-        }
+      var newP = document.createElement('p');
+      var tailText = tail.textContent || '';
+      if (tailText.trim()) {
+        newP.appendChild(tail);
+      } else {
+        newP.appendChild(document.createElement('br'));
       }
-      // Insert newP directly after block
+
       block.parentNode.insertBefore(newP, block.nextSibling);
-    } else {
-      // Cursor is at body level (e.g. directly after an image block)
-      // Insert new <p> after the node at cursor offset
-      var refNode = body.childNodes[range.startOffset] || null;
-      body.insertBefore(newP, refNode);
+
+      // If heading is now empty, give it a br so cursor sits correctly
+      if (!block.textContent.trim()) {
+        block.innerHTML = '<br>';
+      }
+
+      // Move cursor to start of new paragraph
+      var cur = document.createRange();
+      var fc  = newP.firstChild;
+      if (fc && fc.nodeType === 3 && fc.length > 0) {
+        cur.setStart(fc, 0);
+      } else if (fc && fc.nodeName === 'BR') {
+        cur.setStartBefore(fc);
+      } else {
+        cur.setStart(newP, 0);
+      }
+      cur.collapse(true);
+      sel.removeAllRanges();
+      sel.addRange(cur);
+
+      onBodyInput();
+      return;
     }
 
-    // Place cursor at the very start of newP
-    var cur = document.createRange();
-    var fc  = newP.firstChild;
-    if (fc && fc.nodeType === 3) {
-      cur.setStart(fc, 0);
-    } else if (fc) {
-      cur.setStartBefore(fc);
-    } else {
-      cur.setStart(newP, 0);
-    }
-    cur.collapse(true);
-    sel.removeAllRanges();
-    sel.addRange(cur);
-
-    onBodyInput();
+    // For all other blocks (p, blockquote) and body-level content:
+    // Let the browser handle Enter natively — it correctly splits <p> tags,
+    // handles cursor inside <strong>/<em>/<a>/etc., and maintains inline formatting.
+    // We just ensure the result is a <p> by normalising after the fact if needed.
+    // (Browser default for contenteditable with existing <p> blocks is to split into <p>.)
+    // No preventDefault — let it through.
+    setTimeout(function() { onBodyInput(); }, 0);
   }
 }
 
@@ -2409,6 +2527,185 @@ function applyFormat(tag) {
     document.execCommand('formatBlock', false, '<' + tag + '>');
   }
 }
+
+
+// ── fmtToggle — execCommand + sync active state ───────────────────────────────
+function fmtToggle(cmd) {
+  document.getElementById('ed-body').focus();
+  document.execCommand(cmd, false, null);
+  setTimeout(syncToolbarState, 10);
+}
+
+// Sync bold/italic/underline/strike button .on states
+function syncToolbarState() {
+  var map = { bold:'tb-bold', italic:'tb-italic', underline:'tb-underline', strikeThrough:'tb-strike' };
+  Object.keys(map).forEach(function(cmd) {
+    var btn = document.getElementById(map[cmd]);
+    if (!btn) return;
+    try { btn.classList.toggle('on', document.queryCommandState(cmd)); } catch(e) {}
+  });
+}
+
+// ── Font Family ──────────────────────────────────────────────────────────────
+function applyFontFamily(val) {
+  if (!val) return;
+  var body = document.getElementById('ed-body');
+  var sel  = window.getSelection();
+  if (!sel || !sel.rangeCount) return;
+  body.focus();
+  if (sel.isCollapsed) {
+    var el = _cursorBlock();
+    if (el && el !== body) { el.style.fontFamily = val; onBodyInput(); }
+    return;
+  }
+  document.execCommand('styleWithCSS', false, true);
+  document.execCommand('fontName', false, val);
+  onBodyInput();
+}
+
+// ── Clear Formatting ─────────────────────────────────────────────────────────
+function clearFormatting() {
+  var body = document.getElementById('ed-body');
+  body.focus();
+  var sel = window.getSelection();
+  if (!sel || !sel.rangeCount) return;
+  document.execCommand('removeFormat', false, null);
+  // strip leftover color/font spans on selection
+  var range = sel.getRangeAt(0);
+  if (!range.collapsed) {
+    var txt = range.toString();
+    range.deleteContents();
+    range.insertNode(document.createTextNode(txt));
+    sel.collapseToEnd();
+  }
+  syncToolbarState();
+  onBodyInput();
+}
+
+// ── COLOR SYSTEM ─────────────────────────────────────────────────────────────
+var TC_COLORS = [
+  '#000000','#1a1a1a','#333333','#555555','#777777','#999999','#BBBBBB','#FFFFFF',
+  '#E8380D','#DC2626','#EA580C','#D97706','#CA8A04','#16A34A','#0369A1','#1A6BFF',
+  '#7C3AED','#DB2777','#0F172A','#1E3A5F','#14532D','#7F1D1D','#78350F','#1C1917'
+];
+var HC_COLORS = [
+  '#FEF08A','#FDE68A','#FCA5A5','#BBF7D0','#A7F3D0','#BAE6FD','#C7D2FE','#E9D5FF',
+  '#FBCFE8','#FEF3C7','#FFEDD5','#ECFDF5','#EFF6FF','#F0F9FF','#FFF7ED','#F5F5F5',
+  'none','#FFFFFF'
+];
+
+var _savedRng = null;
+
+function saveRngForColor() {
+  var s = window.getSelection();
+  if (s && s.rangeCount) _savedRng = s.getRangeAt(0).cloneRange();
+}
+
+function restoreRngForColor() {
+  if (!_savedRng) return;
+  var s = window.getSelection();
+  s.removeAllRanges();
+  s.addRange(_savedRng);
+}
+
+function toggleColorPalette(which) {
+  saveRngForColor();
+  var pal = document.getElementById(which + '-palette');
+  var wasOpen = pal.classList.contains('open');
+  closeColorPalettes();
+  if (!wasOpen) pal.classList.add('open');
+}
+
+function closeColorPalettes() {
+  document.querySelectorAll('.color-palette.open').forEach(function(p) { p.classList.remove('open'); });
+}
+
+// Build swatch grids once
+function buildSwatches() {
+  buildSwatchRow('tc-swatches', TC_COLORS, applyTextColor);
+  buildSwatchRow('hc-swatches', HC_COLORS, applyHighlight);
+}
+
+function buildSwatchRow(containerId, colors, fn) {
+  var el = document.getElementById(containerId);
+  if (!el || el.hasChildNodes()) return;
+  colors.forEach(function(c) {
+    var s = document.createElement('div');
+    s.className = 'color-swatch';
+    if (c === 'none') {
+      s.style.background = 'linear-gradient(to bottom right,#fff 44%,#f00 44%,#f00 56%,#fff 56%)';
+      s.style.border = '1.5px solid #ddd';
+      s.title = 'none';
+    } else {
+      s.style.background = c;
+      s.style.border = c === '#FFFFFF' ? '1.5px solid #ddd' : '1.5px solid transparent';
+      s.title = c;
+    }
+    s.onclick = function() { fn(c); };
+    el.appendChild(s);
+  });
+}
+
+function applyTextColor(color) {
+  restoreRngForColor();
+  var body = document.getElementById('ed-body');
+  body.focus();
+  var sel = window.getSelection();
+  if (!sel || !sel.rangeCount) return;
+
+  if (sel.isCollapsed) {
+    var block = _cursorBlock();
+    if (block && block !== body) { block.style.color = (color === 'none' ? '' : color); onBodyInput(); }
+  } else {
+    if (color === 'none') {
+      document.execCommand('styleWithCSS', false, true);
+      document.execCommand('foreColor', false, 'inherit');
+    } else {
+      document.execCommand('styleWithCSS', false, true);
+      document.execCommand('foreColor', false, color);
+    }
+    onBodyInput();
+  }
+
+  if (color !== 'none') {
+    var bar = document.getElementById('tc-bar');
+    if (bar) bar.style.background = color;
+    document.querySelectorAll('#tc-swatches .color-swatch').forEach(function(s) {
+      s.classList.toggle('selected', s.title === color);
+    });
+  }
+}
+
+function applyHighlight(color) {
+  restoreRngForColor();
+  var body = document.getElementById('ed-body');
+  body.focus();
+  var sel = window.getSelection();
+  if (!sel || !sel.rangeCount) return;
+  var clearBg = (color === 'none');
+
+  if (sel.isCollapsed) {
+    var block = _cursorBlock();
+    if (block && block !== body) { block.style.backgroundColor = clearBg ? '' : color; onBodyInput(); }
+  } else {
+    document.execCommand('styleWithCSS', false, true);
+    document.execCommand('hiliteColor', false, clearBg ? 'transparent' : color);
+    onBodyInput();
+  }
+
+  if (!clearBg) {
+    var bar = document.getElementById('hc-bar');
+    if (bar) bar.style.background = color;
+    document.querySelectorAll('#hc-swatches .color-swatch').forEach(function(s) {
+      s.classList.toggle('selected', s.title === color);
+    });
+  }
+}
+
+// Close color palettes on outside click
+document.addEventListener('click', function(e) {
+  if (!e.target.closest('.tb-color-wrap')) closeColorPalettes();
+});
 
 var _htmlMode = false;
 function togHTML() {
@@ -2439,6 +2736,7 @@ function _lockSpacingTarget() {
 
 // Sync slider UI to reflect the current paragraph's actual values
 function _syncSpacingUI() {
+  syncToolbarState();
   var el  = _cursorBlock();
   var cs  = window.getComputedStyle(el);
 
@@ -4465,4 +4763,4 @@ function _attachEditBtn(wrapper, iframe) {
 </script>
 <div id="toasts"></div>
 </body>
-</html>s
+</html>
