@@ -1,7 +1,102 @@
-
 name: Update Article Sitemap
 
 on:
   schedule:
+    # Runs every day at 2:00 AM UTC
     - cron: '0 2 * * *'
-  workflow_dispatch:
+  workflow_dispatch: # Allow manual trigger from GitHub Actions UI
+
+jobs:
+  update-sitemap:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout repo
+        uses: actions/checkout@v4
+
+      - name: Generate sitemap-articles.xml
+        env:
+          API_URL: ${{ secrets.DEKHO_API_URL }}
+          SITE_URL: https://elv8dgtl.in
+          ARTICLE_PAGE: dekho-article.html
+        run: |
+          node -e "
+          const https = require('https');
+          const fs    = require('fs');
+
+          const apiUrl     = process.env.API_URL;
+          const siteUrl    = process.env.SITE_URL;
+          const articlePage = process.env.ARTICLE_PAGE;
+
+          if (!apiUrl) { console.error('DEKHO_API_URL secret is not set'); process.exit(1); }
+
+          const body = JSON.stringify({ action: 'listSitemap' });
+          const url  = new URL(apiUrl);
+
+          const options = {
+            hostname: url.hostname,
+            path:     url.pathname + url.search,
+            method:   'POST',
+            headers:  {
+              'Content-Type':   'text/plain',
+              'Content-Length': Buffer.byteLength(body)
+            }
+          };
+
+          const req = https.request(options, (res) => {
+            let raw = '';
+            res.on('data', chunk => raw += chunk);
+            res.on('end', () => {
+              let data;
+              try { data = JSON.parse(raw); } catch(e) {
+                console.error('Failed to parse API response:', raw);
+                process.exit(1);
+              }
+
+              if (!data.ok || !data.articles) {
+                console.error('API error:', data.error || 'Unknown');
+                process.exit(1);
+              }
+
+              const today    = new Date().toISOString().slice(0, 10);
+              const articles = data.articles;
+
+              let xml = '<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n';
+              xml += '<!-- DEKHO article sitemap — auto-generated ' + today + ' -->\n';
+              xml += '<!-- ' + articles.length + ' published articles -->\n';
+              xml += '<urlset xmlns=\"http://www.sitemaps.org/schemas/sitemap/0.9\">\n\n';
+
+              articles.forEach(a => {
+                const loc     = a.slug
+                  ? siteUrl + '/' + articlePage + '?slug=' + encodeURIComponent(a.slug)
+                  : siteUrl + '/' + articlePage + '?id='   + encodeURIComponent(a.id);
+                const lastmod = (a.updatedAt || a.publishedAt || today).slice(0, 10);
+                const prio    = (a.category === 'review' || a.category === 'comparison') ? '0.75' : '0.70';
+
+                xml += '  <url>\n';
+                xml += '    <loc>' + loc + '</loc>\n';
+                xml += '    <lastmod>' + lastmod + '</lastmod>\n';
+                xml += '    <changefreq>monthly</changefreq>\n';
+                xml += '    <priority>' + prio + '</priority>\n';
+                xml += '  </url>\n\n';
+              });
+
+              xml += '</urlset>\n';
+
+              fs.writeFileSync('sitemap-articles.xml', xml, 'utf8');
+              console.log('✓ sitemap-articles.xml written with', articles.length, 'articles');
+            });
+          });
+
+          req.on('error', (e) => { console.error('Request failed:', e.message); process.exit(1); });
+          req.write(body);
+          req.end();
+          "
+
+      - name: Commit and push if changed
+        run: |
+          git config user.name  "github-actions[bot]"
+          git config user.email "github-actions[bot]@users.noreply.github.com"
+          git add sitemap-articles.xml
+          git diff --staged --quiet || git commit -m "chore: update sitemap-articles.xml [$(date -u +%Y-%m-%d)]"
+          git push
