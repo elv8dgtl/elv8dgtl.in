@@ -1105,4 +1105,13 @@ function esc(s) {
     if (!s) return '';
     return String(s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');
 }
-function show(id) { var el=document.getElementById(id); if(el) el.
+function show(id) { var el=document.getElementById(id); if(el) el.style.display=''; }
+function hide(id) { var el=document.getElementById(id); if(el) el.style.display='none'; }
+function showError(msg) {
+    show('error-state');
+    var em = document.getElementById('error-msg');
+    if (em) em.textContent = msg || 'Could not load articles.';
+}
+</script>
+</body>
+</html>
