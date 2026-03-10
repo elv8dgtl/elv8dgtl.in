@@ -20,10 +20,13 @@ jobs:
           SITE_URL: https://elv8dgtl.in
           ARTICLE_PAGE: dekho-article.html
         run: |
-          # Fetch with curl — -L follows redirects (required for Google Apps Script)
-          RESPONSE=$(curl -s -L -X POST "$API_URL" \
-            -H "Content-Type: text/plain" \
-            -d '{"action":"listSitemap"}')
+          # Google Apps Script redirects GET — follow redirect manually
+          REDIRECT=$(curl -s -o /dev/null -w "%{redirect_url}" "$API_URL?action=listSitemap")
+          if [ -z "$REDIRECT" ]; then
+            RESPONSE=$(curl -s "$API_URL?action=listSitemap")
+          else
+            RESPONSE=$(curl -s "$REDIRECT")
+          fi
 
           echo "API response: $RESPONSE"
 
