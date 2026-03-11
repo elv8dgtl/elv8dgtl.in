@@ -1897,7 +1897,9 @@ function loadArts() {
   call('listArticles', { token: $.token }).then(function(r) {
     if (!r.ok) { toast(r.error || 'Failed to load articles', 'bad'); return; }
     $.arts = r.articles || [];
-    var myArts   = $.arts.filter(function(a){ return $.user.role === 'admin' || a.authorEmail === $.user.email; });
+    var myArts = $.user.role === 'admin'
+      ? $.arts.filter(function(a){ return a.status !== 'review'; })
+      : $.arts.filter(function(a){ return a.authorEmail === $.user.email; });
     var revCount = $.arts.filter(function(a){ return a.status === 'review'; }).length;
     document.getElementById('bdg-a').textContent     = myArts.length;
     document.getElementById('bdg-r').textContent     = revCount;
@@ -1936,7 +1938,13 @@ function renderDash() {
 function renderArts() {
   var q   = (document.getElementById('asearch')  ? document.getElementById('asearch').value  : '').toLowerCase();
   var st  = document.getElementById('afilter') ? document.getElementById('afilter').value : '';
-  var all = $.user.role === 'admin' ? $.arts : $.arts.filter(function(a){ return a.authorEmail === $.user.email; });
+  var all;
+  if ($.user.role === 'admin') {
+    // Admin: show all articles EXCEPT those in 'review' status — those go to Pending Review tab
+    all = $.arts.filter(function(a){ return a.status !== 'review'; });
+  } else {
+    all = $.arts.filter(function(a){ return a.authorEmail === $.user.email; });
+  }
   var list = all.filter(function(a) {
     return (!q || (a.title||'').toLowerCase().indexOf(q) > -1) && (!st || a.status === st);
   });
@@ -1944,8 +1952,8 @@ function renderArts() {
   if (!list.length) { tbody.innerHTML = '<tr><td colspan="5" class="te">No articles found.</td></tr>'; return; }
   tbody.innerHTML = list.map(function(a) {
     var acts = '<button class="btn btn-p btn-sm" onclick="openEdit(\'' + a.id + '\')">Edit</button> ';
-    // Only show Submit button for own drafts/rejected articles (not admin reviewing others')
-    if ((a.status === 'draft' || a.status === 'rejected') && ($.user.role === 'admin' || a.authorEmail === $.user.email)) {
+    // Submit button: only for WRITERS on their own draft/rejected articles. Admin never submits.
+    if ($.user.role !== 'admin' && (a.status === 'draft' || a.status === 'rejected') && a.authorEmail === $.user.email) {
       acts += '<button class="btn btn-s btn-sm" onclick="quickSubmit(\'' + a.id + '\')">Submit</button> ';
     }
     acts += '<button class="btn btn-d btn-sm" onclick="askDel(\'' + a.id + '\')">Delete</button>';
@@ -2022,7 +2030,7 @@ function newArt() {
   document.getElementById('ed-cat').value  = 'review';
   document.getElementById('ed-rt').value   = '5';
   document.getElementById('ed-rate').value = '0';
-  document.getElementById('submit-review-btn').style.display = 'flex';
+  document.getElementById('submit-review-btn').style.display = ($.user.role === 'admin') ? 'none' : 'flex';
   ratDisp(); upCover(); setPill('draft'); setSv('Ready');
   if (_htmlMode) togHTML();
   go('editor');
@@ -2066,8 +2074,9 @@ function loadIntoEditor(a, readOnly) {
   document.getElementById('ed-cat').value     = a.category  || 'review';
 
   var isOwnArticle = (a.authorEmail === $.user.email);
-  document.getElementById('submit-review-btn').style.display =
-    (readOnly && !isOwnArticle) ? 'none' : 'flex';
+  // Admin never submits — only writers submit their own draft/rejected articles
+  var canSubmit = $.user.role !== 'admin' && isOwnArticle && (a.status === 'draft' || a.status === 'rejected' || !a.status);
+  document.getElementById('submit-review-btn').style.display = canSubmit ? 'flex' : 'none';
 
   // Restore SEO fields from article data (if saved)
   var sset = function(id,val){ var el=document.getElementById(id); if(el) el.value=val||''; };
