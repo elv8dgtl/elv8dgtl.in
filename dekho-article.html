@@ -623,7 +623,7 @@
     </div>
     <div>
       <div class="footer-col-ttl">CONTACT</div>
-      <a href="mailto:hello@elv8dgtl.in" class="footer-lnk">hello@elv8dgtl.in</a>
+      <a href="/cdn-cgi/l/email-protection#69010c050506290c051f510d0e1d05470007" class="footer-lnk"><span class="__cf_email__" data-cfemail="6109040d0d0e21040d17590506150d4f080f">[email&#160;protected]</span></a>
       <a href="https://wa.me/918052743378" target="_blank" class="footer-lnk">WhatsApp</a>
       <a href="https://instagram.com/elv8dgtl.in" target="_blank" class="footer-lnk">Instagram</a>
       <a href="https://linkedin.com/company/elv8dgtl" target="_blank" class="footer-lnk">LinkedIn</a>
@@ -639,7 +639,7 @@
   <i data-lucide="chevron-up" style="width:18px;height:18px;"></i>
 </button>
 
-<script>
+<script data-cfasync="false" src="/cdn-cgi/scripts/5c5dd728/cloudflare-static/email-decode.min.js"></script><script>
 var API  = 'https://script.google.com/macros/s/AKfycbxaOr-7mI4YWdNia0Fd3qVKUptBvHjqt2hYisva_Ghn3rDGszn-t6F-qCEHiFcM5L-Z/exec';
 var SITE = 'https://www.elv8dgtl.in';
 var GA_ID = 'G-V77HPC9EX8';
@@ -687,7 +687,10 @@ function injectSEO(article) {
   var title     = article.seoMetaTitle || article.title + ' — DEKHO by elv8';
   var desc      = article.seoMetaDesc  || article.excerpt || '';
   var ogImg     = article.seoOgImage   || article.coverImage || '';
-  var canonical = article.seoCanonical || SITE + '/dekho-article.html?id=' + encodeURIComponent(article.id);
+  var canonical = article.seoCanonical ||
+    (article.slug
+      ? SITE + '/dekho-article.html?slug=' + encodeURIComponent(article.slug)
+      : SITE + '/dekho-article.html?id='   + encodeURIComponent(article.id));
   document.title = title;
   setMeta('name','description',desc); setMeta('name','robots','index, follow'); setMeta('name','author',article.authorName||'DEKHO');
   if (article.seoKeyword) setMeta('name','keywords',article.seoKeyword);
@@ -742,7 +745,8 @@ function renderRelated(currentArticle, allArticles) {
   var relatedBottom=document.getElementById('related-bottom'), relatedList=document.getElementById('related-list');
   relatedList.innerHTML=related.map(function(a,i) {
     var cover=a.coverImage||fallbackImg;
-    return '<a href="dekho-article.html?id='+encodeURIComponent(a.id)+'" class="related-b-item">'+
+    var href='dekho-article.html?'+(a.slug?'slug='+encodeURIComponent(a.slug):'id='+encodeURIComponent(a.id));
+    return '<a href="'+href+'" class="related-b-item">'+
            '<span class="related-b-num">0'+(i+1)+'</span>'+
            '<img class="related-b-thumb" src="'+esc(cover)+'" alt="'+esc(a.title)+'" loading="lazy" onerror="this.src=\''+fallbackImg+'\'">'+
            '<div><div class="related-b-title">'+esc(a.title)+'</div>'+
@@ -754,7 +758,8 @@ function renderRelated(currentArticle, allArticles) {
   var relatedCard=document.getElementById('related-card'), sidebarList=document.getElementById('related-sidebar-list');
   sidebarList.innerHTML=related.map(function(a,i) {
     var cover=a.coverImage||fallbackImg;
-    return '<a href="dekho-article.html?id='+encodeURIComponent(a.id)+'" class="srel-item">'+
+    var href2='dekho-article.html?'+(a.slug?'slug='+encodeURIComponent(a.slug):'id='+encodeURIComponent(a.id));
+    return '<a href="'+href2+'" class="srel-item">'+
            '<span class="srel-num">0'+(i+1)+'</span>'+
            '<img class="srel-thumb" src="'+esc(cover)+'" alt="'+esc(a.title)+'" loading="lazy" onerror="this.src=\''+fallbackImg+'\'">'+
            '<div><div class="srel-title">'+esc(a.title)+'</div>'+
@@ -837,10 +842,24 @@ function fetchArticle(id, slug) {
   .then(function(r){return r.json();})
   .then(function(data){
     if (!data||!data.ok||!data.article){showError(data&&data.error?data.error:'Article not found.');return;}
-    renderArticle(data.article);
+    var article = data.article;
+
+    // ── Rewrite URL to slug-based if we have a slug ──────────────────────────
+    // This ensures the address bar always shows the clean slug URL,
+    // even if the page was opened via ?id=. Search engines will index the slug URL.
+    if (article.slug) {
+      var currentSlug = getParam('slug');
+      if (currentSlug !== article.slug) {
+        // Replace ?id=xxx (or any other param) with ?slug=the-slug
+        var cleanURL = window.location.pathname + '?slug=' + encodeURIComponent(article.slug);
+        try { window.history.replaceState({slug: article.slug}, '', cleanURL); } catch(e){}
+      }
+    }
+
+    renderArticle(article);
     fetch(API,{method:'POST',headers:{'Content-Type':'text/plain'},body:JSON.stringify({action:'listPublished'})})
     .then(function(r){return r.json();})
-    .then(function(listData){if(listData&&listData.ok&&listData.articles)renderRelated(data.article,listData.articles);})
+    .then(function(listData){if(listData&&listData.ok&&listData.articles)renderRelated(article,listData.articles);})
     .catch(function(){});
   })
   .catch(function(){showError('Could not load article. Please check your connection.');});
@@ -862,8 +881,19 @@ document.addEventListener('DOMContentLoaded', function() {
     if(navbar) navbar.classList.toggle('scrolled',sy>40);
     if(backTop) backTop.classList.toggle('show',sy>400);
   });
-  var id=getParam('id'), slug=getParam('slug');
-  if(!id&&!slug){showError('No article specified. Use ?id=... or ?slug=... in the URL.');return;}
+
+  // ── Slug-first URL resolution ──────────────────────────────────────────────
+  // Priority: ?slug= first (clean SEO URL), then ?id= as fallback.
+  // If only ?id= is present and the article has a slug, we rewrite the URL
+  // to use ?slug= so the browser address bar and search engines see the slug.
+  var slug = getParam('slug');
+  var id   = getParam('id');
+
+  if (!slug && !id) {
+    showError('No article specified. Use ?slug=your-slug or ?id=... in the URL.');
+    return;
+  }
+
   fetchArticle(id, slug);
 });
 </script>
