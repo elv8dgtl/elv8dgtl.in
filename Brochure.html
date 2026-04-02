@@ -1,0 +1,986 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>elv8 dgtl — Service Brochure 2026</title>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,600;1,400;1,600&family=DM+Sans:opsz,wght@9..40,300;9..40,400;9..40,500;9..40,600&display=swap" rel="stylesheet">
+<style>
+:root{
+  --cream:#F7F4ED;
+  --ivory:#FDFAF3;
+  --white:#FEFCF8;
+  --gold:#A87C28;
+  --gold-l:#C49A3C;
+  --gold-dim:rgba(168,124,40,.08);
+  --gold-border:rgba(168,124,40,.22);
+  --char:#1A1815;
+  --char-soft:#28251F;
+  --muted:#6A6560;
+  --muted-l:#9E9890;
+  --border:#E5DDD0;
+  --border-l:#EFE8DA;
+  --red-old:#C0392B;
+  --green-new:#1A6B3A;
+  --tag:#EDE5D4;
+}
+*{box-sizing:border-box;margin:0;padding:0;}
+body{background:var(--cream);color:var(--char);font-family:'DM Sans',sans-serif;font-size:15px;line-height:1.72;-webkit-font-smoothing:antialiased;}
+
+/* ─── EDITABLE ─── */
+[contenteditable]{outline:none;cursor:text;border-radius:2px;transition:background .15s;}
+[contenteditable]:hover{background:var(--gold-dim);}
+[contenteditable]:focus{background:rgba(168,124,40,.13);box-shadow:0 0 0 2px var(--gold-border);}
+
+
+
+/* ─── FREE AUDIT RIBBON ─── */
+.audit-bar{
+  background:var(--char);color:var(--ivory);
+  text-align:center;padding:12px 24px;
+  font-size:13px;letter-spacing:.04em;
+}
+.audit-bar strong{color:var(--gold-l);}
+.audit-bar a{color:var(--gold-l);text-decoration:none;font-weight:600;border-bottom:1px solid var(--gold-border);}
+
+/* ─── LAYOUT ─── */
+.wrap{max-width:940px;margin:0 auto;padding:0 48px;}
+.serif{font-family:'Playfair Display',serif;}
+.label{font-size:11px;letter-spacing:.14em;text-transform:uppercase;color:var(--gold);font-weight:500;}
+hr.div{border:none;border-top:1px solid var(--border);}
+
+/* ─── PRICING DISPLAY ─── */
+.price-block{display:flex;align-items:baseline;gap:10px;flex-wrap:wrap;margin:4px 0 2px;}
+.price-old{font-size:15px;color:var(--red-old);text-decoration:line-through;font-weight:400;opacity:.7;}
+.price-new{font-family:'Playfair Display',serif;font-size:34px;font-weight:600;letter-spacing:-.03em;color:var(--char);}
+.price-new.light{color:var(--ivory);}
+.price-save{font-size:11px;background:#E8F5ED;color:var(--green-new);padding:3px 9px;border-radius:20px;font-weight:500;letter-spacing:.03em;}
+.price-note{font-size:12px;color:var(--muted-l);margin-top:2px;}
+.price-note.light{color:#8A857E;}
+
+/* ─── COVER ─── */
+.cover{min-height:100vh;display:flex;flex-direction:column;justify-content:space-between;padding:52px 0 68px;border-bottom:1px solid var(--border);}
+.nav-bar{display:flex;justify-content:space-between;align-items:center;}
+.logo-type{font-size:16px;font-weight:600;letter-spacing:.03em;}
+.logo-type span{color:var(--gold);}
+.doc-label{font-size:11.5px;letter-spacing:.1em;text-transform:uppercase;color:var(--muted-l);}
+.cover-body{max-width:760px;}
+.eyebrow{display:flex;align-items:center;gap:12px;margin-bottom:32px;}
+.eyebrow::before{content:'';width:28px;height:1px;background:var(--gold);display:block;}
+.cover-h1{font-family:'Playfair Display',serif;font-size:clamp(48px,7.8vw,90px);font-weight:400;line-height:1.0;letter-spacing:-.025em;margin-bottom:24px;}
+.cover-h1 em{font-style:italic;color:var(--gold);}
+.cover-sub{font-size:16.5px;color:var(--muted);max-width:540px;margin-bottom:44px;line-height:1.7;}
+.stats-row{display:flex;gap:52px;flex-wrap:wrap;}
+.stat-val{font-family:'Playfair Display',serif;font-size:33px;font-weight:600;display:block;}
+.stat-lbl{font-size:12.5px;color:var(--muted-l);margin-top:2px;}
+.cover-foot{display:flex;justify-content:space-between;align-items:flex-end;padding-top:36px;border-top:1px solid var(--border-l);flex-wrap:wrap;gap:20px;}
+.contact-line{display:flex;flex-direction:column;gap:5px;}
+.contact-line a, .contact-line span{font-size:13.5px;color:var(--char);text-decoration:none;}
+.contact-line a:hover{color:var(--gold);}
+.gold-text{color:var(--gold);}
+.city-tag{display:inline-flex;gap:8px;flex-wrap:wrap;}
+.city-pill{background:var(--tag);color:var(--muted);font-size:11.5px;padding:4px 13px;border-radius:20px;letter-spacing:.03em;}
+.city-pill.primary{background:var(--gold);color:var(--white);font-weight:500;}
+
+/* ─── SECTION ─── */
+section{padding:76px 0;}
+.section-head{margin-bottom:48px;}
+.section-head h2{font-family:'Playfair Display',serif;font-size:clamp(30px,4vw,46px);font-weight:400;line-height:1.08;letter-spacing:-.02em;margin-top:10px;}
+.section-head h2 em{font-style:italic;color:var(--gold);}
+.section-sub{color:var(--muted);font-size:15.5px;margin-top:12px;max-width:580px;line-height:1.68;}
+
+/* ─── 3-COL TIER ─── */
+.tier-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:1px;background:var(--border);border:1px solid var(--border);}
+.tier{background:var(--ivory);padding:34px 28px 38px;}
+.tier.hero{background:var(--char);}
+.tier-badge{font-size:10.5px;letter-spacing:.12em;text-transform:uppercase;color:var(--gold);margin-bottom:18px;display:block;}
+.tier.hero .tier-badge{color:var(--gold-l);}
+.tier-name{font-family:'Playfair Display',serif;font-size:21px;font-weight:400;margin-bottom:6px;}
+.tier.hero .tier-name{color:var(--ivory);}
+.tier-tagline{font-size:13px;color:var(--muted);margin-bottom:22px;min-height:38px;line-height:1.5;}
+.tier.hero .tier-tagline{color:#8A857E;}
+.tier-feats{list-style:none;margin:22px 0 28px;}
+.tier-feats li{font-size:13.5px;padding:7px 0;border-bottom:1px solid var(--border-l);display:flex;align-items:flex-start;gap:9px;color:var(--char);line-height:1.5;}
+.tier.hero .tier-feats li{border-color:rgba(255,255,255,.09);color:#C8C3B8;}
+.tier-feats li::before{content:'';width:5px;height:5px;border-radius:50%;background:var(--gold);flex-shrink:0;margin-top:7px;}
+.tier.hero .tier-feats li::before{background:var(--gold-l);}
+.tier-btn{display:block;width:100%;padding:12px 0;text-align:center;font-size:13px;font-weight:500;letter-spacing:.04em;border:1px solid var(--char);background:transparent;color:var(--char);cursor:pointer;text-decoration:none;transition:background .2s,color .2s;}
+.tier-btn:hover{background:var(--char);color:var(--cream);}
+.tier.hero .tier-btn{background:var(--gold);border-color:var(--gold);color:var(--char);}
+.tier.hero .tier-btn:hover{background:var(--gold-l);border-color:var(--gold-l);}
+
+/* ─── 2-COL ─── */
+.two-col{display:grid;grid-template-columns:1fr 1fr;gap:1px;background:var(--border);border:1px solid var(--border);}
+.col-card{background:var(--ivory);padding:36px 30px 40px;}
+
+/* ─── FEATURE TABLE ─── */
+.feat-table{width:100%;border-collapse:collapse;}
+.feat-table th{font-size:11px;letter-spacing:.1em;text-transform:uppercase;color:var(--muted-l);font-weight:500;padding:0 0 16px;border-bottom:1px solid var(--border);}
+.feat-table th:not(:first-child){text-align:center;}
+.feat-table td{padding:16px 0;border-bottom:1px solid var(--border-l);vertical-align:middle;}
+.feat-table td:not(:first-child){text-align:center;font-size:14px;}
+.feat-table .col-hi{background:rgba(168,124,40,.06);}
+.feat-table tr{break-inside:avoid;page-break-inside:avoid;}
+.col-name-h{font-family:'Playfair Display',serif;font-size:17px;font-weight:400;}
+.col-price-h{font-size:11.5px;color:var(--muted-l);margin-top:3px;}
+.col-price-h del{color:var(--red-old);opacity:.7;}
+.feat-label{font-weight:500;font-size:14px;}
+.feat-sub{font-size:12px;color:var(--muted);margin-top:2px;}
+.tick{color:var(--gold);font-size:16px;font-weight:600;}
+.dash{color:var(--border);font-size:18px;}
+
+/* ─── BUNDLE ─── */
+.bundle-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:22px;}
+.bundle{background:var(--white);border:1px solid var(--border);padding:30px 26px 34px;position:relative;}
+.bundle.glow{border-color:var(--gold);background:linear-gradient(155deg,#FDFBF5 0%,#FAF5E6 100%);}
+.bundle-ribbon{position:absolute;top:0;right:0;background:var(--gold);color:var(--white);font-size:10px;letter-spacing:.1em;text-transform:uppercase;padding:5px 14px;font-weight:600;}
+.bundle-icon{width:36px;height:36px;border:1px solid var(--border);border-radius:50%;display:flex;align-items:center;justify-content:center;margin-bottom:16px;font-size:14px;}
+.bundle-name{font-family:'Playfair Display',serif;font-size:20px;font-weight:400;margin-bottom:5px;}
+.bundle-desc{font-size:13px;color:var(--muted);margin-bottom:18px;line-height:1.55;}
+.bundle-feats{list-style:none;margin-bottom:20px;}
+.bundle-feats li{font-size:13px;padding:5px 0;color:var(--muted);}
+.bundle-feats li::before{content:'+ ';color:var(--gold);font-weight:600;}
+.b-price-old{font-size:13.5px;color:var(--red-old);text-decoration:line-through;opacity:.7;}
+.b-price-new{font-family:'Playfair Display',serif;font-size:28px;font-weight:600;letter-spacing:-.025em;margin-top:2px;}
+.b-save{font-size:12px;color:var(--green-new);margin-top:4px;}
+
+/* ─── FULL PACKAGE HERO ─── */
+.pkg-hero{background:var(--char);color:var(--ivory);padding:60px 0;border-top:1px solid var(--border);border-bottom:1px solid var(--border);}
+.pkg-inner{display:grid;grid-template-columns:1fr 1.1fr;gap:56px;align-items:center;}
+.pkg-label{font-size:11px;letter-spacing:.14em;text-transform:uppercase;color:var(--gold-l);margin-bottom:14px;display:block;}
+.pkg-title{font-family:'Playfair Display',serif;font-size:clamp(28px,3.5vw,42px);font-weight:400;line-height:1.1;margin-bottom:16px;}
+.pkg-title em{font-style:italic;color:var(--gold-l);}
+.pkg-desc{font-size:14.5px;color:#9A9590;line-height:1.68;margin-bottom:32px;}
+.pkg-bullets{list-style:none;display:grid;grid-template-columns:1fr 1fr;gap:0;}
+.pkg-bullets li{font-size:13.5px;padding:9px 0;border-bottom:1px solid rgba(255,255,255,.07);color:#C8C3B8;display:flex;align-items:flex-start;gap:9px;}
+.pkg-bullets li::before{content:'✦';color:var(--gold-l);font-size:10px;flex-shrink:0;margin-top:3px;}
+.pkg-price-panel{background:rgba(255,255,255,.04);border:1px solid rgba(255,255,255,.09);padding:36px 32px;}
+.pkg-price-tier{margin-bottom:28px;padding-bottom:28px;border-bottom:1px solid rgba(255,255,255,.08);}
+.pkg-price-tier:last-child{margin-bottom:0;padding-bottom:0;border-bottom:none;}
+.ppt-name{font-size:12px;letter-spacing:.1em;text-transform:uppercase;color:var(--gold-l);margin-bottom:8px;}
+.ppt-price-row{display:flex;align-items:baseline;gap:10px;margin-bottom:6px;}
+.ppt-old{font-size:14px;color:var(--red-old);text-decoration:line-through;opacity:.65;}
+.ppt-new{font-family:'Playfair Display',serif;font-size:30px;font-weight:600;color:var(--ivory);}
+.ppt-note{font-size:12.5px;color:#7A7570;}
+.ppt-feats{list-style:none;margin-top:12px;}
+.ppt-feats li{font-size:13px;color:#A09890;padding:4px 0;display:flex;align-items:flex-start;gap:8px;}
+.ppt-feats li::before{content:'·';color:var(--gold-l);flex-shrink:0;}
+.pkg-cta-row{display:flex;gap:12px;margin-top:28px;flex-wrap:wrap;}
+.btn-gold{display:inline-block;background:var(--gold);color:var(--char);padding:13px 28px;font-size:13px;font-weight:600;letter-spacing:.04em;text-decoration:none;border:1px solid var(--gold);transition:background .2s;cursor:pointer;}
+.btn-gold:hover{background:var(--gold-l);border-color:var(--gold-l);}
+.btn-outline{display:inline-block;background:transparent;color:var(--ivory);padding:13px 28px;font-size:13px;font-weight:500;letter-spacing:.04em;text-decoration:none;border:1px solid rgba(255,255,255,.3);transition:border-color .2s;cursor:pointer;}
+.btn-outline:hover{border-color:rgba(255,255,255,.6);}
+
+/* ─── FREE AUDIT ─── */
+.free-audit{border:1px solid var(--gold-border);background:linear-gradient(135deg,#FDFBF5 0%,#FAF4E2 100%);padding:48px 44px;display:flex;justify-content:space-between;align-items:center;gap:32px;flex-wrap:wrap;}
+.fa-left h3{font-family:'Playfair Display',serif;font-size:26px;font-weight:400;margin-bottom:8px;}
+.fa-left h3 em{font-style:italic;color:var(--gold);}
+.fa-left p{font-size:14px;color:var(--muted);max-width:480px;line-height:1.65;}
+.fa-badge{background:var(--gold);color:var(--white);font-size:12px;font-weight:600;letter-spacing:.08em;padding:4px 14px;border-radius:20px;display:inline-block;margin-bottom:14px;text-transform:uppercase;}
+.btn-dark{display:inline-block;background:var(--char);color:var(--ivory);padding:13px 30px;font-size:13.5px;font-weight:500;letter-spacing:.04em;text-decoration:none;transition:background .2s;cursor:pointer;white-space:nowrap;}
+.btn-dark:hover{background:#2C2A27;}
+
+/* ─── WHY ─── */
+.why-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:1px;background:var(--border);border:1px solid var(--border);}
+.why-cell{background:var(--ivory);padding:34px 30px;}
+.why-n{font-family:'Playfair Display',serif;font-size:11px;color:var(--gold-l);letter-spacing:.1em;margin-bottom:14px;display:block;}
+.why-t{font-weight:600;font-size:15px;margin-bottom:8px;}
+.why-b{font-size:13.5px;color:var(--muted);line-height:1.62;}
+
+/* ─── TESTIMONIALS ─── */
+.testi-band{background:var(--char-soft);padding:60px 0;}
+.testi-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:44px;}
+.testi-q{font-family:'Playfair Display',serif;font-style:italic;font-size:15px;line-height:1.72;margin-bottom:18px;color:#C8C3B5;}
+.testi-n{font-size:13px;font-weight:600;color:var(--ivory);}
+.testi-r{font-size:12px;color:#6A6560;}
+
+/* ─── CONTACT FOOTER ─── */
+.contact-section{padding:72px 0 0;}
+.contact-inner{display:grid;grid-template-columns:1.1fr 1fr;gap:56px;align-items:start;padding-bottom:60px;border-bottom:1px solid var(--border);}
+.contact-head{font-family:'Playfair Display',serif;font-size:clamp(26px,3.5vw,40px);font-weight:400;line-height:1.1;margin-bottom:16px;}
+.contact-head em{font-style:italic;color:var(--gold);}
+.contact-intro{font-size:14.5px;color:var(--muted);line-height:1.68;margin-bottom:28px;}
+.contact-links{display:flex;flex-direction:column;gap:14px;}
+.contact-item{display:flex;align-items:center;gap:14px;}
+.ci-icon{width:38px;height:38px;border:1px solid var(--border);border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:14px;flex-shrink:0;background:var(--white);}
+.ci-label{font-size:11px;letter-spacing:.08em;text-transform:uppercase;color:var(--muted-l);}
+.ci-val{font-size:14.5px;font-weight:500;margin-top:1px;}
+.ci-val a{color:var(--char);text-decoration:none;}
+.ci-val a:hover{color:var(--gold);}
+.contact-info-panel{background:var(--char);color:var(--ivory);padding:40px 36px;}
+.cip-label{font-size:11px;letter-spacing:.12em;text-transform:uppercase;color:var(--gold-l);margin-bottom:20px;display:block;}
+.cip-h{font-family:'Playfair Display',serif;font-size:22px;font-weight:400;margin-bottom:8px;}
+.cip-sub{font-size:13.5px;color:#8A8580;margin-bottom:28px;line-height:1.6;}
+.hours-row{display:flex;justify-content:space-between;border-bottom:1px solid rgba(255,255,255,.08);padding:10px 0;font-size:13.5px;}
+.hours-row:last-child{border-bottom:none;}
+.hr-day{color:#8A8580;}
+.hr-time{color:var(--ivory);}
+.cities-row{display:flex;gap:10px;margin-top:22px;flex-wrap:wrap;}
+.city-badge{background:rgba(255,255,255,.07);color:#B8B3AB;font-size:12px;padding:5px 14px;border-radius:20px;}
+.city-badge.primary-city{background:var(--gold);color:var(--char);font-weight:600;}
+
+/* ─── FOOTER STRIP ─── */
+.foot-strip{border-top:1px solid var(--border);padding:28px 0;display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:16px;}
+.foot-logo{font-size:14px;font-weight:600;letter-spacing:.03em;}
+.foot-logo span{color:var(--gold);}
+.foot-links{display:flex;gap:24px;flex-wrap:wrap;}
+.foot-links a{font-size:13px;color:var(--muted);text-decoration:none;}
+.foot-links a:hover{color:var(--gold);}
+.foot-copy{font-size:12px;color:var(--muted-l);}
+
+/* ─── KANPUR BADGE ─── */
+.kanpur-note{display:inline-flex;align-items:center;gap:7px;background:#FDF5E4;border:1px solid var(--gold-border);padding:6px 14px;border-radius:20px;font-size:12.5px;color:var(--gold);margin-bottom:18px;font-weight:500;}
+
+/* ─── SECTION BG ALT ─── */
+.bg-ivory{background:var(--ivory);border-top:1px solid var(--border);border-bottom:1px solid var(--border);}
+
+@media print{
+  /* ── Hide UI chrome ── */
+  .audit-bar{display:none!important;}
+  [contenteditable]:hover,[contenteditable]:focus{background:transparent!important;box-shadow:none!important;}
+
+  /* ── Page setup ── */
+  @page{size:A4 portrait;margin:0;}
+  html,body{width:210mm;background:var(--cream)!important;}
+
+  /* ── Never split these elements across pages ── */
+  .tier,.col-card,.bundle,.why-cell,.pkg-price-tier,
+  .testi-grid > div,.contact-item,.free-audit,
+  .pkg-inner,.contact-inner,.cover-foot,
+  .stats-row,.price-block,.bundle-feats,
+  .tier-feats,.ppt-feats,.pkg-bullets,
+  tr,.feat-table thead,.feat-table tbody tr,
+  .foot-strip,.cover-body,.cover,.nav-bar{
+    break-inside:avoid;
+    page-break-inside:avoid;
+  }
+
+  /* ── Force a clean new page before each major section ── */
+  .bg-ivory,
+  .pkg-hero,
+  .testi-band,
+  .contact-section{
+    break-before:page;
+    page-break-before:always;
+  }
+
+  /* ── Keep grids from orphaning a single column ── */
+  .tier-grid,.two-col,.bundle-grid,.why-grid,.testi-grid{
+    break-inside:avoid;
+    page-break-inside:avoid;
+  }
+
+  /* ── Keep section headers with the content that follows ── */
+  .section-head,.pkg-label,.label{
+    break-after:avoid;
+    page-break-after:avoid;
+  }
+
+  /* ── Ensure backgrounds & colors print ── */
+  *{-webkit-print-color-adjust:exact!important;print-color-adjust:exact!important;}
+
+  /* ── Tighten section padding slightly for print ── */
+  section{padding:48px 0!important;}
+  .cover{padding:36px 0 48px!important;min-height:unset!important;}
+  .pkg-hero{padding:48px 0!important;}
+  .testi-band{padding:44px 0!important;}
+  .contact-section{padding:48px 0 0!important;}
+}
+@media(max-width:700px){
+  .wrap{padding:0 22px;}
+  .tier-grid,.two-col,.bundle-grid,.why-grid,.testi-grid,.pkg-inner,.contact-inner{grid-template-columns:1fr;}
+  .cover-h1{font-size:42px;}
+  .stats-row{gap:24px;}
+  .pkg-bullets{grid-template-columns:1fr;}
+  .foot-strip{flex-direction:column;text-align:center;}
+}
+</style>
+</head>
+<body>
+
+<!-- ═══════ AUDIT BAR ═══════ -->
+<div class="audit-bar">
+  <strong>🎯 Free Digital Audit</strong> — Get a comprehensive review of your online presence. No cost, no obligation. &nbsp;
+  <a href="https://elv8dgtl.in/contact.html" target="_blank">Claim Your Free Audit →</a>
+</div>
+
+<!-- ═══════════════════════════════════════════ COVER ═══════════════════════════════════════════ -->
+<div class="wrap">
+<div class="cover">
+
+  <div class="nav-bar">
+    <div class="logo-type">elv8<span>.</span>dgtl</div>
+    <div class="doc-label" contenteditable>Service Brochure · 2026</div>
+  </div>
+
+  <div class="cover-body">
+    <div class="eyebrow"><span class="label">Capabilities &amp; Pricing — Kanpur &amp; Lucknow</span></div>
+    <h1 class="cover-h1">
+      Kanpur's most<br>
+      <em>results-driven</em><br>
+      digital studio.
+    </h1>
+    <p class="cover-sub" contenteditable>
+      elv8 dgtl is a boutique digital studio serving businesses across Kanpur, Lucknow &amp; beyond — delivering web development, brand identity, social media, SEO, and performance marketing that actually moves the needle.
+    </p>
+    <div class="stats-row">
+      <div><span class="stat-val serif" contenteditable>451K+</span><span class="stat-lbl">Organic views generated</span></div>
+      <div><span class="stat-val serif" contenteditable>₹6.15</span><span class="stat-lbl">Average cost per lead</span></div>
+      <div><span class="stat-val serif" contenteditable>100%</span><span class="stat-lbl">Direct team access</span></div>
+      <div><span class="stat-val serif" contenteditable>3×</span><span class="stat-lbl">Avg. client ROI</span></div>
+    </div>
+  </div>
+
+  <div class="cover-foot">
+    <div class="contact-line">
+      <a href="/cdn-cgi/l/email-protection#224a474e4e4d62474e541a4645564e0c4b4c" contenteditable><span class="__cf_email__" data-cfemail="b2dad7dededdf2d7dec48ad6d5c6de9cdbdc">[email&#160;protected]</span></a>
+      <a href="https://wa.me/918052743378" contenteditable>+91 80527 43378 (WhatsApp)</a>
+      <a href="https://elv8dgtl.in" contenteditable>elv8dgtl.in &nbsp;·&nbsp; dekho.elv8dgtl.in</a>
+    </div>
+    <div style="text-align:right;">
+      <div class="city-tag">
+        <span class="city-pill primary">📍 Kanpur</span>
+        <span class="city-pill">Lucknow</span>
+        <span class="city-pill">Delhi</span>
+        <span class="city-pill">Remote</span>
+      </div>
+      <div style="font-size:12px;color:var(--muted-l);margin-top:10px;" contenteditable>Mon–Sat &nbsp;·&nbsp; 9am – 6pm IST</div>
+    </div>
+  </div>
+
+</div>
+</div>
+
+<!-- ═══════════════════════════════════════════ BRAND IDENTITY ═══════════════════════════════════════════ -->
+<div class="bg-ivory">
+<div class="wrap">
+<section>
+
+  <div class="section-head">
+    <span class="label">01 — Brand Identity</span>
+    <h2 class="serif">Your brand is your <em>silent salesperson.</em></h2>
+    <p class="section-sub" contenteditable>Cohesive visual identities that build trust before you even speak — logos, typography, colours, and guidelines built for Kanpur businesses ready to stand out.</p>
+  </div>
+
+  <div class="tier-grid">
+
+    <div class="tier">
+      <span class="tier-badge">Spark — Starter</span>
+      <div class="tier-name" contenteditable>Basic Identity</div>
+      <div class="tier-tagline" contenteditable>New business? Get a professional face, fast.</div>
+      <div class="price-block">
+        <span class="price-old" contenteditable>₹9,999</span>
+        <span class="price-new" contenteditable>₹4,999</span>
+        <span class="price-save" contenteditable>Save 50%</span>
+      </div>
+      <div class="price-note" contenteditable>One-time · 7–10 day delivery</div>
+      <ul class="tier-feats">
+        <li contenteditable>Primary logo (3 concepts)</li>
+        <li contenteditable>Color palette + rationale</li>
+        <li contenteditable>2 font pairings</li>
+        <li contenteditable>Business card design</li>
+        <li contenteditable>All source files (AI, PNG, SVG)</li>
+      </ul>
+      <a class="tier-btn" href="https://elv8dgtl.in/contact.html" target="_blank">Get Started →</a>
+    </div>
+
+    <div class="tier hero">
+      <span class="tier-badge">★ Most Popular</span>
+      <div class="tier-name" contenteditable>Studio Brand Kit</div>
+      <div class="tier-tagline" contenteditable>A complete visual system for brands ready to scale.</div>
+      <div class="price-block">
+        <span class="price-old light" style="color:#C06050;opacity:.7;" contenteditable>₹18,000</span>
+        <span class="price-new light" contenteditable>₹10,999</span>
+        <span class="price-save" contenteditable>Save 39%</span>
+      </div>
+      <div class="price-note light" contenteditable>One-time · 14–18 day delivery</div>
+      <ul class="tier-feats">
+        <li contenteditable>Everything in Spark, plus:</li>
+        <li contenteditable>Primary + secondary logo suite</li>
+        <li contenteditable>Full typography system</li>
+        <li contenteditable>10 social media templates</li>
+        <li contenteditable>Brand guidelines PDF (20 pages)</li>
+        <li contenteditable>Email signature design</li>
+        <li contenteditable>2 full revision rounds</li>
+      </ul>
+      <a class="tier-btn" href="https://elv8dgtl.in/contact.html" target="_blank">Book a Call →</a>
+    </div>
+
+    <div class="tier">
+      <span class="tier-badge">Signature — Premium</span>
+      <div class="tier-name" contenteditable>Full Identity System</div>
+      <div class="tier-tagline" contenteditable>Established businesses that demand zero compromise.</div>
+      <div class="price-block">
+        <span class="price-old" contenteditable>₹32,000</span>
+        <span class="price-new" contenteditable>₹19,999</span>
+        <span class="price-save" contenteditable>Save 37%</span>
+      </div>
+      <div class="price-note" contenteditable>One-time · 3–4 week delivery</div>
+      <ul class="tier-feats">
+        <li contenteditable>Everything in Studio, plus:</li>
+        <li contenteditable>Brand motion / animation kit</li>
+        <li contenteditable>Pitch deck template (15 slides)</li>
+        <li contenteditable>Packaging / merch mockup</li>
+        <li contenteditable>Unlimited revisions (30 days)</li>
+        <li contenteditable>Brand strategy workshop</li>
+      </ul>
+      <a class="tier-btn" href="https://elv8dgtl.in/contact.html" target="_blank">Get Started →</a>
+    </div>
+
+  </div>
+
+</section>
+</div>
+</div>
+
+<!-- ═══════════════════════════════════════════ WEB DEVELOPMENT ═══════════════════════════════════════════ -->
+<div class="wrap">
+<section>
+
+  <div class="section-head">
+    <div class="kanpur-note">📍 Popular with Kanpur &amp; Lucknow businesses</div>
+    <span class="label">02 — Web Development</span>
+    <h2 class="serif">Websites that work <em>harder than you.</em></h2>
+    <p class="section-sub" contenteditable>Hand-coded, fast-loading, conversion-focused websites. No bloated builders — every project is built from scratch for your specific business goals.</p>
+  </div>
+
+  <div class="two-col">
+
+    <div class="col-card">
+      <span class="tier-badge" style="display:block;margin-bottom:14px;">Launch</span>
+      <div class="tier-name serif" style="margin-bottom:6px;" contenteditable>Landing Page</div>
+      <div style="font-size:13px;color:var(--muted);margin-bottom:20px;" contenteditable>High-converting single page for campaigns, services, or events.</div>
+      <div class="price-block">
+        <span class="price-old" contenteditable>₹12,000</span>
+        <span class="price-new" contenteditable>₹6,999</span>
+        <span class="price-save" contenteditable>Save 42%</span>
+      </div>
+      <div class="price-note" contenteditable>One-time · 5–7 day delivery</div>
+      <ul class="tier-feats" style="margin-top:20px;">
+        <li contenteditable>Custom HTML/CSS/JS — no templates</li>
+        <li contenteditable>Mobile-first, fully responsive</li>
+        <li contenteditable>SEO-optimised structure</li>
+        <li contenteditable>WhatsApp / Lead form integration</li>
+        <li contenteditable>Google Analytics setup</li>
+        <li contenteditable>1 month post-launch support</li>
+      </ul>
+      <a class="tier-btn" href="https://elv8dgtl.in/contact.html" target="_blank">Get Started →</a>
+    </div>
+
+    <div class="col-card" style="background:var(--char);">
+      <span style="font-size:10.5px;letter-spacing:.12em;text-transform:uppercase;color:var(--gold-l);margin-bottom:14px;display:block;">★ Best Value</span>
+      <div class="tier-name serif" style="margin-bottom:6px;color:var(--ivory);" contenteditable>Business Website</div>
+      <div style="font-size:13px;color:#8A8580;margin-bottom:20px;" contenteditable>Multi-page website with CMS for growing Kanpur SMEs &amp; businesses.</div>
+      <div class="price-block">
+        <span class="price-old" style="color:#C06050;" contenteditable>₹28,000</span>
+        <span class="price-new light" contenteditable>₹16,999</span>
+        <span class="price-save" contenteditable>Save 39%</span>
+      </div>
+      <div class="price-note light" contenteditable>One-time · 3–4 week delivery</div>
+      <ul class="tier-feats" style="margin-top:20px;">
+        <li contenteditable>5–8 pages, fully custom designed</li>
+        <li contenteditable>CMS — edit content yourself</li>
+        <li contenteditable>On-page SEO fully optimised</li>
+        <li contenteditable>WhatsApp chat + booking form</li>
+        <li contenteditable>Google Search Console setup</li>
+        <li contenteditable>Performance score 90+ (Page Speed)</li>
+        <li contenteditable>3 months free support</li>
+      </ul>
+      <a class="tier-btn" href="https://elv8dgtl.in/contact.html" target="_blank">Book a Call →</a>
+    </div>
+
+  </div>
+
+</section>
+</div>
+
+<!-- ═══════════════════════════════════════════ SOCIAL MEDIA + CONTENT CREATION ═══════════════════════════════════════════ -->
+<div class="bg-ivory">
+<div class="wrap">
+<section>
+
+  <div class="section-head">
+    <span class="label">03 — Social Media Management &amp; Content Creation</span>
+    <h2 class="serif">Stay consistent. <em>Stay relevant.</em></h2>
+    <p class="section-sub" contenteditable>End-to-end social media management — strategy, graphic design, copywriting, reels, scheduling, and engagement — so your brand never goes quiet.</p>
+  </div>
+
+  <table class="feat-table">
+    <thead>
+      <tr>
+        <th style="width:36%;text-align:left;padding-bottom:18px;">What's included</th>
+        <th>
+          <div class="col-name-h serif" contenteditable>Starter</div>
+          <div class="col-price-h" contenteditable><del>₹6,000</del> &nbsp;₹3,499/mo</div>
+        </th>
+        <th class="col-hi">
+          <div class="col-name-h serif" contenteditable>Growth ★</div>
+          <div class="col-price-h" contenteditable><del>₹11,000</del> &nbsp;₹5,999/mo</div>
+        </th>
+        <th>
+          <div class="col-name-h serif" contenteditable>Pro</div>
+          <div class="col-price-h" contenteditable><del>₹18,000</del> &nbsp;₹9,999/mo</div>
+        </th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><div class="feat-label" contenteditable>Platforms</div><div class="feat-sub" contenteditable>Instagram, Facebook, LinkedIn, etc.</div></td>
+        <td contenteditable>2</td><td class="col-hi" contenteditable>3</td><td contenteditable>4+</td>
+      </tr>
+      <tr>
+        <td><div class="feat-label" contenteditable>Posts / month</div><div class="feat-sub" contenteditable>Static + carousel posts</div></td>
+        <td contenteditable>12</td><td class="col-hi" contenteditable>20</td><td contenteditable>30</td>
+      </tr>
+      <tr>
+        <td><div class="feat-label" contenteditable>Custom brand graphics</div><div class="feat-sub" contenteditable>Designed visuals, on-brand</div></td>
+        <td><span class="tick">✦</span></td><td class="col-hi"><span class="tick">✦</span></td><td><span class="tick">✦</span></td>
+      </tr>
+      <tr>
+        <td><div class="feat-label" contenteditable>Copywriting &amp; captions</div><div class="feat-sub" contenteditable>Hindi + English supported</div></td>
+        <td><span class="tick">✦</span></td><td class="col-hi"><span class="tick">✦</span></td><td><span class="tick">✦</span></td>
+      </tr>
+      <tr>
+        <td><div class="feat-label" contenteditable>Content calendar</div></td>
+        <td><span class="tick">✦</span></td><td class="col-hi"><span class="tick">✦</span></td><td><span class="tick">✦</span></td>
+      </tr>
+      <tr>
+        <td><div class="feat-label" contenteditable>Reels / Short-form video</div><div class="feat-sub" contenteditable>Scripted + edited</div></td>
+        <td><span class="dash">—</span></td><td class="col-hi" contenteditable>4 / month</td><td contenteditable>8 / month</td>
+      </tr>
+      <tr>
+        <td><div class="feat-label" contenteditable>Stories &amp; highlights</div></td>
+        <td><span class="dash">—</span></td><td class="col-hi"><span class="tick">✦</span></td><td><span class="tick">✦</span></td>
+      </tr>
+      <tr>
+        <td><div class="feat-label" contenteditable>Community management</div><div class="feat-sub" contenteditable>DM replies + comment moderation</div></td>
+        <td><span class="dash">—</span></td><td class="col-hi"><span class="dash">—</span></td><td><span class="tick">✦</span></td>
+      </tr>
+      <tr>
+        <td><div class="feat-label" contenteditable>Monthly analytics report</div></td>
+        <td><span class="dash">—</span></td><td class="col-hi"><span class="tick">✦</span></td><td><span class="tick">✦</span></td>
+      </tr>
+      <tr>
+        <td><div class="feat-label" contenteditable>Dedicated account manager</div></td>
+        <td><span class="dash">—</span></td><td class="col-hi"><span class="tick">✦</span></td><td><span class="tick">✦</span></td>
+      </tr>
+    </tbody>
+  </table>
+
+</section>
+</div>
+</div>
+
+<!-- ═══════════════════════════════════════════ SEO + SEM ═══════════════════════════════════════════ -->
+<div class="wrap">
+<section>
+
+  <div class="section-head">
+    <span class="label">04 — SEO &amp; SEM (Google &amp; Meta Ads)</span>
+    <h2 class="serif">Get found first. <em>Convert better.</em></h2>
+    <p class="section-sub" contenteditable>Organic search that compounds over time — combined with paid ads that deliver immediate, measurable returns. Built for local Kanpur &amp; Lucknow markets.</p>
+  </div>
+
+  <div class="two-col">
+
+    <div class="col-card">
+      <span class="label" style="display:block;margin-bottom:20px;">SEO — Search Engine Optimisation</span>
+
+      <div style="margin-bottom:24px;padding-bottom:24px;border-bottom:1px solid var(--border-l);">
+        <div style="display:flex;justify-content:space-between;align-items:baseline;margin-bottom:6px;">
+          <div class="serif" style="font-size:17px;" contenteditable>Local SEO</div>
+          <div>
+            <span style="font-size:13px;color:var(--red-old);text-decoration:line-through;opacity:.7;" contenteditable>₹5,000</span>
+            <span class="serif" style="font-size:21px;font-weight:600;margin-left:8px;" contenteditable>₹2,499/mo</span>
+          </div>
+        </div>
+        <ul style="list-style:none;font-size:13px;color:var(--muted);line-height:1.8;">
+          <li contenteditable>✦ Google Business Profile setup &amp; optimisation</li>
+          <li contenteditable>✦ 5 target keywords / month</li>
+          <li contenteditable>✦ On-page SEO fixes</li>
+          <li contenteditable>✦ Monthly ranking report</li>
+        </ul>
+      </div>
+
+      <div style="margin-bottom:24px;padding-bottom:24px;border-bottom:1px solid var(--border-l);">
+        <div style="display:flex;justify-content:space-between;align-items:baseline;margin-bottom:6px;">
+          <div class="serif" style="font-size:17px;" contenteditable>Growth SEO</div>
+          <div>
+            <span style="font-size:13px;color:var(--red-old);text-decoration:line-through;opacity:.7;" contenteditable>₹9,000</span>
+            <span class="serif" style="font-size:21px;font-weight:600;margin-left:8px;" contenteditable>₹4,999/mo</span>
+          </div>
+        </div>
+        <ul style="list-style:none;font-size:13px;color:var(--muted);line-height:1.8;">
+          <li contenteditable>✦ 15 keywords + content strategy</li>
+          <li contenteditable>✦ 2 SEO blog articles / month</li>
+          <li contenteditable>✦ Technical SEO audit &amp; fixes</li>
+          <li contenteditable>✦ Backlink outreach (5 / month)</li>
+        </ul>
+      </div>
+
+      <div>
+        <div style="display:flex;justify-content:space-between;align-items:baseline;margin-bottom:6px;">
+          <div class="serif" style="font-size:17px;" contenteditable>Authority SEO</div>
+          <div>
+            <span style="font-size:13px;color:var(--red-old);text-decoration:line-through;opacity:.7;" contenteditable>₹18,000</span>
+            <span class="serif" style="font-size:21px;font-weight:600;margin-left:8px;" contenteditable>₹9,999/mo</span>
+          </div>
+        </div>
+        <ul style="list-style:none;font-size:13px;color:var(--muted);line-height:1.8;">
+          <li contenteditable>✦ 40+ keywords + full content plan</li>
+          <li contenteditable>✦ 4 SEO articles + 2 landing pages</li>
+          <li contenteditable>✦ Competitor gap analysis</li>
+          <li contenteditable>✦ 15+ quality backlinks / month</li>
+        </ul>
+      </div>
+    </div>
+
+    <div class="col-card">
+      <span class="label" style="display:block;margin-bottom:20px;">SEM — Google &amp; Meta Ads</span>
+
+      <div style="margin-bottom:24px;padding-bottom:24px;border-bottom:1px solid var(--border-l);">
+        <div style="display:flex;justify-content:space-between;align-items:baseline;margin-bottom:4px;">
+          <div class="serif" style="font-size:17px;" contenteditable>Ignite</div>
+          <div>
+            <span style="font-size:13px;color:var(--red-old);text-decoration:line-through;opacity:.7;" contenteditable>₹6,000</span>
+            <span class="serif" style="font-size:21px;font-weight:600;margin-left:8px;" contenteditable>₹2,999/mo</span>
+          </div>
+        </div>
+        <div style="font-size:12px;color:var(--muted-l);margin-bottom:8px;" contenteditable>+ Ad spend (min. ₹2,000/mo billed to your account)</div>
+        <ul style="list-style:none;font-size:13px;color:var(--muted);line-height:1.8;">
+          <li contenteditable>✦ 1 platform (Meta or Google)</li>
+          <li contenteditable>✦ 2 ad creatives / month</li>
+          <li contenteditable>✦ Audience targeting setup</li>
+          <li contenteditable>✦ Monthly performance report</li>
+        </ul>
+      </div>
+
+      <div style="margin-bottom:24px;padding-bottom:24px;border-bottom:1px solid var(--border-l);">
+        <div style="display:flex;justify-content:space-between;align-items:baseline;margin-bottom:4px;">
+          <div class="serif" style="font-size:17px;" contenteditable>Scale</div>
+          <div>
+            <span style="font-size:13px;color:var(--red-old);text-decoration:line-through;opacity:.7;" contenteditable>₹12,000</span>
+            <span class="serif" style="font-size:21px;font-weight:600;margin-left:8px;" contenteditable>₹5,999/mo</span>
+          </div>
+        </div>
+        <div style="font-size:12px;color:var(--muted-l);margin-bottom:8px;" contenteditable>+ Ad spend (min. ₹5,000/mo billed to your account)</div>
+        <ul style="list-style:none;font-size:13px;color:var(--muted);line-height:1.8;">
+          <li contenteditable>✦ Meta + Google + retargeting</li>
+          <li contenteditable>✦ 6 ad creatives + A/B testing</li>
+          <li contenteditable>✦ Landing page optimisation</li>
+          <li contenteditable>✦ Pixel + conversion tracking</li>
+          <li contenteditable>✦ Bi-weekly strategy calls</li>
+        </ul>
+      </div>
+
+      <div style="background:var(--tag);padding:16px;border-radius:2px;">
+        <p style="font-size:13px;color:var(--muted);line-height:1.65;" contenteditable>
+          💡 Ad spend goes directly to your Meta / Google account — elv8 dgtl never marks up your ad budget. You stay in full control.
+        </p>
+      </div>
+    </div>
+
+  </div>
+
+</section>
+</div>
+
+<!-- ═══════════════════════════════════════════ COMPLETE DIGITAL MARKETING PACKAGE ═══════════════════════════════════════════ -->
+<div class="pkg-hero">
+<div class="wrap">
+
+  <div class="pkg-inner">
+
+    <div>
+      <span class="pkg-label">05 — Full Stack Digital Marketing</span>
+      <h2 class="pkg-title">The complete <em>digital growth engine.</em></h2>
+      <p class="pkg-desc" contenteditable>Stop managing multiple vendors. Get your entire digital presence — social media, SEO, paid ads, content creation, and monthly strategy — handled by one focused team who knows your business inside out.</p>
+      <ul class="pkg-bullets">
+        <li contenteditable>Social Media Management</li>
+        <li contenteditable>Content Creation (posts + reels)</li>
+        <li contenteditable>SEO (on-page + off-page)</li>
+        <li contenteditable>Google Ads management</li>
+        <li contenteditable>Meta Ads management</li>
+        <li contenteditable>Monthly strategy call</li>
+        <li contenteditable>Performance dashboard</li>
+        <li contenteditable>Competitor monitoring</li>
+        <li contenteditable>Email / WhatsApp campaigns</li>
+        <li contenteditable>Dedicated account manager</li>
+      </ul>
+      <div class="pkg-cta-row" style="margin-top:28px;">
+        <a class="btn-gold" href="https://elv8dgtl.in/contact.html" target="_blank">Book a Free Audit →</a>
+        <a class="btn-outline" href="https://wa.me/918052743378" target="_blank">WhatsApp Us</a>
+      </div>
+    </div>
+
+    <div>
+      <div class="pkg-price-panel">
+
+        <div class="pkg-price-tier">
+          <div class="ppt-name" contenteditable>Starter Package</div>
+          <div class="ppt-price-row">
+            <span class="ppt-old" contenteditable>₹18,000</span>
+            <span class="ppt-new" contenteditable>₹9,999</span>
+            <span class="price-save" style="font-size:11px;" contenteditable>/month</span>
+          </div>
+          <div class="ppt-note" contenteditable>Social (2 platforms) + Local SEO + 1 Ads platform</div>
+          <ul class="ppt-feats">
+            <li contenteditable>12 posts/month + 2 reels</li>
+            <li contenteditable>5 SEO keywords tracked</li>
+            <li contenteditable>1 ads platform managed</li>
+            <li contenteditable>Monthly report</li>
+          </ul>
+        </div>
+
+        <div class="pkg-price-tier">
+          <div class="ppt-name" style="display:flex;align-items:center;gap:10px;">
+            <span contenteditable>Growth Package</span>
+            <span style="background:var(--gold);color:var(--char);font-size:10px;padding:2px 10px;border-radius:10px;font-weight:600;letter-spacing:.06em;">BEST VALUE</span>
+          </div>
+          <div class="ppt-price-row">
+            <span class="ppt-old" contenteditable>₹32,000</span>
+            <span class="ppt-new" contenteditable>₹16,999</span>
+            <span class="price-save" style="font-size:11px;" contenteditable>/month</span>
+          </div>
+          <div class="ppt-note" contenteditable>Social (3 platforms) + Growth SEO + Meta + Google Ads</div>
+          <ul class="ppt-feats">
+            <li contenteditable>20 posts/month + 4 reels + stories</li>
+            <li contenteditable>15 SEO keywords + 1 blog/mo</li>
+            <li contenteditable>Meta + Google Ads managed</li>
+            <li contenteditable>Bi-weekly strategy calls</li>
+            <li contenteditable>Full performance dashboard</li>
+          </ul>
+        </div>
+
+      </div>
+    </div>
+
+  </div>
+
+</div>
+</div>
+
+<!-- ═══════════════════════════════════════════ BUNDLE PACKAGES ═══════════════════════════════════════════ -->
+<div class="bg-ivory">
+<div class="wrap">
+<section>
+
+  <div class="section-head">
+    <span class="label">06 — Launch Bundles</span>
+    <h2 class="serif">More together, <em>better results.</em></h2>
+    <p class="section-sub" contenteditable>Curated combinations for Kanpur businesses at different stages — from just starting up to scaling aggressively. Each bundle saves you 30–40% vs buying individually.</p>
+  </div>
+
+  <div class="bundle-grid">
+
+    <div class="bundle">
+      <div class="bundle-icon">◈</div>
+      <div class="bundle-name serif" contenteditable>Startup Kit</div>
+      <div class="bundle-desc" contenteditable>Everything a new Kanpur business needs to look credible and get discovered online.</div>
+      <ul class="bundle-feats">
+        <li contenteditable>Basic Brand Identity</li>
+        <li contenteditable>Landing Page website</li>
+        <li contenteditable>Google Business Profile setup</li>
+        <li contenteditable>1 month Social Starter</li>
+        <li contenteditable>Free Digital Audit</li>
+      </ul>
+      <div class="b-price-old" contenteditable>₹17,000</div>
+      <div class="b-price-new serif" contenteditable>₹12,999</div>
+      <div class="b-save" contenteditable>✦ Save ₹4,000 — 24% off</div>
+    </div>
+
+    <div class="bundle glow">
+      <div class="bundle-ribbon">Best Value</div>
+      <div class="bundle-icon" style="border-color:var(--gold-border);">◉</div>
+      <div class="bundle-name serif" contenteditable>Growth Pack</div>
+      <div class="bundle-desc" contenteditable>For SMEs in Kanpur / Lucknow ready to grow with a complete digital stack.</div>
+      <ul class="bundle-feats">
+        <li contenteditable>Studio Brand Kit</li>
+        <li contenteditable>Business Website (5–8 pages)</li>
+        <li contenteditable>3 months Social Growth</li>
+        <li contenteditable>Growth SEO (3 months)</li>
+        <li contenteditable>1 month Meta Ads</li>
+      </ul>
+      <div class="b-price-old" contenteditable>₹58,000</div>
+      <div class="b-price-new serif" contenteditable>₹39,999</div>
+      <div class="b-save" contenteditable>✦ Save ₹18,000 — 31% off</div>
+    </div>
+
+    <div class="bundle">
+      <div class="bundle-icon">◇</div>
+      <div class="bundle-name serif" contenteditable>Event / Campaign</div>
+      <div class="bundle-desc" contenteditable>Product launches, grand openings, festival campaigns, or seasonal promotions.</div>
+      <ul class="bundle-feats">
+        <li contenteditable>Campaign brand design</li>
+        <li contenteditable>Landing page</li>
+        <li contenteditable>Meta + Google Ads (1 month)</li>
+        <li contenteditable>Reels × 4 + posts × 8</li>
+        <li contenteditable>Post-campaign report</li>
+      </ul>
+      <div class="b-price-old" contenteditable>₹21,000</div>
+      <div class="b-price-new serif" contenteditable>₹14,999</div>
+      <div class="b-save" contenteditable>✦ Save ₹6,000 — 29% off</div>
+    </div>
+
+  </div>
+
+</section>
+</div>
+</div>
+
+<!-- ═══════════════════════════════════════════ FREE AUDIT ═══════════════════════════════════════════ -->
+<div class="wrap">
+<section style="padding-bottom:0;">
+
+  <div class="free-audit">
+    <div class="fa-left">
+      <div class="fa-badge">Free — No Obligation</div>
+      <h3 class="serif">Get your <em>Free Digital Audit.</em></h3>
+      <p contenteditable>We'll review your website, Google presence, social media, and competitors — and give you a clear, honest action plan. Available for all Kanpur &amp; Lucknow businesses. Takes 30 minutes. Costs nothing.</p>
+      <div style="margin-top:18px;font-size:13px;color:var(--muted);display:flex;gap:20px;flex-wrap:wrap;">
+        <span contenteditable>✦ Website performance check</span>
+        <span contenteditable>✦ SEO score &amp; gaps</span>
+        <span contenteditable>✦ Competitor snapshot</span>
+        <span contenteditable>✦ Social media review</span>
+      </div>
+    </div>
+    <div style="display:flex;flex-direction:column;gap:12px;align-items:flex-start;">
+      <a class="btn-dark" href="https://elv8dgtl.in/contact.html" target="_blank">Claim Free Audit →</a>
+      <a class="btn-dark" style="background:transparent;color:var(--char);border:1px solid var(--border);" href="https://wa.me/918052743378" target="_blank">WhatsApp: +91 80527 43378</a>
+    </div>
+  </div>
+
+</section>
+</div>
+
+<!-- ═══════════════════════════════════════════ WHY ELV8 ═══════════════════════════════════════════ -->
+<div class="wrap">
+<section>
+
+  <div class="section-head">
+    <span class="label">Why elv8 dgtl</span>
+    <h2 class="serif">The boutique <em>advantage.</em></h2>
+  </div>
+
+  <div class="why-grid">
+    <div class="why-cell">
+      <span class="why-n">01</span>
+      <div class="why-t" contenteditable>Local market expertise — Kanpur first</div>
+      <div class="why-b" contenteditable>We understand how Kanpur and Lucknow consumers search, engage, and buy. Our campaigns are built around local intent, Hindi + English messaging, and region-specific platforms that actually work here.</div>
+    </div>
+    <div class="why-cell">
+      <span class="why-n">02</span>
+      <div class="why-t" contenteditable>You work directly with the creators</div>
+      <div class="why-b" contenteditable>No account managers, no juniors, no outsourcing. The people on the call are the people doing the work — which means faster decisions, better quality, and zero lost-in-translation.</div>
+    </div>
+    <div class="why-cell">
+      <span class="why-n">03</span>
+      <div class="why-t" contenteditable>Proven, measurable results</div>
+      <div class="why-b" contenteditable>474K organic plays for Friction NYE. ₹6.15 average cost per lead. Direct hotel bookings for Hotel Rass. Every project starts with agreed KPIs — and ends with a results report.</div>
+    </div>
+    <div class="why-cell">
+      <span class="why-n">04</span>
+      <div class="why-t" contenteditable>Complete transparency, always</div>
+      <div class="why-b" contenteditable>No hidden fees. Ad spend goes directly to your account — we never mark it up. You receive weekly updates and can see exactly what's running, what's working, and what we're improving.</div>
+    </div>
+  </div>
+
+</section>
+</div>
+
+<!-- ═══════════════════════════════════════════ TESTIMONIALS ═══════════════════════════════════════════ -->
+<div class="testi-band">
+<div class="wrap">
+  <div class="testi-grid">
+    <div>
+      <div class="testi-q" contenteditable>"elv8 dgtl completely transformed our online presence. The website gets us direct bookings every single week now."</div>
+      <div class="testi-n" contenteditable>Rajesh K.</div>
+      <div class="testi-r" contenteditable>Hotel Rass, Kanpur</div>
+    </div>
+    <div>
+      <div class="testi-q" contenteditable>"The Friction NYE campaign exceeded every expectation — 474K organic plays and a sold-out event. These guys know exactly what they're doing."</div>
+      <div class="testi-n" contenteditable>Aryan V.</div>
+      <div class="testi-r" contenteditable>Friction Events</div>
+    </div>
+    <div>
+      <div class="testi-q" contenteditable>"Working directly with the team — not some account manager — made all the difference. Fast, transparent, and genuinely invested in our growth."</div>
+      <div class="testi-n" contenteditable>Priya M.</div>
+      <div class="testi-r" contenteditable>Startup Founder, Delhi</div>
+    </div>
+  </div>
+</div>
+</div>
+
+<!-- ═══════════════════════════════════════════ CONTACT ═══════════════════════════════════════════ -->
+<div class="wrap">
+<div class="contact-section">
+
+  <div class="contact-inner">
+    <div>
+      <span class="label" style="display:block;margin-bottom:12px;">Get in Touch</span>
+      <h2 class="contact-head">Ready to <em>elevate?</em></h2>
+      <p class="contact-intro" contenteditable>Whether you need a full digital overhaul or just want to know where to start — book a free 30-minute call. No commitment, no hard sell. Just honest advice for your business in Kanpur or Lucknow.</p>
+
+      <div class="contact-links">
+        <div class="contact-item">
+          <div class="ci-icon">✉</div>
+          <div>
+            <div class="ci-label">Email</div>
+            <div class="ci-val"><a href="/cdn-cgi/l/email-protection#f69e939a9a99b6939a80ce9291829ad89f98" contenteditable><span class="__cf_email__" data-cfemail="dab2bfb6b6b59abfb6ace2bebdaeb6f4b3b4">[email&#160;protected]</span></a></div>
+          </div>
+        </div>
+        <div class="contact-item">
+          <div class="ci-icon">💬</div>
+          <div>
+            <div class="ci-label">WhatsApp</div>
+            <div class="ci-val"><a href="https://wa.me/918052743378" contenteditable>+91 80527 43378</a></div>
+          </div>
+        </div>
+        <div class="contact-item">
+          <div class="ci-icon">🌐</div>
+          <div>
+            <div class="ci-label">Website</div>
+            <div class="ci-val"><a href="https://elv8dgtl.in" target="_blank" contenteditable>elv8dgtl.in</a></div>
+          </div>
+        </div>
+        <div class="contact-item">
+          <div class="ci-icon">📰</div>
+          <div>
+            <div class="ci-label">Blog &amp; Insights</div>
+            <div class="ci-val"><a href="https://dekho.elv8dgtl.in" target="_blank" contenteditable>dekho.elv8dgtl.in</a></div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div>
+      <div class="contact-info-panel">
+        <span class="cip-label">Office Hours &amp; Reach</span>
+        <div class="cip-h" contenteditable>We're local. We're available.</div>
+        <div class="cip-sub" contenteditable>Based in Kanpur &amp; Lucknow — serving businesses across UP, Delhi, and remote clients India-wide.</div>
+
+        <div class="hours-row"><span class="hr-day" contenteditable>Monday – Friday</span><span class="hr-time" contenteditable>9:00 am – 6:00 pm</span></div>
+        <div class="hours-row"><span class="hr-day" contenteditable>Saturday</span><span class="hr-time" contenteditable>10:00 am – 4:00 pm</span></div>
+        <div class="hours-row"><span class="hr-day" contenteditable>Sunday</span><span class="hr-time" contenteditable>Closed</span></div>
+
+        <div class="cities-row">
+          <span class="city-badge primary-city" contenteditable>📍 Kanpur</span>
+          <span class="city-badge" contenteditable>Lucknow</span>
+          <span class="city-badge" contenteditable>Delhi</span>
+          <span class="city-badge" contenteditable>Pan-India Remote</span>
+        </div>
+
+        <div style="margin-top:24px;padding-top:20px;border-top:1px solid rgba(255,255,255,.08);">
+          <a class="btn-gold" style="width:100%;text-align:center;display:block;" href="https://elv8dgtl.in/contact.html" target="_blank">Book Free Audit →</a>
+        </div>
+      </div>
+    </div>
+
+  </div>
+
+  <div class="foot-strip">
+    <div class="foot-logo">elv8<span>.</span>dgtl &nbsp;·&nbsp; <span style="font-weight:300;color:var(--muted);">elevate digital</span></div>
+    <div class="foot-links">
+      <a href="https://elv8dgtl.in" target="_blank" contenteditable>elv8dgtl.in</a>
+      <a href="https://dekho.elv8dgtl.in" target="_blank" contenteditable>dekho.elv8dgtl.in</a>
+      <a href="/cdn-cgi/l/email-prote
